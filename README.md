@@ -1,6 +1,6 @@
-# I Installed 1,000 Skills and 791 MCP Tools in Claude Code and Codex
+# A Closet Full of Skills and Nothing to Wear
 
-**The right skill was picked far less often. Single-step MCP tool selection in Claude Code held up better.**
+**The more skills you install, the less often your coding agent picks the right one. MCP tools hold up better.** Measured with up to 1,000 skills and 791 MCP tools in Claude Code and Codex.
 
 This repository has everything behind the blog post: the requests, the experiment scripts, every result record, the analysis that turns those records into the published numbers, the methodology with an external review and my response to it, and the post itself. You can reproduce every number without spending anything, and re-run the experiments if you want to pay for it.
 

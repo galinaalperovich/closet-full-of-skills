@@ -74,8 +74,8 @@ SK_TABLE = ('<div class="wrap"><table>\n<tr><th>#</th><th>Skill</th><th>From</th
 body = f"""
 <article>
 <div class="tags">AI Agents · Claude Code · Codex · Agent Skills · MCP</div>
-<h1>I Installed 1,000 Skills and 791 MCP Tools in Claude Code and Codex. The Right Skill Was Picked Far Less Often.</h1>
-<p class="dek">Skill selection fell sharply in these tests. Single-step MCP tool selection in Claude Code held up better. A useful contrast, with important limits.</p>
+<h1>A Closet Full of Skills and Nothing to Wear: The More Skills You Install, the Less Often Your Agent Picks the Right One (MCP Tools Hold Up Better)</h1>
+<p class="dek">I installed up to 1,000 skills and 791 MCP tools in Claude Code and Codex. The right skill went from being picked 78–100% of the time to 10–34%. In Claude Code, single-step MCP tool selection held steady from 220 to 791 tools.</p>
 <div class="byline">Galina Alperovich · November 2026</div>
 
 <p class="tldr">tldr; Installing a skill does not guarantee that your agent will select it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill. With only that skill installed, it was selected in 78–100% of runs. With 1,000 more skills installed next to it, in 10–34%. MCP tools showed a different pattern: in Claude Code, selection across 15 single-step tool targets was the same with 220 tools installed as with 791. These are selection measurements in empty folders, with stubbed instructions and a short observation window. They do not measure how good the answer was.</p>
@@ -313,6 +313,6 @@ codex exec --json -s read-only "Audit the SEO of my site." \\
 </ol>
 </article>
 """
-html = f'<title>1,000 Skills, 791 MCP Tools</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">\n<style>{css}</style>\n{body}'
+html = f'<title>A Closet Full of Skills</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">\n<style>{css}</style>\n{body}'
 open(os.path.join(B, "skills-mcp-post.html"), "w").write(html)
 print("ok", len(html))
