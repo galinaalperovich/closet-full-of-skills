@@ -8,7 +8,7 @@ COL = {"Haiku": "var(--s-haiku)", "Sonnet": "var(--s-sonnet)", "GPT": "var(--s-g
 F = lambda x: float(x)
 out = {}
 
-def line_chart(series, xlabels, aria, w=720, h=330, legend_note=""):
+def line_chart(series, xlabels, aria, w=720, h=330, legend_note="", title=""):
     L, R, T, Bm = 56, 150, 44, 54
     pw, ph = w - L - R, h - T - Bm
     X = lambda i: L + pw * i / (len(xlabels) - 1)
@@ -41,10 +41,12 @@ def line_chart(series, xlabels, aria, w=720, h=330, legend_note=""):
         if ends[k][0] - ends[k-1][0] < 15: ends[k][0] = ends[k-1][0] + 15
     for y, s, v in ends:
         lines.append(f'<text x="{L+pw+12}" y="{y+4:.1f}" font-size="12" fill="currentColor"><tspan font-weight="600">{v:.0f}%</tspan> {s["short"]}</text>')
-    return f'<svg viewBox="0 0 {w} {h}" role="img" aria-label="{aria}"><g {FONT}>{"".join(g)}{"".join(lg)}{"".join(lines)}</g></svg>'
+    dy = 24 if title else 0
+    ttl = f'<text x="{L}" y="15" font-size="13" font-weight="600" fill="currentColor">{title}</text>' if title else ""
+    return f'<svg viewBox="0 0 {w} {h+dy}" role="img" aria-label="{aria}"><g {FONT}>{ttl}<g transform="translate(0,{dy})">{"".join(g)}{"".join(lg)}{"".join(lines)}</g></g></svg>'
 
 # --- Fig: how selection works (skills vs MCP tools)
-out["fig_how"] = f'''<svg viewBox="0 0 760 330" role="img" aria-label="Diagram. Every request is sent with the skill listing (all names and descriptions, capped at a share of the context) and with MCP tool definitions. Claude Code sends tool names and fetches schemas on demand with ToolSearch; Codex's token counts suggest it sends full definitions. From that, the model either loads a skill, calls a tool, or uses only built-in actions.">
+out["fig_how"] = f'''<svg viewBox="0 0 760 330" role="img" aria-label="Diagram. Every request is sent with the skill listing (all names and descriptions, capped at a share of the context) and with MCP tool definitions. Claude Code sends tool names and fetches schemas on demand with ToolSearch; For Codex, reported tokens grew when 20 tool definitions were added. From that, the model either loads a skill, calls a tool, or uses only built-in actions.">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <g fill="none" stroke="currentColor" stroke-width="1.5">
 <rect x="10" y="135" width="140" height="60" rx="6"/>
@@ -67,8 +69,8 @@ out["fig_how"] = f'''<svg viewBox="0 0 760 330" role="img" aria-label="Diagram. 
 <text x="214" y="204" font-weight="600">MCP tool definitions</text>
 <text x="214" y="226" font-size="11.5">Claude Code: tool names listed,</text>
 <text x="214" y="243" font-size="11.5">schemas fetched with ToolSearch</text>
-<text x="214" y="267" font-size="11.5">Codex: tokens grow with every</text>
-<text x="214" y="284" font-size="11.5">definition (all appear in context)</text>
+<text x="214" y="267" font-size="11.5">Codex: reported tokens grew when</text>
+<text x="214" y="284" font-size="11.5">I added 20 tool definitions</text>
 <text x="214" y="306" font-size="11" fill-opacity=".75">plus built-ins: Glob, Read, shell…</text>
 <text x="650" y="44" text-anchor="middle" font-weight="600">Load a skill</text>
 <text x="650" y="116" text-anchor="middle" font-weight="600">No skill selected</text>
@@ -107,7 +109,7 @@ for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku")):
     ser.append(dict(name=f"{nm} MCP tools", short=f"{nm} tools", color=COL[nm], dash=True,
                     values=[100 * F(e2[(m, s)]["nonbrowser_rate"]) for s in M],
                     ci=[(100 * F(e2[(m, s)]["nonbrowser_req_lo"]), 100 * F(e2[(m, s)]["nonbrowser_req_hi"])) for s in M]))
-out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "All installed"],
+out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "All installed"], title="Claude Code: skills (solid) vs the 15 single-step, non-browser MCP tool targets (dashed)", aria=
     "Line chart for Claude Code. Skills, solid lines: Sonnet 93 to 34 percent, Haiku 78 to 16 percent. Single-step MCP tools, dashed: Sonnet 92, 81, 77, 77 percent; Haiku 86, 79, 78, 78 percent, flat from about 220 tools on.")
 
 # --- Fig: what happened on misses at 1,020 skills
@@ -145,11 +147,11 @@ e3 = {(r["model"], r["setup"], r["kind"]): r for r in rd("e3_mixed_rates.csv")}
 e3p = {(r["model"], r["comparison"]): r for r in rd("e3_paired.csv")}
 groups = []
 for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet")):
-    base_sk = (F(e1[(m, "alone")]["target_selected"]) + F(e3[(m, "sk_alone", "skill")]["strict"])) / (F(e1[(m, "alone")]["n"]) + 30) * 100
+    base_sk = (120 * F(e1[(m, "alone")]["target_selected"]) / F(e1[(m, "alone")]["n"]) + F(e3[(m, "sk_alone", "skill")]["strict"])) / 150 * 100   # each of the 150 requests weighted equally
     sk = [base_sk, 100 * F(e3[(m, "mixed_smaller", "skill")]["strict_rate"]), 100 * F(e3[(m, "mixed_larger", "skill")]["strict_rate"])]
     nb0 = 100 * F(e2[(m, "mcp_alone")]["nonbrowser_rate"])
     tl = [nb0, nb0 + 100 * F(e3p[(m, "tool nonbrowser: mcp_alone -> mixed_smaller")]["diff"]), nb0 + 100 * F(e3p[(m, "tool nonbrowser: mcp_alone -> mixed_larger")]["diff"])]
-    groups += [(f"{nm}", "skill requests", sk), (f"{nm}", "tool requests", tl)]
+    groups += [(f"{nm}", "150 skill requests", sk), (f"{nm}", "90 tool requests", tl)]
 W, Hh = 720, 330; L, T, Bm = 50, 40, 62; pw = W - L - 20; ph = Hh - T - Bm
 Y = lambda v: T + ph * (1 - v / 100)
 gp = []; gw = pw / len(groups); bwid = 30
@@ -204,7 +206,8 @@ for j, (lab, n_other, n_look) in enumerate(toy):
         if wv > 46: pa.append(f'<text x="{cx+wv/2:.1f}" y="{y+17}" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--on-seg-{k})">{v:.0f}%</text>')
         cx += wv
     pa.append(f'<text x="{x1+10}" y="{y+17}" font-size="12" fill="currentColor">target <tspan font-weight="600">{vals[0]:.1f}%</tspan></text>')
-out["fig_attn"] = (f'<svg viewBox="0 0 740 {40 + 40*len(toy)}" role="img" aria-label="Toy model, not data. If the target skill matches the request 20 times better than an unrelated skill, its share of attention is 100 percent alone, 51 percent with 20 skills, 8 percent with 220, 2 percent with 1,020, and 1.5 percent with 1,020 skills of which 16 look-alikes match as well as the target. The look-alikes then take 24 percent.">'
+pa.append(f'<text x="{x0}" y="{40 + 40*len(toy) + 8}" font-size="11.5" fill="currentColor" fill-opacity=".75">Illustrative arithmetic, not a measurement and not a model of these agents.</text>')
+out["fig_attn"] = (f'<svg viewBox="0 0 740 {62 + 40*len(toy)}" role="img" aria-label="Toy model, not data. If the target skill matches the request 20 times better than an unrelated skill, its share of attention is 100 percent alone, 51 percent with 20 skills, 8 percent with 220, 2 percent with 1,020, and 1.5 percent with 1,020 skills of which 16 look-alikes match as well as the target. The look-alikes then take 24 percent.">'
                    f'<g {FONT}>{"".join(pa)}</g></svg>')
 
 old = json.load(open(os.path.join(B, "figs.json")))

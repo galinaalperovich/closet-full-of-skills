@@ -1,6 +1,6 @@
-# Catastrophic Forgetting, Now In-Context
+# I Installed 1,000 Skills and 791 MCP Tools in Claude Code and Codex
 
-**The more skills and MCP tools you install, the less often your coding agent picks the right one.**
+**The right skill was picked far less often. Single-step MCP tool selection in Claude Code held up better.**
 
 This repository has everything behind the blog post: the requests, the experiment scripts, every result record, the analysis that turns those records into the published numbers, the methodology with an external review and my response to it, and the post itself. You can reproduce every number without spending anything, and re-run the experiments if you want to pay for it.
 
@@ -10,15 +10,13 @@ The page is `docs/index.html`, built from the sources in [`post/`](post/). The f
 
 ## What was measured
 
-I asked Claude Code and Codex natural requests that were written for one particular skill or MCP tool, such as “Audit the SEO of my site” for `seo-audit`, without ever naming it. Then I counted how often the agent selected that component as more skills or tools were installed next to it.
+I asked Claude Code and Codex natural requests that were written for one particular skill or MCP tool, such as “Audit the SEO of my site” for `seo-audit`, with no explicit invocation (no `/seo-audit`, no “use the seo-audit skill”). Then I counted how often the agent selected that component as more skills or tools were installed next to it.
 
 | | Claude Code + Haiku | Claude Code + Sonnet | Codex + GPT |
 |---|---|---|---|
 | **Skills** (E1): target alone → 20 → 220 → 1,020 skills | 78% → 48% → 25% → 16% | 93% → 76% → 56% → 34% | 100% → 99% → 83% → 10% |
-| **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 86% → 79% → 78% → 78% | 92% → 81% → 77% → 77% | 91% → 92%* (larger setups not run) |
+| **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 86% → 79% → 78% → 78% | 92% → 81% → 77% → 77% | 91% alone (82 of 90). With 20 tools, only 24 requests were run: 22 of 24, down from 24 of 24 on the same requests. Larger setups not run |
 | **Skills + tools together** (E3), change against the single component | skill requests −48 to −59 points (both models); tool requests −9 to −18 | | not run (cost) |
-
-\* partial: 24 of 90 runs.
 
 - 4,674 retained runs: 4,020 Claude Code runs and 654 GPT runs. On top of those there is one excluded, rate-limited GPT batch (`gpt_subscription_failed.jsonl`).
 - What is measured is **selection of the designated component within the observation window**, not the quality of the answer.
