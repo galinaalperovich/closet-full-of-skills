@@ -1,0 +1,65 @@
+files 14418 unique 7848
+
+== share of unique skills with each issue ==
+desc-no-trigger             3757   47.9%
+orphan-file                 1271   16.2%
+body-over-500-lines          377    4.8%
+missing-dir-path             236    3.0%
+undeclared-python-dep        154    2.0%
+old-model-id                 129    1.6%
+dead-link                    109    1.4%
+desc-under-40                106    1.4%
+name-dir-mismatch             95    1.2%
+dead-path                     87    1.1%
+personal-abs-path             49    0.6%
+name-invalid                  41    0.5%
+desc-over-1024                 2    0.0%
+no-frontmatter                 1    0.0%
+any issue (excluding desc-no-trigger, orphan, old-model): 790
+
+== per repo: n, then % of skills with each ==
+repo                                           n yaml-inva name-dir- dead-link dead-path missing-d undeclare orphan-fi old-model desc-over body-over personal-
+sickn33_agentic-awesome-skills              3338        0%        0%        0%        1%        5%        0%        4%        2%        0%        0%        0%
+affaan-m_ECC                                 944        0%        0%        2%        0%        1%        0%        2%        1%        0%       15%        0%
+davila7_claude-code-templates                901        0%        4%        3%        5%        5%        2%       11%        4%        0%       17%        0%
+mukul975_Anthropic-Cybersecurity-Skills      818        0%        0%        1%        0%        0%       11%      100%        1%        0%        3%        3%
+github_awesome-copilot                       482        0%        3%        2%        0%        0%        1%        2%        3%        0%        5%        0%
+alirezarezvani_claude-skills                 467        0%        2%        6%        1%        0%        1%        7%        0%        0%        1%        0%
+wshobson_agents                              185        0%        0%        2%        2%        1%        1%       11%        0%        0%        1%        0%
+K-Dense-AI_scientific-agent-skills           177        0%        0%        1%        1%        1%        5%       32%        1%        0%        0%        0%
+elementalsouls_Claude-BugHunter               83        0%        0%        7%        0%        0%        0%        0%        1%        0%       13%        1%
+coreyhaines31_marketingskills                 53        0%        0%        0%        0%        0%        0%        2%        0%        0%        2%        0%
+thedotmack_claude-mem                         41        0%        7%        0%        5%        0%        0%       10%        0%        0%        0%        0%
+mattpocock_skills                             39        0%        0%        5%        0%        0%        0%        5%        0%        0%        0%        0%
+AgriciDaniel_claude-seo                       36        0%        0%        3%        0%        3%        0%        3%        0%        0%        0%        0%
+addyosmani_agent-skills                       26        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+Yuan1z0825_nature-skills                      24        0%        4%        4%        0%        0%       17%       71%        0%        0%        0%        0%
+pbakaus_impeccable                            24        0%        0%        0%        0%        0%        0%       92%        0%        0%        0%        0%
+JuliusBrussee_caveman                         23        0%        0%        0%        0%        4%        4%        9%        0%        0%        0%        0%
+anthropics_skills                             20        0%        5%        5%        0%        0%       10%       45%        5%        5%        5%        0%
+emilkowalski_skills                           20        0%        0%        0%        0%        0%        0%        0%        0%        0%        5%        0%
+kajisho5_ffmpeg-skill                         19        0%       74%        0%        5%        0%        5%        5%        0%        0%        0%        0%
+alchaincyf_nuwa-skill                         16        0%        6%        0%        0%        0%        0%      100%        0%        0%       19%        0%
+google-labs-code_stitch-skills                16        0%       50%        0%        6%        6%        0%       25%        0%        0%        0%        0%
+Jakeschincariol_instagram-agent-skill         13        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+DietrichGebert_ponytail                       12        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+mksglu_context-mode                           10        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+Egonex-AI_Understand-Anything                  9        0%        0%        0%        0%        0%        0%       11%        0%        0%       11%        0%
+shanraisshan_claude-code-best-practice         9        0%        0%       11%        0%       11%        0%        0%        0%        0%        0%        0%
+vercel-labs_agent-skills                       9        0%       44%        0%        0%        0%        0%       33%        0%        0%        0%        0%
+nextlevelbuilder_ui-ux-pro-max-skill           7        0%        0%        0%        0%       71%       43%       71%        0%        0%        0%        0%
+obsidianmd_obsidian-skills                     7        0%        0%       14%        0%        0%        0%        0%        0%        0%       14%        0%
+Imbad0202_academic-research-skills             5        0%        0%        0%        0%        0%        0%       80%        0%        0%      100%        0%
+tt-a1i_archify                                 5        0%        0%        0%        0%        0%        0%       20%        0%        0%        0%        0%
+Leonxlnx_taste-skill                           1        0%      100%        0%        0%        0%        0%      100%        0%        0%        0%        0%
+Nutlope_hallmark                               1        0%        0%        0%        0%        0%        0%      100%        0%        0%        0%        0%
+Panniantong_Agent-Reach                        1        0%      100%        0%        0%        0%        0%      100%        0%        0%        0%        0%
+ayghri_i-have-adhd                             1        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+blader_humanizer                               1        0%      100%        0%        0%        0%        0%      100%        0%        0%      100%        0%
+career-ops-hq_career-ops                       1        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+cathrynlavery_diagram-design                   1        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+cloudflare_security-audit-skill                1        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%        0%
+mvanhorn_last30days-skill                      1        0%        0%      100%        0%        0%      100%      100%        0%        0%        0%        0%
+virgiliojr94_book-to-skill                     1        0%      100%      100%        0%        0%        0%      100%        0%        0%      100%        0%
+
+repos affected (of 42): {'dead-path': 11, 'missing-dir-path': 11, 'undeclared-python-dep': 14, 'orphan-file': 30, 'old-model-id': 9, 'body-over-500-lines': 17, 'personal-abs-path': 6, 'dead-link': 16, 'name-dir-mismatch': 14, 'desc-over-1024': 2}

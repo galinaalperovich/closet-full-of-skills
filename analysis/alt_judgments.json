@@ -1,0 +1,1052 @@
+[
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the trace."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|1|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.list_pull_requests",
+  "label": "preliminary_step",
+  "reason": "Checks for an existing PR before opening one; does not create it."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|2|skill:dataviz",
+  "label": "equivalent",
+  "reason": "Name indicates a chart-making skill; can produce the requested column chart."
+ },
+ {
+  "id": "skill|frontend-design|3|skill:better-ui",
+  "label": "related_partial",
+  "reason": "Polish-level details (radius, shadows, icons); not aesthetic direction, typography or color."
+ },
+ {
+  "id": "skill|diagnosing-bugs|1|skill:debugging-strategies",
+  "label": "equivalent",
+  "reason": "General systematic debugging skill; covers this diagnosis task."
+ },
+ {
+  "id": "skill|docx|4|mcp:word-document-server.add_paragraph",
+  "label": "related_partial",
+  "reason": "One building block of the letter; needs document creation and formatting too."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome_devtools.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|frontend-design|4|skill:build-design",
+  "label": "inappropriate",
+  "reason": "Implements from a Figma file or image; no design source exists here."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the console read."
+ },
+ {
+  "id": "skill|webapp-testing|3|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Inspects page structure before acting or writing locators; performs no check."
+ },
+ {
+  "id": "skill|web-design-guidelines|5|skill:accessibility-compliance-accessibility-audit",
+  "label": "related_partial",
+  "reason": "Covers accessibility (keyboard, focus) but not broader interaction details."
+ },
+ {
+  "id": "skill|frontend-design|4|skill:artifact-design",
+  "label": "unassessable",
+  "reason": "Description not captured; name does not show whether it covers website design."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:chrome_devtools.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|webapp-testing|2|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the local app in a browser; first step toward the requested check."
+ },
+ {
+  "id": "skill|json-canvas|5|mcp:basic-memory.list_directory",
+  "label": "preliminary_step",
+  "reason": "Locates planning.canvas first; does not edit the canvas."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|0|mcp:chrome-devtools.navigate_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "skill|tdd|0|skill:test-driven-development",
+  "label": "equivalent",
+  "reason": "Near-duplicate test-first development skill."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the Lighthouse audit."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.list_issues",
+  "label": "preliminary_step",
+  "reason": "Checks for a duplicate issue before filing; does not create it."
+ },
+ {
+  "id": "skill|webapp-testing|0|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Inspects page structure before acting or writing locators; performs no check."
+ },
+ {
+  "id": "skill|seo|0|skill:seo-audit",
+  "label": "equivalent",
+  "reason": "Dedicated SEO audit skill; covers a full site SEO analysis."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "skill|webapp-testing|2|skill:browser-automation",
+  "label": "related_partial",
+  "reason": "Covers scripted flows but not capturing console errors."
+ },
+ {
+  "id": "skill|webapp-testing|4|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open browser pages before loading the local app; orientation step."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|5|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Loads the page in Playwright, which can then read console messages."
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.list_commits",
+  "label": "preliminary_step",
+  "reason": "Reads branch commits to write the PR description; does not create the PR."
+ },
+ {
+  "id": "skill|web-design-guidelines|2|skill:better-interface",
+  "label": "equivalent",
+  "reason": "Reviews interface across a11y, layout, typography; equivalent UI/UX review."
+ },
+ {
+  "id": "skill|docx|1|mcp:word-document-server.list_available_documents",
+  "label": "preliminary_step",
+  "reason": "Locates the .docx file first; does not perform the edit or extraction."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome-devtools.emulate",
+  "label": "preliminary_step",
+  "reason": "Sets mobile emulation before auditing; setup step, does not run Lighthouse."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "skill|security-audit|3|skill:security-review",
+  "label": "equivalent",
+  "reason": "Name matches the request directly: a security review skill."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:playwright-mcp.browser_resize",
+  "label": "preliminary_step",
+  "reason": "Sets viewport size before the capture; setup step, no screenshot taken."
+ },
+ {
+  "id": "skill|web-design-guidelines|3|skill:design-how-ui-review",
+  "label": "equivalent",
+  "reason": "UI review ranking usability and accessibility defects; equivalent review."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.search_code",
+  "label": "preliminary_step",
+  "reason": "Locates the broken install-page link to describe in the issue; does not file it."
+ },
+ {
+  "id": "skill|mcp-builder|3|skill:tool-design",
+  "label": "equivalent",
+  "reason": "Designing agent tool definitions is exactly the question asked."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:browser-automation",
+  "label": "related_partial",
+  "reason": "Oriented to building checks, not debugging a dead button."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.search_issues",
+  "label": "preliminary_step",
+  "reason": "Checks for a duplicate issue before filing; does not create it."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Gets element refs needed to fill fields; preparatory step, fills nothing."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|5|mcp:chrome_devtools.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|webapp-testing|2|mcp:playwright-mcp.browser_tabs",
+  "label": "preliminary_step",
+  "reason": "Manages browser tabs before navigating; orientation step only."
+ },
+ {
+  "id": "skill|mcp-builder|1|skill:api-designer",
+  "label": "inappropriate",
+  "reason": "Produces REST endpoint specs, not MCP tool design; shares only \"API/design\"."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_evaluate",
+  "label": "related_partial",
+  "reason": "JS could set the field value but bypasses real input; page not yet loaded."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the trace."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:playwright-mcp.browser_wait_for",
+  "label": "preliminary_step",
+  "reason": "Waits for the page to finish loading before reading console; setup step."
+ },
+ {
+  "id": "skill|webapp-testing|4|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the local app in a browser; first step toward the requested check."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "preliminary_step",
+  "reason": "Observes the page (vision workflow) before filling; does not enter any values."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|2|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the trace."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "preliminary_step",
+  "reason": "Observes the page (vision workflow) before filling; does not enter any values."
+ },
+ {
+  "id": "skill|docx|3|mcp:word-document-server.get_document_text",
+  "label": "equivalent",
+  "reason": "Directly extracts all text from the Word document."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|4|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the console read."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:playwright-mcp.browser_navigate",
+  "label": "related_partial",
+  "reason": "Loads page in Playwright, which lacks a performance-trace tool; does not set up the trace."
+ },
+ {
+  "id": "skill|frontend-design|2|skill:better-ui",
+  "label": "related_partial",
+  "reason": "Polish-level details (radius, shadows, icons); not aesthetic direction, typography or color."
+ },
+ {
+  "id": "skill|webapp-testing|5|skill:browser-harness",
+  "label": "related_partial",
+  "reason": "Drives an existing browser via CDP; does not cover starting and verifying the app."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the trace."
+ },
+ {
+  "id": "tool|github.create_issue|2|mcp:github.get_me",
+  "label": "preliminary_step",
+  "reason": "Gets own username needed for the assignment; does not create the issue."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:chrome-devtools.navigate_page",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Gets element refs needed to fill fields; preparatory step, fills nothing."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:playwright-mcp.browser_wait_for",
+  "label": "preliminary_step",
+  "reason": "Waits for page load before the capture; setup step, no screenshot taken."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the console read."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "skill|hallmark|0|skill:landing-page",
+  "label": "equivalent",
+  "reason": "Builds landing/home/product-style pages that avoid AI look; same task."
+ },
+ {
+  "id": "skill|webapp-testing|5|skill:run",
+  "label": "unassessable",
+  "reason": "Description not captured; name \"run\" does not settle what it covers."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "tool|github.create_pull_request|1|mcp:github.search_code",
+  "label": "inappropriate",
+  "reason": "Code search does not help open a PR whose branch and title are given."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "inappropriate",
+  "reason": "A screenshot does not capture console output."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|1|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|5|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|5|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|2|mcp:mcp-server-chart.generate_dual_axes_chart",
+  "label": "related_partial",
+  "reason": "Bar+line combo chart; not the plain column chart requested."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome-devtools.navigate_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the console read."
+ },
+ {
+  "id": "skill|xlsx|1|mcp:excel.excel_write_to_sheet",
+  "label": "related_partial",
+  "reason": "Writes cell values; file creation and formula support not evident from description."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the Lighthouse audit."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "skill|hallmark|5|skill:landing-page",
+  "label": "equivalent",
+  "reason": "Builds landing/home/product-style pages that avoid AI look; same task."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:desktop-commander.start_process",
+  "label": "equivalent",
+  "reason": "A shell can run the Lighthouse CLI against the URL and list top issues."
+ },
+ {
+  "id": "skill|webapp-testing|2|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open browser pages before loading the local app; orientation step."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the console read."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:fetch.fetch",
+  "label": "inappropriate",
+  "reason": "Static fetch cannot interact with or fill a web form."
+ },
+ {
+  "id": "skill|seo|0|mcp:fetch.fetch",
+  "label": "preliminary_step",
+  "reason": "Fetches the site content for analysis; does not analyze SEO itself."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:canonical-tag-checker",
+  "label": "related_partial",
+  "reason": "Canonicals are one possible indexing cause; not a full indexing diagnosis."
+ },
+ {
+  "id": "skill|docx|4|mcp:word-document-server.create_document",
+  "label": "preliminary_step",
+  "reason": "Creates the .docx; first step, letter content still to be added."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the trace."
+ },
+ {
+  "id": "skill|webapp-testing|1|skill:browser-automation",
+  "label": "related_partial",
+  "reason": "Oriented to building checks, not screenshotting and visual inspection."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome_devtools.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|webapp-testing|3|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the local app in a browser; first step toward the requested check."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.list_branches",
+  "label": "preliminary_step",
+  "reason": "Verifies the branch exists before opening the PR."
+ },
+ {
+  "id": "skill|mcp-builder|0|skill:api-integration",
+  "label": "inappropriate",
+  "reason": "Event-driven/webhook/ETL integration patterns; no MCP server guidance."
+ },
+ {
+  "id": "skill|xlsx|3|mcp:excel.excel_describe_sheets",
+  "label": "preliminary_step",
+  "reason": "Inspects the workbook sheets first; does not make the chart."
+ },
+ {
+  "id": "skill|obsidian-markdown|0|mcp:basic-memory.search_notes",
+  "label": "preliminary_step",
+  "reason": "Looks up Atlas and people in notes before writing; no Obsidian syntax help."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|5|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "skill|web-design-guidelines|3|skill:better-interface",
+  "label": "equivalent",
+  "reason": "Reviews interface across a11y, layout, typography; equivalent UI/UX review."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|xlsx|3|skill:dataviz",
+  "label": "related_partial",
+  "reason": "Covers the chart but not spreadsheet handling; chart-in-workbook reading unserved."
+ },
+ {
+  "id": "skill|security-and-hardening|3|skill:auth-implementation-patterns",
+  "label": "equivalent",
+  "reason": "Reviews token/session handling explicitly; fits the session-token review."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:diagnosing-bugs",
+  "label": "inappropriate",
+  "reason": "Software bug diagnosis skill; matches only on \"diagnose\", not SEO indexing."
+ },
+ {
+  "id": "skill|diagnosing-bugs|2|skill:debugging-strategies",
+  "label": "equivalent",
+  "reason": "General systematic debugging skill; covers this diagnosis task."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|0|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the console read."
+ },
+ {
+  "id": "skill|web-design-guidelines|2|skill:design-how-ui-review",
+  "label": "equivalent",
+  "reason": "UI review ranking usability and accessibility defects; equivalent review."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the console read."
+ },
+ {
+  "id": "skill|seo-audit|3|skill:canonical-tag-checker",
+  "label": "related_partial",
+  "reason": "Covers canonical tags but not hreflang."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Gets element refs needed to fill fields; preparatory step, fills nothing."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "preliminary_step",
+  "reason": "Observes the page (vision workflow) before filling; does not enter any values."
+ },
+ {
+  "id": "skill|frontend-design|0|skill:hallmark",
+  "label": "equivalent",
+  "reason": "Design skill for new pages that do not look generated; same task."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the trace."
+ },
+ {
+  "id": "tool|time.convert_time|3|mcp:12306-mcp.get-current-date",
+  "label": "inappropriate",
+  "reason": "Returns only the date (Shanghai), not the current time asked for."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|grill-me|5|skill:interview-me",
+  "label": "equivalent",
+  "reason": "One-question-at-a-time interview skill; matches \"interview me\" about the plan."
+ },
+ {
+  "id": "skill|security-and-hardening|0|skill:find-bugs",
+  "label": "related_partial",
+  "reason": "Scoped to branch changes and general bugs; partly fits auditing one handler."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:chrome_devtools.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.list_pull_requests",
+  "label": "preliminary_step",
+  "reason": "Checks for an existing PR before opening one; does not create it."
+ },
+ {
+  "id": "skill|web-design-guidelines|0|skill:accessibility-engineering",
+  "label": "equivalent",
+  "reason": "Accessibility audit and remediation skill; matches an accessibility code review."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|web-design-guidelines|4|skill:design-how-ui-review",
+  "label": "equivalent",
+  "reason": "UI review ranking usability and accessibility defects; equivalent review."
+ },
+ {
+  "id": "skill|webapp-testing|1|skill:run",
+  "label": "unassessable",
+  "reason": "Description not captured; name \"run\" does not settle what it covers."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|pdf|1|mcp:filesystem.list_allowed_directories",
+  "label": "preliminary_step",
+  "reason": "Finds accessible directories to locate the PDF; no PDF operation performed."
+ },
+ {
+  "id": "skill|webapp-testing|0|skill:browser-automation",
+  "label": "equivalent",
+  "reason": "Guides building reliable browser checks; fits verifying the form/page."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "skill|webapp-testing|3|skill:browser-automation",
+  "label": "equivalent",
+  "reason": "Guides building reliable browser checks; fits verifying the form/page."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|0|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.get_file_contents",
+  "label": "preliminary_step",
+  "reason": "Locates the broken install-page link to describe in the issue; does not file it."
+ },
+ {
+  "id": "skill|seo|0|mcp:sitemap.get_sitemap_stats",
+  "label": "related_partial",
+  "reason": "Sitemap stats cover one facet of an SEO analysis."
+ },
+ {
+  "id": "skill|diagnosing-bugs|0|skill:debugging-strategies",
+  "label": "equivalent",
+  "reason": "General systematic debugging skill; covers this diagnosis task."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|5|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the console read."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.get_repository_tree",
+  "label": "preliminary_step",
+  "reason": "Locates the broken install-page link to describe in the issue; does not file it."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|3|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "skill|frontend-design|0|skill:build-design",
+  "label": "inappropriate",
+  "reason": "Implements from a Figma file or image; no design source exists here."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|3|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "skill|animate|3|skill:animation-performance",
+  "label": "related_partial",
+  "reason": "Covers smoothness/perf of motion, not building the removal transition."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|0|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|5|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the Lighthouse audit."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|pdf|4|mcp:filesystem.list_allowed_directories",
+  "label": "preliminary_step",
+  "reason": "Finds accessible directories to locate the PDF; no PDF operation performed."
+ },
+ {
+  "id": "skill|obsidian-markdown|0|mcp:memory.search_nodes",
+  "label": "preliminary_step",
+  "reason": "Looks up Atlas people in the knowledge graph before writing the note."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Gets element refs needed to fill fields; preparatory step, fills nothing."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:fetch.fetch",
+  "label": "related_partial",
+  "reason": "Returns page text for \"what is on it\" but no screenshot."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the trace."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Gets element refs needed to fill fields; preparatory step, fills nothing."
+ },
+ {
+  "id": "skill|pptx|3|mcp:ppt.list_presentations",
+  "label": "preliminary_step",
+  "reason": "Lists loaded presentations before combining; does not merge them."
+ },
+ {
+  "id": "skill|webapp-testing|1|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open browser pages before loading the local app; orientation step."
+ },
+ {
+  "id": "skill|webapp-testing|0|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the local app in a browser; first step toward the requested check."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "preliminary_step",
+  "reason": "Observes the page (vision workflow) before filling; does not enter any values."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|3|mcp:playwright-mcp.browser_wait_for",
+  "label": "preliminary_step",
+  "reason": "Waits for page load before the capture; setup step, no screenshot taken."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|2|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|vercel-react-best-practices|4|skill:react-best-practices",
+  "label": "equivalent",
+  "reason": "Near-duplicate React performance guide adapted from Vercel guidance."
+ },
+ {
+  "id": "skill|mcp-builder|2|skill:api-integration",
+  "label": "inappropriate",
+  "reason": "Event-driven/webhook/ETL integration patterns; no MCP server guidance."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_snapshot",
+  "label": "preliminary_step",
+  "reason": "Gets element refs needed to fill fields; preparatory step, fills nothing."
+ },
+ {
+  "id": "skill|web-design-guidelines|1|skill:design-how-ui-review",
+  "label": "equivalent",
+  "reason": "UI review ranking usability and accessibility defects; equivalent review."
+ },
+ {
+  "id": "skill|webapp-testing|1|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the local app in a browser; first step toward the requested check."
+ },
+ {
+  "id": "tool|time.convert_time|3|mcp:fetch.fetch",
+  "label": "related_partial",
+  "reason": "Could fetch a time service page; indirect, depends on finding one."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|2|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|docx|3|mcp:word-document-server.list_available_documents",
+  "label": "preliminary_step",
+  "reason": "Locates the .docx file first; does not perform the edit or extraction."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|0|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|5|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the console read."
+ },
+ {
+  "id": "skill|web-design-guidelines|0|skill:accessibility-compliance-accessibility-audit",
+  "label": "equivalent",
+  "reason": "WCAG accessibility audit skill; matches an accessibility review."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|2|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "skill|seo-audit|4|skill:seo-technical",
+  "label": "equivalent",
+  "reason": "Technical SEO audit skill; matches the requested technical SEO check."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome_devtools.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|security-and-hardening|5|skill:api-security",
+  "label": "related_partial",
+  "reason": "API pentest methodology; only partly matches a code-level webhook handler review."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:chrome_devtools.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:chrome-devtools.navigate_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "preliminary_step",
+  "reason": "Observes the page (vision workflow) before filling; does not enter any values."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Loads the page in Playwright, which can then read console messages."
+ },
+ {
+  "id": "skill|docx|5|mcp:word-document-server.list_available_documents",
+  "label": "preliminary_step",
+  "reason": "Locates the .docx file first; does not perform the edit or extraction."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|1|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the Lighthouse audit."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|security-and-hardening|1|skill:backend-security-coder",
+  "label": "equivalent",
+  "reason": "Secure backend coding with input validation; fits hardening an upload endpoint."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|1|mcp:chrome-devtools.navigate_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the Lighthouse audit."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|0|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks open pages before loading the URL; orientation step toward the Lighthouse audit."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:codex.list_mcp_resources",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "skill|web-design-guidelines|5|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Identifies \"this page\" among open browser pages before auditing."
+ },
+ {
+  "id": "skill|obsidian-markdown|2|mcp:basic-memory.list_memory_projects",
+  "label": "preliminary_step",
+  "reason": "Orients in the notes store before finding the source note; writes nothing."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "preliminary_step",
+  "reason": "Observes the page (vision workflow) before filling; does not enter any values."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:codex.list_mcp_resource_templates",
+  "label": "inappropriate",
+  "reason": "Generic MCP resource listing; neither performs nor sets up the requested browser operation."
+ },
+ {
+  "id": "tool|context7.get-library-docs|3|mcp:fetch.fetch",
+  "label": "equivalent",
+  "reason": "Fetching the official Tailwind v4 docs page gives the same up-to-date content."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_get",
+  "label": "inappropriate",
+  "reason": "Plain HTTP GET cannot fill in a browser form."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.list_branches",
+  "label": "preliminary_step",
+  "reason": "Verifies the branch exists before opening the PR."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the trace."
+ },
+ {
+  "id": "skill|frontend-design|0|skill:landing-page",
+  "label": "equivalent",
+  "reason": "Builds non-generic landing pages; directly fits the request."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:run",
+  "label": "unassessable",
+  "reason": "Description not captured; name \"run\" does not settle what it covers."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "skill|security-and-hardening|5|skill:find-bugs",
+  "label": "equivalent",
+  "reason": "Security review of pending branch changes; fits a pre-ship handler check."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Navigates to the URL; required first step before capturing the screenshot."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|4|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Loads the page in Playwright, which can then read console messages."
+ },
+ {
+  "id": "skill|seo-audit|0|mcp:excel.excel_describe_sheets",
+  "label": "inappropriate",
+  "reason": "No spreadsheet mentioned; inspecting Excel sheets does not address traffic drop."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "skill|humanizer|1|skill:better-writing",
+  "label": "inappropriate",
+  "reason": "Interface copy skill (labels, errors); not removing AI tells from prose."
+ },
+ {
+  "id": "skill|obsidian-markdown|2|mcp:basic-memory.search_notes",
+  "label": "preliminary_step",
+  "reason": "Finds the source note with the diagram before writing the embed."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:puppeteer.puppeteer_navigate",
+  "label": "preliminary_step",
+  "reason": "Opens the form page; required first step before filling the fields."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|0|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in the same Chrome; sensible first step before the trace."
+ }
+]

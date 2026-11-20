@@ -1,0 +1,8 @@
+envs/
+envs2/
+third_party/
+results/
+mcp/raw/
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,72 @@
+repo                                     skills listing_tok  x8k-chars  x16k  medDesc  twins  w/eval  body_tok
+sickn33_agentic-awesome-skills             3049      129184      64.6x  32.3x     148    161     60    6440587
+mukul975_Anthropic-Cybersecurity-Skills     818       88887      44.4x  22.2x     399      2      0    1829456
+davila7_claude-code-templates               904       68277      34.1x  17.1x     258     28     15    2152890
+github_awesome-copilot                      482       41557      20.8x  10.4x     292     30      5    1046711
+alirezarezvani_claude-skills                467       28769      14.4x   7.2x     218      2     15     916320
+K-Dense-AI_scientific-agent-skills          177       17731       8.9x   4.4x     336      0      1     578431
+affaan-m_ECC                                331       17074       8.5x   4.3x     139      0      1     559499
+wshobson_agents                             185       12898       6.4x   3.2x     231      0      0     233094
+elementalsouls_Claude-BugHunter              83       12630       6.3x   3.2x     593      4      0     400197
+coreyhaines31_marketingskills                53        4823       2.4x   1.2x     338      0     53     205211
+addyosmani_agent-skills                      26        2717       1.4x   0.7x     335      0      0      86316
+kajisho5_ffmpeg-skill                        18        2712       1.4x   0.7x     631      0      1      40378
+AgriciDaniel_claude-seo                      35        2662       1.3x   0.7x     279      0      0      92882
+thedotmack_claude-mem                        37        2626       1.3x   0.7x     238      0      1      74033
+anthropics_skills                            20        2424       1.2x   0.6x     324      0      1      72092
+emilkowalski_skills                          20        2165       1.1x   0.5x     447      0      0      67234
+Yuan1z0825_nature-skills                     24        1699       0.8x   0.4x     236      0     15      40911
+mattpocock_skills                            39        1496       0.7x   0.4x     125      0      0      42154
+Imbad0202_academic-research-skills            5        1194       0.6x   0.3x    1003      0      0      65034
+alchaincyf_nuwa-skill                        16        1194       0.6x   0.3x     302      0      0      50826
+Jakeschincariol_instagram-agent-skill        13        1106       0.6x   0.3x     310      0      0      13789
+JuliusBrussee_caveman                        22        1073       0.5x   0.3x     174      0      2      17439
+google-labs-code_stitch-skills               16         998       0.5x   0.2x     193      0      0      32520
+vercel-labs_agent-skills                      9         796       0.4x   0.2x     295      0      0      16229
+nextlevelbuilder_ui-ux-pro-max-skill          7         684       0.3x   0.2x     443      0      5      15206
+tt-a1i_archify                                5         498       0.2x   0.1x     288      0      0      10930
+obsidianmd_obsidian-skills                    7         463       0.2x   0.1x     262      0      0      11456
+shanraisshan_claude-code-best-practice        9         405       0.2x   0.1x     132      0      0       7672
+Egonex-AI_Understand-Anything                 9         323       0.2x   0.1x     114      0      0      29155
+cathrynlavery_diagram-design                  1         243       0.1x   0.1x     960      0      0       7915
+Leonxlnx_taste-skill                          1         231       0.1x   0.1x     904      0      0       7212
+DietrichGebert_ponytail                       6         202       0.1x   0.1x     133      0      0       4763
+pbakaus_impeccable                            2         157       0.1x   0.0x     589      0      0       3043
+virgiliojr94_book-to-skill                    1         104       0.1x   0.0x     405      0      1      14216
+cloudflare_security-audit-skill               1          93       0.0x   0.0x     359      0      0       5397
+mksglu_context-mode                           4          91       0.0x   0.0x      63      0      0        772
+Panniantong_Agent-Reach                       1          84       0.0x   0.0x     327      0      0        853
+blader_humanizer                              1          76       0.0x   0.0x     297      0      0       8300
+career-ops-hq_career-ops                      1          71       0.0x   0.0x     277      0      0       7047
+Nutlope_hallmark                              1          65       0.0x   0.0x     252      0      0       4442
+mvanhorn_last30days-skill                     1          64       0.0x   0.0x     246      0      1       7540
+ayghri_i-have-adhd                            1          63       0.0x   0.0x     242      0      0       1695
+
+skill names used by 2+ repos: 831
+5 seo-audit
+4 seo
+4 deep-research
+4 exa-search
+4 architecture-decision-records
+4 design-system
+4 marketing-psychology
+4 programmatic-seo
+4 copywriting
+4 copy-editing
+4 marketing-ideas
+4 brand-guidelines
+4 internal-comms
+4 handoff
+4 webapp-testing
+3 networkx
+3 qiskit
+3 sympy
+3 seaborn
+3 citation-management
+3 biopython
+3 scientific-writing
+3 cirq
+3 matplotlib
+3 generate-image
+
+skills 6908 with any eval/test file 177 2.6% repos with any: 15

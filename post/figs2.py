@@ -1,0 +1,213 @@
+"""SVG figures for post v2, computed from skill-trigger-spike/analysis/derived/v2 (run analyze.py first)."""
+import csv, json, os
+D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "analysis", "derived", "v2")
+B = os.path.dirname(os.path.abspath(__file__))
+rd = lambda f: list(csv.DictReader(open(os.path.join(D, f))))
+FONT = 'font-family="IBM Plex Sans, system-ui, sans-serif"'; MONO = 'font-family="IBM Plex Mono, ui-monospace, monospace"'
+COL = {"Haiku": "var(--s-haiku)", "Sonnet": "var(--s-sonnet)", "GPT": "var(--s-gpt)"}
+F = lambda x: float(x)
+out = {}
+
+def line_chart(series, xlabels, aria, w=720, h=330, legend_note=""):
+    L, R, T, Bm = 56, 150, 44, 54
+    pw, ph = w - L - R, h - T - Bm
+    X = lambda i: L + pw * i / (len(xlabels) - 1)
+    Y = lambda v: T + ph * (1 - v / 100)
+    g = []
+    for v in (0, 25, 50, 75, 100):
+        g.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{L+pw}" y2="{Y(v):.1f}" stroke="currentColor" stroke-opacity="{.35 if v==0 else .12}"/>'
+                 f'<text x="{L-8}" y="{Y(v)+4:.1f}" text-anchor="end" font-size="11.5" fill="currentColor" fill-opacity=".7">{v}%</text>')
+    for i, lab in enumerate(xlabels):
+        anchor = "start" if i == 0 else ("end" if i == len(xlabels) - 1 else "middle")
+        g.append(f'<text x="{X(i):.1f}" y="{T+ph+22}" text-anchor="{anchor}" font-size="12" fill="currentColor" fill-opacity=".8">{lab}</text>')
+    lg = []; lx = L
+    for s in series:
+        da = ' stroke-dasharray="6 5"' if s.get("dash") else ""
+        lg.append(f'<line x1="{lx}" y1="16" x2="{lx+22}" y2="16" stroke="{s["color"]}" stroke-width="2.5"{da}/><text x="{lx+28}" y="20" font-size="12" fill="currentColor">{s["name"]}</text>')
+        lx += 36 + 7.2 * len(s["name"])
+    lines, ends = [], []
+    for s in series:
+        pts = [(X(i), Y(v), v, i) for i, v in enumerate(s["values"]) if v is not None]
+        da = ' stroke-dasharray="6 5"' if s.get("dash") else ""
+        lines.append(f'<polyline points="{" ".join(f"{x:.1f},{y:.1f}" for x,y,_,_ in pts)}" fill="none" stroke="{s["color"]}" stroke-width="2.2"{da}/>')
+        for (x, y, v, i) in pts:
+            if s.get("ci"):
+                lo, hi = s["ci"][i]
+                lines.append(f'<line x1="{x:.1f}" y1="{Y(lo):.1f}" x2="{x:.1f}" y2="{Y(hi):.1f}" stroke="{s["color"]}" stroke-opacity=".45" stroke-width="1.5"/>')
+            lines.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{"var(--surface)" if s.get("dash") else s["color"]}" stroke="{s["color"]}" stroke-width="2"><title>{s["name"]}, {xlabels[i]}: {v:.1f}%</title></circle>')
+        x, y, v, _ = pts[-1]; ends.append([y, s, v])
+    ends.sort(key=lambda e: e[0])
+    for k in range(1, len(ends)):
+        if ends[k][0] - ends[k-1][0] < 15: ends[k][0] = ends[k-1][0] + 15
+    for y, s, v in ends:
+        lines.append(f'<text x="{L+pw+12}" y="{y+4:.1f}" font-size="12" fill="currentColor"><tspan font-weight="600">{v:.0f}%</tspan> {s["short"]}</text>')
+    return f'<svg viewBox="0 0 {w} {h}" role="img" aria-label="{aria}"><g {FONT}>{"".join(g)}{"".join(lg)}{"".join(lines)}</g></svg>'
+
+# --- Fig: how selection works (skills vs MCP tools)
+out["fig_how"] = f'''<svg viewBox="0 0 760 330" role="img" aria-label="Diagram. Every request is sent with the skill listing (all names and descriptions, capped at a share of the context) and with MCP tool definitions. Claude Code sends tool names and fetches schemas on demand with ToolSearch; Codex's token counts suggest it sends full definitions. From that, the model either loads a skill, calls a tool, or uses only built-in actions.">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+<g fill="none" stroke="currentColor" stroke-width="1.5">
+<rect x="10" y="135" width="140" height="60" rx="6"/>
+<rect x="200" y="14" width="300" height="128" rx="6"/>
+<rect x="200" y="182" width="300" height="134" rx="6"/>
+<rect x="550" y="14" width="200" height="50" rx="6" stroke="var(--accent)" stroke-width="2"/>
+<rect x="550" y="86" width="200" height="50" rx="6" stroke-dasharray="5 4"/>
+<rect x="550" y="182" width="200" height="50" rx="6" stroke="var(--accent)" stroke-width="2"/>
+<rect x="550" y="254" width="200" height="50" rx="6" stroke-dasharray="5 4"/>
+</g>
+<g {FONT} font-size="13" fill="currentColor">
+<text x="80" y="161" text-anchor="middle" font-weight="600">Your request</text>
+<text x="80" y="180" text-anchor="middle" font-size="11.5" fill-opacity=".75">“Audit the SEO of my site.”</text>
+<text x="214" y="36" font-weight="600">Skill listing, sent every time</text>
+<text x="214" y="58" {MONO} font-size="11">seo-audit: When the user wants to…</text>
+<text x="214" y="76" {MONO} font-size="11">pdf: Use this skill whenever…</text>
+<text x="214" y="94" {MONO} font-size="11">tdd: Test-driven development…</text>
+<text x="214" y="112" {MONO} font-size="11">… 1,000 more</text>
+<text x="214" y="132" font-size="11" fill-opacity=".75">capped: 1% (Claude Code), 2% / 10K tokens (Codex)</text>
+<text x="214" y="204" font-weight="600">MCP tool definitions</text>
+<text x="214" y="226" font-size="11.5">Claude Code: tool names listed,</text>
+<text x="214" y="243" font-size="11.5">schemas fetched with ToolSearch</text>
+<text x="214" y="267" font-size="11.5">Codex: tokens grow with every</text>
+<text x="214" y="284" font-size="11.5">definition (all appear in context)</text>
+<text x="214" y="306" font-size="11" fill-opacity=".75">plus built-ins: Glob, Read, shell…</text>
+<text x="650" y="44" text-anchor="middle" font-weight="600">Load a skill</text>
+<text x="650" y="116" text-anchor="middle" font-weight="600">No skill selected</text>
+<text x="650" y="212" text-anchor="middle" font-weight="600">Call an MCP tool</text>
+<text x="650" y="284" text-anchor="middle" font-weight="600">Built-in actions only</text>
+</g>
+<g stroke="currentColor" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+<line x1="150" y1="155" x2="196" y2="92"/>
+<line x1="150" y1="175" x2="196" y2="238"/>
+<line x1="500" y1="62" x2="546" y2="42"/>
+<line x1="500" y1="94" x2="546" y2="110"/>
+<line x1="500" y1="230" x2="546" y2="210"/>
+<line x1="500" y1="262" x2="546" y2="278"/>
+</g>
+<g {FONT} font-size="11" fill="currentColor" fill-opacity=".75"><text x="505" y="160">model</text><text x="505" y="174">decides</text></g>
+</svg>'''
+
+# --- Fig: skills curve (E1)
+e1 = {(r["model"], r["setup"]): r for r in rd("e1_rates.csv")}
+S = ["alone", "pack20", "crowd200", "crowd1000"]
+ser = []
+for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku"), ("gpt", "GPT")):
+    vals = [100 * F(e1[(m, s)]["rate"]) for s in S]
+    ci = [(100 * F(e1[(m, s)]["req_boot_lo"]), 100 * F(e1[(m, s)]["req_boot_hi"])) for s in S]
+    if m == "gpt": ci[0] = (96.9, 100)
+    ser.append(dict(name=f"{nm} ({'Codex' if m=='gpt' else 'Claude Code'})", short=nm, color=COL[nm], values=vals, ci=ci))
+out["fig_skills"] = line_chart(ser, ["Target alone", "20 skills", "220 skills", "1,020 skills"],
+    "Line chart: share of requests where the designated skill was selected. Sonnet 93, 76, 56, 34 percent; Haiku 78, 48, 25, 16; GPT 100, 99, 83, 10, for the target alone, 20, 220 and 1,020 skills installed.")
+
+# --- Fig: skills fade, tools bend (Claude, non-browser tools)
+e2 = {(r["model"], r["setup"]): r for r in rd("e2_mcp_rates.csv")}
+M = ["mcp_alone", "mcp_pack20", "mcp_crowd200", "mcp_crowdall"]
+ser = []
+for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku")):
+    ser.append(dict(name=f"{nm} skills", short=f"{nm} skills", color=COL[nm], values=[100 * F(e1[(m, s)]["rate"]) for s in S]))
+    ser.append(dict(name=f"{nm} MCP tools", short=f"{nm} tools", color=COL[nm], dash=True,
+                    values=[100 * F(e2[(m, s)]["nonbrowser_rate"]) for s in M],
+                    ci=[(100 * F(e2[(m, s)]["nonbrowser_req_lo"]), 100 * F(e2[(m, s)]["nonbrowser_req_hi"])) for s in M]))
+out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "All installed"],
+    "Line chart for Claude Code. Skills, solid lines: Sonnet 93 to 34 percent, Haiku 78 to 16 percent. Single-step MCP tools, dashed: Sonnet 92, 81, 77, 77 percent; Haiku 86, 79, 78, 78 percent, flat from about 220 tools on.")
+
+# --- Fig: what happened on misses at 1,020 skills
+segs = [("Designated skill", "target"), ("Equivalent alternative", "eq"), ("Other alternative", "alt"), ("No skill, finished", "none"), ("No skill, hit turn limit", "cap")]
+rows = []
+for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet"), ("gpt", "GPT")):
+    r = e1[(m, "crowd1000")]; n = F(r["n"])
+    vals = [F(r["target_selected"]), F(r["miss_alt_equivalent"]), F(r["miss_alt_related"]) + F(r["miss_alt_inappropriate"]) + F(r["miss_alt_unassessable"]),
+            F(r["miss_no_skill_completed"]), F(r["miss_no_skill_turn_limit"])]
+    rows.append((nm, [100 * v / n for v in vals], int(n)))
+x0, x1 = 90, 690; bw = x1 - x0; parts = []
+leg = []; lx = x0
+for n_, (lab, k) in enumerate(segs):
+    if n_ == 3: lx = x0
+    ly = 8 if n_ < 3 else 28
+    leg.append(f'<rect x="{lx}" y="{ly}" width="12" height="12" rx="2" fill="var(--seg-{k})"/>' + (f'<rect x="{lx}" y="{ly}" width="12" height="12" rx="2" fill="url(#hatch)"/>' if k == "cap" else "") + f'<text x="{lx+17}" y="{ly+10}" font-size="11.5" fill="currentColor">{lab}</text>')
+    lx += 34 + 6.6 * len(lab)
+for j, (nm, vals, n) in enumerate(rows):
+    y = 60 + j * 50; cx = x0
+    parts.append(f'<text x="{x0-10}" y="{y+21}" text-anchor="end" font-size="13" font-weight="600" fill="currentColor">{nm}</text>')
+    for (lab, k), v in zip(segs, vals):
+        wv = bw * v / 100
+        if wv <= 0: continue
+        parts.append(f'<rect x="{cx+1:.1f}" y="{y}" width="{max(0,wv-2):.1f}" height="30" fill="var(--seg-{k})"><title>{nm}: {lab} {v:.1f}%</title></rect>')
+        if k == "cap": parts.append(f'<rect x="{cx+1:.1f}" y="{y}" width="{max(0,wv-2):.1f}" height="30" fill="url(#hatch)" pointer-events="none"/>')
+        if wv > 42: parts.append(f'<text x="{cx+wv/2:.1f}" y="{y+20}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--on-seg-{k})">{v:.0f}%</text>')
+        cx += wv
+    parts.append(f'<text x="{x1+6}" y="{y+20}" font-size="11" fill="currentColor" fill-opacity=".7">n={n}</text>')
+out["fig_misses"] = f'''<svg viewBox="0 0 740 216" role="img" aria-label="Stacked bars at 1,020 skills. Haiku: 16 percent designated skill, 1 equivalent alternative, 3 other alternative, 37 no skill and finished, 44 no skill and hit the turn limit. Sonnet: 34, 2, 0, 44, 19. GPT: 10, 10, 14, 66, 0.">
+<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/></pattern></defs>
+<g {FONT}>{"".join(leg)}{"".join(parts)}</g></svg>'''
+
+# --- Fig: mixed scenarios (sequential ramp: load level)
+e3 = {(r["model"], r["setup"], r["kind"]): r for r in rd("e3_mixed_rates.csv")}
+e3p = {(r["model"], r["comparison"]): r for r in rd("e3_paired.csv")}
+groups = []
+for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet")):
+    base_sk = (F(e1[(m, "alone")]["target_selected"]) + F(e3[(m, "sk_alone", "skill")]["strict"])) / (F(e1[(m, "alone")]["n"]) + 30) * 100
+    sk = [base_sk, 100 * F(e3[(m, "mixed_smaller", "skill")]["strict_rate"]), 100 * F(e3[(m, "mixed_larger", "skill")]["strict_rate"])]
+    nb0 = 100 * F(e2[(m, "mcp_alone")]["nonbrowser_rate"])
+    tl = [nb0, nb0 + 100 * F(e3p[(m, "tool nonbrowser: mcp_alone -> mixed_smaller")]["diff"]), nb0 + 100 * F(e3p[(m, "tool nonbrowser: mcp_alone -> mixed_larger")]["diff"])]
+    groups += [(f"{nm}", "skill requests", sk), (f"{nm}", "tool requests", tl)]
+W, Hh = 720, 330; L, T, Bm = 50, 40, 62; pw = W - L - 20; ph = Hh - T - Bm
+Y = lambda v: T + ph * (1 - v / 100)
+gp = []; gw = pw / len(groups); bwid = 30
+for v in (0, 25, 50, 75, 100):
+    gp.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{L+pw}" y2="{Y(v):.1f}" stroke="currentColor" stroke-opacity="{.35 if v==0 else .12}"/><text x="{L-8}" y="{Y(v)+4:.1f}" text-anchor="end" font-size="11.5" fill="currentColor" fill-opacity=".7">{v}%</text>')
+labs = ["Single component", "Mixed, smaller", "Mixed, larger"]
+lx = L
+for k, lab in enumerate(labs):
+    gp.append(f'<rect x="{lx}" y="10" width="12" height="12" rx="2" fill="var(--seq{k+1})"/><text x="{lx+17}" y="20" font-size="11.5" fill="currentColor">{lab}</text>'); lx += 34 + 6.4 * len(lab)
+for gi, (nm, kind, vals) in enumerate(groups):
+    cx = L + gw * gi + gw / 2 - 1.5 * bwid - 3
+    for k, v in enumerate(vals):
+        x = cx + k * (bwid + 3); y = Y(v)
+        gp.append(f'<path d="M{x:.1f},{Y(0):.1f} V{y+4:.1f} Q{x:.1f},{y:.1f} {x+4:.1f},{y:.1f} H{x+bwid-4:.1f} Q{x+bwid:.1f},{y:.1f} {x+bwid:.1f},{y+4:.1f} V{Y(0):.1f} Z" fill="var(--seq{k+1})"><title>{nm} {kind}, {labs[k]}: {v:.1f}%</title></path>')
+        gp.append(f'<text x="{x+bwid/2:.1f}" y="{y-6:.1f}" text-anchor="middle" font-size="11" fill="currentColor">{v:.0f}</text>')
+    gp.append(f'<text x="{L+gw*gi+gw/2:.1f}" y="{T+ph+20}" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">{nm}</text><text x="{L+gw*gi+gw/2:.1f}" y="{T+ph+37}" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity=".8">{kind}</text>')
+out["fig_mix"] = f'<svg viewBox="0 0 {W} {Hh}" role="img" aria-label="Grouped bars, Claude Code. Skill requests: Haiku 79, 31, 24 percent; Sonnet 93, 43, 34 percent. Single-step tool requests: Haiku 86, 77, 73 percent; Sonnet 92, 76, 74 percent, for single component, mixed smaller and mixed larger setups."><g {FONT}>{"".join(gp)}</g></svg>'
+
+# --- Fig: per-skill dumbbell, Sonnet
+pt = [r for r in rd("e1_per_target.csv") if r["model"] == "sonnet"]
+fr = lambda s: int(s.split("/")[0]) / int(s.split("/")[1]) * 100
+pt.sort(key=lambda r: (-fr(r["crowd1000"]), -fr(r["alone"]), r["target"]))
+x0, x1 = 210, 680; sc = (x1 - x0) / 100; rows = []
+for i, r in enumerate(pt):
+    y = 34 + i * 22; a, c = fr(r["alone"]), fr(r["crowd1000"])
+    rows.append(f'<text x="{x0-12}" y="{y+4}" text-anchor="end" {MONO} font-size="11.5" fill="currentColor">{r["target"]}</text>'
+                f'<line x1="{x0+a*sc:.1f}" y1="{y}" x2="{x0+c*sc:.1f}" y2="{y}" stroke="currentColor" stroke-opacity=".3" stroke-width="2"/>'
+                f'<circle cx="{x0+a*sc:.1f}" cy="{y}" r="5.5" fill="var(--surface)" stroke="var(--s-sonnet)" stroke-width="2"><title>{r["target"]} alone: {r["alone"]}</title></circle>'
+                f'<circle cx="{x0+c*sc:.1f}" cy="{y}" r="5.5" fill="var(--s-sonnet)" stroke="var(--surface)" stroke-width="2"><title>{r["target"]} with 1,020 skills: {r["crowd1000"]}</title></circle>')
+H2 = 34 + len(pt) * 22
+ax = "".join(f'<line x1="{x0+v*sc:.1f}" y1="22" x2="{x0+v*sc:.1f}" y2="{H2-8}" stroke="currentColor" stroke-opacity=".1"/><text x="{x0+v*sc:.1f}" y="{H2+8}" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{v}%</text>' for v in (0, 25, 50, 75, 100))
+out["fig_dumbbell"] = f'''<svg viewBox="0 0 700 {H2+18}" role="img" aria-label="Dot plot for Sonnet, each skill alone (hollow) and with 1,020 skills installed (filled). grill-me and json-canvas stay at 17 of 18; seo-audit, security-and-hardening, diagnosing-bugs and animate fall to 0 of 18.">
+<g {FONT}><circle cx="{x0}" cy="10" r="5" fill="var(--surface)" stroke="var(--s-sonnet)" stroke-width="2"/><text x="{x0+10}" y="14" font-size="11.5" fill="currentColor">target alone</text>
+<circle cx="{x0+110}" cy="10" r="5" fill="var(--s-sonnet)"/><text x="{x0+120}" y="14" font-size="11.5" fill="currentColor">with 1,020 skills (18 runs each)</text>{ax}{"".join(rows)}</g></svg>'''
+
+# --- Fig: toy softmax, share of attention left for the target skill (illustration, not data)
+M = 20.0   # target matches the request 20x better than an unrelated skill (score gap ln 20)
+toy = [("Alone (1 skill)", 0, 0), ("20 skills", 19, 0), ("220 skills", 219, 0), ("1,020 skills", 1019, 0), ("1,020 incl. 16 look-alikes", 1003, 16)]
+segs_a = [("Target skill", "target"), ("Look-alikes (match as well as the target)", "alt"), ("Other skills", "none")]
+x0, x1 = 196, 636; bw = x1 - x0; pa = []; lx = x0
+for lab, k in segs_a:
+    pa.append(f'<rect x="{lx}" y="8" width="12" height="12" rx="2" fill="var(--seg-{k})"/><text x="{lx+17}" y="18" font-size="11.5" fill="currentColor">{lab}</text>'); lx += 34 + 6.3 * len(lab)
+for j, (lab, n_other, n_look) in enumerate(toy):
+    tot = M + n_other + M * n_look
+    vals = [100 * M / tot, 100 * M * n_look / tot, 100 * n_other / tot]
+    y = 40 + j * 40; cx = x0
+    pa.append(f'<text x="{x0-10}" y="{y+17}" text-anchor="end" font-size="12.5" fill="currentColor">{lab}</text>')
+    for (sl, k), v in zip(segs_a, vals):
+        wv = bw * v / 100
+        if wv <= 0: continue
+        pa.append(f'<rect x="{cx+1:.1f}" y="{y}" width="{max(2.5, wv-2):.1f}" height="26" fill="var(--seg-{k})"><title>{lab}: {sl} {v:.1f}%</title></rect>')
+        if wv > 46: pa.append(f'<text x="{cx+wv/2:.1f}" y="{y+17}" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--on-seg-{k})">{v:.0f}%</text>')
+        cx += wv
+    pa.append(f'<text x="{x1+10}" y="{y+17}" font-size="12" fill="currentColor">target <tspan font-weight="600">{vals[0]:.1f}%</tspan></text>')
+out["fig_attn"] = (f'<svg viewBox="0 0 740 {40 + 40*len(toy)}" role="img" aria-label="Toy model, not data. If the target skill matches the request 20 times better than an unrelated skill, its share of attention is 100 percent alone, 51 percent with 20 skills, 8 percent with 220, 2 percent with 1,020, and 1.5 percent with 1,020 skills of which 16 look-alikes match as well as the target. The look-alikes then take 24 percent.">'
+                   f'<g {FONT}>{"".join(pa)}</g></svg>')
+
+old = json.load(open(os.path.join(B, "figs.json")))
+out["fig_weight"] = old["fig_weight"]
+json.dump(out, open(os.path.join(B, "figs2.json"), "w"))
+print("figures:", list(out))

@@ -1,0 +1,1682 @@
+[
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:chrome-devtools.new_page",
+  "request": "Measure Core Web Vitals for https://acme.dev using a real browser trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|1|mcp:chrome-devtools.new_page",
+  "request": "What's the Lighthouse accessibility score of https://acme.dev/pricing?",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.list_pull_requests",
+  "request": "My branch hotfix-500 in octo/api is ready. Put up a PR against main.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.list_pull_requests",
+  "alternative_description": "MCP tool. List pull requests in a GitHub repository. If the user specifies an author, then DO NOT use this tool and use the search_pull_requests tool instead."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|2|skill:dataviz",
+  "request": "Create a column chart comparing revenue for 2024 (1.2M) and 2025 (1.9M).",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "skill:dataviz",
+  "alternative_description": "Skill. (Claude Code built-in skill; description not captured)"
+ },
+ {
+  "id": "skill|frontend-design|3|skill:better-ui",
+  "request": "Make this dashboard look less like every other AI-generated UI.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:better-ui",
+  "alternative_description": "Skill. Polishes surfaces, icons and motion with exact values for border radius, optical alignment, shadows, icon states and animation."
+ },
+ {
+  "id": "skill|diagnosing-bugs|1|skill:debugging-strategies",
+  "request": "This endpoint got 4x slower after last week's release. Find out why.",
+  "designated_target": "diagnosing-bugs",
+  "target_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+  "alternative": "skill:debugging-strategies",
+  "alternative_description": "Skill. Transform debugging from frustrating guesswork into systematic problem-solving with proven strategies, powerful tools, and methodical approaches."
+ },
+ {
+  "id": "skill|docx|4|mcp:word-document-server.add_paragraph",
+  "request": "Create a formal letter to my landlord as a .docx I can print.",
+  "designated_target": "docx",
+  "target_description": "Skill. Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files) or Word templates (.dotx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+  "alternative": "mcp:word-document-server.add_paragraph",
+  "alternative_description": "MCP tool. Add a paragraph to a Word document."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome_devtools.list_mcp_resource_templates",
+  "request": "Load https://shop.acme.dev and list any warnings in the dev tools console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome_devtools.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:codex.list_mcp_resources",
+  "request": "Start a performance trace on https://acme.dev/search and find long tasks.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|frontend-design|4|skill:build-design",
+  "request": "Design a portfolio homepage with a bold aesthetic direction.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:build-design",
+  "alternative_description": "Skill. Builds UI from a Figma file or a design image so it matches the design, using the project's existing tokens and components."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:chrome-devtools.new_page",
+  "request": "Are there any JavaScript console errors on https://acme.dev/checkout?",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|webapp-testing|3|mcp:playwright-mcp.browser_snapshot",
+  "request": "Write a Playwright script that verifies the signup page on localhost:5173.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "skill|web-design-guidelines|5|skill:accessibility-compliance-accessibility-audit",
+  "request": "Audit this page's accessibility and interaction details.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:accessibility-compliance-accessibility-audit",
+  "alternative_description": "Skill. Audit pages and user journeys against a declared WCAG scope. Use when identifying keyboard, screen-reader, focus or contrast barriers and planning verified remediation."
+ },
+ {
+  "id": "skill|frontend-design|4|skill:artifact-design",
+  "request": "Design a portfolio homepage with a bold aesthetic direction.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:artifact-design",
+  "alternative_description": "Skill. (Claude Code built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:chrome_devtools.list_mcp_resources",
+  "request": "Are there any JavaScript console errors on https://acme.dev/checkout?",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome_devtools.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|webapp-testing|2|mcp:playwright-mcp.browser_navigate",
+  "request": "Click through the checkout flow on my local site and capture any browser console errors.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|json-canvas|5|mcp:basic-memory.list_directory",
+  "request": "Connect the nodes in planning.canvas with labelled edges.",
+  "designated_target": "json-canvas",
+  "target_description": "Skill. Create and edit JSON Canvas files (.canvas) with nodes, edges, groups, and connections. Use when working with .canvas files, creating visual canvases, mind maps, flowcharts, or when the user mentions Canvas files in Obsidian.",
+  "alternative": "mcp:basic-memory.list_directory",
+  "alternative_description": "MCP tool. List directory contents with filtering and depth control."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|0|mcp:chrome-devtools.navigate_page",
+  "request": "Run a Lighthouse audit on https://acme.dev.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.navigate_page",
+  "alternative_description": "MCP tool. Go to a URL, or back, forward, or reload. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|tdd|0|skill:test-driven-development",
+  "request": "Add a discount code feature to the cart, and do it test-first.",
+  "designated_target": "tdd",
+  "target_description": "Skill. Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor\", or wants integration tests.",
+  "alternative": "skill:test-driven-development",
+  "alternative_description": "Skill. Use a failing behavioral test to guide a feature or bug fix, then implement and refactor with relevant regression checks."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:chrome-devtools.list_pages",
+  "request": "Audit https://acme.dev with Lighthouse and list the top issues.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.list_issues",
+  "request": "Can you report this on GitHub for acme/docs? The install page links to a 404.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.list_issues",
+  "alternative_description": "MCP tool. List issues in a GitHub repository. For pagination, use the 'endCursor' from the previous response's 'pageInfo' in the 'after' parameter."
+ },
+ {
+  "id": "skill|webapp-testing|0|mcp:playwright-mcp.browser_snapshot",
+  "request": "My app is running on localhost:3000. Check that the login form actually works.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "skill|seo|0|skill:seo-audit",
+  "request": "Analyze the SEO of acme.dev.",
+  "designated_target": "seo",
+  "target_description": "Skill. Comprehensive SEO analysis for any website or business type. Full site audits, single-page analysis, technical SEO (crawlability, indexability, Core Web Vitals with INP), schema markup, content quality (E-E-A-T), image optimization, sitemap analysis, and GEO for AI Overviews/ChatGPT/Perplexity. Industry detection for SaaS, e-commerce, local, publishers, agencies. Triggers on: SEO, audit, schema, Core Web Vitals, sitemap, E-E-A-T, AI Overviews, GEO, technical SEO, content quality, page speed. Use this hub only when the SEO domain is clear and the requested workflow is not; otherwise use the specific seo-* skill.",
+  "alternative": "skill:seo-audit",
+  "alternative_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won't rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:puppeteer.puppeteer_navigate",
+  "request": "Screenshot the homepage of https://vercel.com for my design notes.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|webapp-testing|2|skill:browser-automation",
+  "request": "Click through the checkout flow on my local site and capture any browser console errors.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-automation",
+  "alternative_description": "Skill. Build reliable browser checks using observed UI state, semantic locators, bounded waits, isolated test data and explicit outcome verification."
+ },
+ {
+  "id": "skill|webapp-testing|4|mcp:chrome-devtools.list_pages",
+  "request": "The button on my local React app does nothing when clicked. Can you debug it in a real browser?",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|5|mcp:playwright-mcp.browser_navigate",
+  "request": "What does the browser console print when https://acme.dev/settings opens?",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.list_commits",
+  "request": "Make a pull request for branch deps-bump in acme/webapp with a short description.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.list_commits",
+  "alternative_description": "MCP tool. Get list of commits of a branch in a GitHub repository. Returns at least 30 results per page by default, but can return more if specified using the perPage parameter (up to 100)."
+ },
+ {
+  "id": "skill|web-design-guidelines|2|skill:better-interface",
+  "request": "Check my site against UX best practices.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:better-interface",
+  "alternative_description": "Skill. Reviews a screen, flow or whole interface across accessibility, layout, writing, typography, color and UI polish, and returns one ranked report."
+ },
+ {
+  "id": "skill|docx|1|mcp:word-document-server.list_available_documents",
+  "request": "Replace every mention of Acme Corp with Globex in contract.docx.",
+  "designated_target": "docx",
+  "target_description": "Skill. Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files) or Word templates (.dotx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+  "alternative": "mcp:word-document-server.list_available_documents",
+  "alternative_description": "MCP tool. List all .docx files in the specified directory."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome-devtools.emulate",
+  "request": "Check https://acme.dev/blog with Lighthouse on mobile.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.emulate",
+  "alternative_description": "MCP tool. Emulates various features on the target page. Each call replaces all emulation settings (except extraHttpHeaders), so pass all desired settings in a single call."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_navigate",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|security-audit|3|skill:security-review",
+  "request": "Run a security review on the auth service.",
+  "designated_target": "security-audit",
+  "target_description": "Skill. Security guidance and vulnerability review for codebases, APIs, services, CLI tools, libraries, and daemons. Use for security questions, focused reviews, vulnerability research, security audits, or pen tests. Run the complete workflow only for explicit codebase audit or pen-test requests, full/comprehensive/end-to-end reviews, or requested report artifacts.",
+  "alternative": "skill:security-review",
+  "alternative_description": "Skill. (Claude Code built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:playwright-mcp.browser_resize",
+  "request": "Screenshot the homepage of https://vercel.com for my design notes.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_resize",
+  "alternative_description": "MCP tool. Resize the browser window"
+ },
+ {
+  "id": "skill|web-design-guidelines|3|skill:design-how-ui-review",
+  "request": "Review my UI.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:design-how-ui-review",
+  "alternative_description": "Skill. Review a rendered screen or flow and rank reproducible usability, accessibility and responsive defects with evidence."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.search_code",
+  "request": "Can you report this on GitHub for acme/docs? The install page links to a 404.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.search_code",
+  "alternative_description": "MCP tool. Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns."
+ },
+ {
+  "id": "skill|mcp-builder|3|skill:tool-design",
+  "request": "What is the right way to structure tool definitions for an MCP integration with Notion?",
+  "designated_target": "mcp-builder",
+  "target_description": "Skill. Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+  "alternative": "skill:tool-design",
+  "alternative_description": "Skill. Build tools that agents can use effectively, including architectural reduction patterns. Use when creating new tools for agent systems, debugging tool-related failures or misuse, or optimizing existing tool sets for better agent performance."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:browser-automation",
+  "request": "The button on my local React app does nothing when clicked. Can you debug it in a real browser?",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-automation",
+  "alternative_description": "Skill. Build reliable browser checks using observed UI state, semantic locators, bounded waits, isolated test data and explicit outcome verification."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.search_issues",
+  "request": "Can you report this on GitHub for acme/docs? The install page links to a 404.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.search_issues",
+  "alternative_description": "MCP tool. Search issues using natural-language semantic matching. Best for conceptual or paraphrased queries (e.g. \"login fails after password reset\"). Already scoped to is:issue."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:playwright-mcp.browser_snapshot",
+  "request": "In the browser, enter 'wireless headphones' in the search box on https://shop.acme.dev.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:codex.list_mcp_resource_templates",
+  "request": "Load https://shop.acme.dev and list any warnings in the dev tools console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:playwright-mcp.browser_navigate",
+  "request": "Screenshot the homepage of https://vercel.com for my design notes.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|5|mcp:chrome_devtools.list_mcp_resources",
+  "request": "Run Lighthouse against https://acme.dev/login and summarize the report.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome_devtools.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|webapp-testing|2|mcp:playwright-mcp.browser_tabs",
+  "request": "Click through the checkout flow on my local site and capture any browser console errors.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_tabs",
+  "alternative_description": "MCP tool. List, create, close, or select a browser tab."
+ },
+ {
+  "id": "skill|mcp-builder|1|skill:api-designer",
+  "request": "Help me design the tools for a Model Context Protocol server wrapping the Stripe API.",
+  "designated_target": "mcp-builder",
+  "target_description": "Skill. Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+  "alternative": "skill:api-designer",
+  "alternative_description": "Skill. Generates complete, production-ready REST API endpoint specifications for any system or domain the user describes."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:playwright-mcp.browser_navigate",
+  "request": "Open https://news.ycombinator.com in a browser and screenshot it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_evaluate",
+  "request": "On https://acme.dev/newsletter, type test@example.com into the email field.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_evaluate",
+  "alternative_description": "MCP tool. Evaluate JavaScript expression on page or element"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:chrome-devtools.new_page",
+  "request": "Run a Chrome performance recording on https://shop.acme.dev and look at the LCP.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_navigate",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:playwright-mcp.browser_wait_for",
+  "request": "Check the console output of https://acme.dev/dashboard after it loads.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:playwright-mcp.browser_wait_for",
+  "alternative_description": "MCP tool. Wait for text to appear or disappear or a specified time to pass. When both text and textGone are provided, waits for the first one to happen"
+ },
+ {
+  "id": "skill|webapp-testing|4|mcp:playwright-mcp.browser_navigate",
+  "request": "The button on my local React app does nothing when clicked. Can you debug it in a real browser?",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|2|mcp:chrome-devtools.new_page",
+  "request": "Why is https://acme.dev slow to become interactive? Capture a trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "On https://acme.dev/newsletter, type test@example.com into the email field.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "skill|docx|3|mcp:word-document-server.get_document_text",
+  "request": "Pull the text out of resume.docx so I can reuse it.",
+  "designated_target": "docx",
+  "target_description": "Skill. Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files) or Word templates (.dotx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+  "alternative": "mcp:word-document-server.get_document_text",
+  "alternative_description": "MCP tool. Extract all text from a Word document."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:puppeteer.puppeteer_navigate",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|4|mcp:chrome-devtools.new_page",
+  "request": "Something on https://acme.dev/login throws in the browser. Read the console logs.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:playwright-mcp.browser_navigate",
+  "request": "Measure Core Web Vitals for https://acme.dev using a real browser trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|frontend-design|2|skill:better-ui",
+  "request": "Create a React component for a pricing section with real attention to typography and color.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:better-ui",
+  "alternative_description": "Skill. Polishes surfaces, icons and motion with exact values for border radius, optical alignment, shadows, icon states and animation."
+ },
+ {
+  "id": "skill|webapp-testing|5|skill:browser-harness",
+  "request": "Verify the frontend of the app in this repo renders after I start it locally.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-harness",
+  "alternative_description": "Skill. Drive an existing browser through CDP for authenticated, visual, or interactive web automation."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:chrome-devtools.new_page",
+  "request": "Profile the page load of https://acme.dev/dashboard in Chrome.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|github.create_issue|2|mcp:github.get_me",
+  "request": "Create a GitHub issue in acme/webapp to track adding dark mode, assign it to me.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.get_me",
+  "alternative_description": "MCP tool. Get details of the authenticated GitHub user. Use this when a request is about the user's own profile for GitHub. Or when information is missing to build other tool calls."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:chrome-devtools.navigate_page",
+  "request": "Open https://news.ycombinator.com in a browser and screenshot it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:chrome-devtools.navigate_page",
+  "alternative_description": "MCP tool. Go to a URL, or back, forward, or reload. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_snapshot",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:playwright-mcp.browser_wait_for",
+  "request": "Screenshot the homepage of https://vercel.com for my design notes.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_wait_for",
+  "alternative_description": "MCP tool. Wait for text to appear or disappear or a specified time to pass. When both text and textGone are provided, waits for the first one to happen"
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome-devtools.list_pages",
+  "request": "Load https://shop.acme.dev and list any warnings in the dev tools console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:puppeteer.puppeteer_navigate",
+  "request": "Open https://news.ycombinator.com in a browser and screenshot it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|hallmark|0|skill:landing-page",
+  "request": "Build a landing page for my new note-taking app.",
+  "designated_target": "hallmark",
+  "target_description": "Skill. Design skill for websites and new pages that look designed, not generated. Use when the user asks to build or design something new, or names Hallmark. Never use it on an existing design unless the user names Hallmark, as in `/hallmark redesign <path>`.",
+  "alternative": "skill:landing-page",
+  "alternative_description": "Skill. Build landing, home and pricing pages that look like a real product instead of AI output: honest copy, one design system, checked on phone and desktop."
+ },
+ {
+  "id": "skill|webapp-testing|5|skill:run",
+  "request": "Verify the frontend of the app in this repo renders after I start it locally.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:run",
+  "alternative_description": "Skill. (Claude Code built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_navigate",
+  "request": "On https://acme.dev/newsletter, type test@example.com into the email field.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:chrome-devtools.new_page",
+  "request": "Audit https://acme.dev with Lighthouse and list the top issues.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|github.create_pull_request|1|mcp:github.search_code",
+  "request": "Create a pull request on GitHub for my branch feature/dark-mode in acme/webapp, titled Add dark mode.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.search_code",
+  "alternative_description": "MCP tool. Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "Check the console output of https://acme.dev/dashboard after it loads.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|1|mcp:playwright-mcp.browser_navigate",
+  "request": "Grab a screenshot of the pricing page at https://acme.dev/pricing.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|5|mcp:playwright-mcp.browser_navigate",
+  "request": "Show me what https://acme.dev/login looks like in a real browser.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|5|mcp:chrome-devtools.new_page",
+  "request": "Show me what https://acme.dev/login looks like in a real browser.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|2|mcp:mcp-server-chart.generate_dual_axes_chart",
+  "request": "Create a column chart comparing revenue for 2024 (1.2M) and 2025 (1.9M).",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "mcp:mcp-server-chart.generate_dual_axes_chart",
+  "alternative_description": "MCP tool. Generate a dual axes chart which is a combination chart that integrates two different chart types, typically combining a bar chart with a line chart to display both the trend and comparison of data, such as, the trend of sales and profit over time."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome-devtools.navigate_page",
+  "request": "Load https://shop.acme.dev and list any warnings in the dev tools console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.navigate_page",
+  "alternative_description": "MCP tool. Go to a URL, or back, forward, or reload. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|xlsx|1|mcp:excel.excel_write_to_sheet",
+  "request": "Build me a budget spreadsheet with formulas for the monthly totals.",
+  "designated_target": "xlsx",
+  "target_description": "Skill. Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .xltx, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path \u2014 even casually (like \"the xlsx in my downloads\") \u2014 and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved.",
+  "alternative": "mcp:excel.excel_write_to_sheet",
+  "alternative_description": "MCP tool. Write values to the Excel sheet"
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome-devtools.list_pages",
+  "request": "Check https://acme.dev/blog with Lighthouse on mobile.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|2|mcp:chrome-devtools.new_page",
+  "request": "Open https://news.ycombinator.com in a browser and screenshot it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|hallmark|5|skill:landing-page",
+  "request": "Build a fresh product page for our running shoes.",
+  "designated_target": "hallmark",
+  "target_description": "Skill. Design skill for websites and new pages that look designed, not generated. Use when the user asks to build or design something new, or names Hallmark. Never use it on an existing design unless the user names Hallmark, as in `/hallmark redesign <path>`.",
+  "alternative": "skill:landing-page",
+  "alternative_description": "Skill. Build landing, home and pricing pages that look like a real product instead of AI output: honest copy, one design system, checked on phone and desktop."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:codex.list_mcp_resources",
+  "request": "Load https://shop.acme.dev and list any warnings in the dev tools console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:puppeteer.puppeteer_navigate",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:puppeteer.puppeteer_navigate",
+  "request": "In the browser, enter 'wireless headphones' in the search box on https://shop.acme.dev.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:desktop-commander.start_process",
+  "request": "Audit https://acme.dev with Lighthouse and list the top issues.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:desktop-commander.start_process",
+  "alternative_description": "MCP tool. \n                        Start a new terminal process with intelligent state detection.\n                        \n                        PRIMARY TOOL FOR FILE ANALYSIS AND DATA PROCESSING\n                        This is the ONLY correct tool for analyzing local files (CSV, JSON, logs, etc.).\n                        The analysis tool CANNOT access local files and WILL FAIL - always use processes for file-based work.\n                        \n                        CRITICAL RULE: For ANY local file work, ALWAYS use this tool + interact_with_process, NEVER use analysis/REPL tool.\n                        \n                        Running on Linux. Default shell: bash.\n        \nLINUX-SPECIFIC NOTES:\n- Package managers vary by distro: apt, yum, dnf, pacman, zypper\n- Python 3 might be 'python3' command, not 'python'\n- Standard Unix shell tools available (grep, awk, sed, etc.)\n- File permissions and ownership important for many operations\n- Systemd services common on modern distributions\n                        \n                        REQUIRED WORKFLOW FOR LOCAL FILES:\n                        1. start_process(\"python3 -i\") - Start Python REPL for data analysis\n                        2. in"
+ },
+ {
+  "id": "skill|webapp-testing|2|mcp:chrome-devtools.list_pages",
+  "request": "Click through the checkout flow on my local site and capture any browser console errors.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:chrome-devtools.list_pages",
+  "request": "Check the console output of https://acme.dev/dashboard after it loads.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:fetch.fetch",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "skill|seo|0|mcp:fetch.fetch",
+  "request": "Analyze the SEO of acme.dev.",
+  "designated_target": "seo",
+  "target_description": "Skill. Comprehensive SEO analysis for any website or business type. Full site audits, single-page analysis, technical SEO (crawlability, indexability, Core Web Vitals with INP), schema markup, content quality (E-E-A-T), image optimization, sitemap analysis, and GEO for AI Overviews/ChatGPT/Perplexity. Industry detection for SaaS, e-commerce, local, publishers, agencies. Triggers on: SEO, audit, schema, Core Web Vitals, sitemap, E-E-A-T, AI Overviews, GEO, technical SEO, content quality, page speed. Use this hub only when the SEO domain is clear and the requested workflow is not; otherwise use the specific seo-* skill.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:canonical-tag-checker",
+  "request": "Diagnose why Google isn't indexing our blog posts.",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won't rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:canonical-tag-checker",
+  "alternative_description": "Skill. Canonical Tag Checker. Use when working with HTML and page URL, or accessible page URL."
+ },
+ {
+  "id": "skill|docx|4|mcp:word-document-server.create_document",
+  "request": "Create a formal letter to my landlord as a .docx I can print.",
+  "designated_target": "docx",
+  "target_description": "Skill. Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files) or Word templates (.dotx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+  "alternative": "mcp:word-document-server.create_document",
+  "alternative_description": "MCP tool. Create a new Word document with optional metadata."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:chrome-devtools.list_pages",
+  "request": "Run a Chrome performance recording on https://shop.acme.dev and look at the LCP.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "skill|webapp-testing|1|skill:browser-automation",
+  "request": "Take a screenshot of the dashboard page of my local dev server and tell me if anything looks broken.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-automation",
+  "alternative_description": "Skill. Build reliable browser checks using observed UI state, semantic locators, bounded waits, isolated test data and explicit outcome verification."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome_devtools.list_mcp_resources",
+  "request": "Load https://shop.acme.dev and list any warnings in the dev tools console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome_devtools.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|webapp-testing|3|mcp:playwright-mcp.browser_navigate",
+  "request": "Write a Playwright script that verifies the signup page on localhost:5173.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:playwright-mcp.browser_navigate",
+  "request": "Take a screenshot of https://example.com and tell me what's on it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.list_branches",
+  "request": "Make a pull request for branch deps-bump in acme/webapp with a short description.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.list_branches",
+  "alternative_description": "MCP tool. List branches in a GitHub repository"
+ },
+ {
+  "id": "skill|mcp-builder|0|skill:api-integration",
+  "request": "I want to build an MCP server that exposes our internal ticketing API to Claude.",
+  "designated_target": "mcp-builder",
+  "target_description": "Skill. Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+  "alternative": "skill:api-integration",
+  "alternative_description": "Skill. Designs event-driven architectures, webhook systems, API chaining flows, ETL pipelines, and integration patterns between services."
+ },
+ {
+  "id": "skill|xlsx|3|mcp:excel.excel_describe_sheets",
+  "request": "Make a chart of revenue by region from q3.xlsx.",
+  "designated_target": "xlsx",
+  "target_description": "Skill. Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .xltx, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path \u2014 even casually (like \"the xlsx in my downloads\") \u2014 and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved.",
+  "alternative": "mcp:excel.excel_describe_sheets",
+  "alternative_description": "MCP tool. List all sheet information of specified Excel file"
+ },
+ {
+  "id": "skill|obsidian-markdown|0|mcp:basic-memory.search_notes",
+  "request": "Write a note for my Obsidian vault about project Atlas with wikilinks to the people involved.",
+  "designated_target": "obsidian-markdown",
+  "target_description": "Skill. Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax. Use when working with .md files in Obsidian, or when the user mentions wikilinks, callouts, frontmatter, tags, embeds, or Obsidian notes.",
+  "alternative": "mcp:basic-memory.search_notes",
+  "alternative_description": "MCP tool. Search across all content in the knowledge base with advanced syntax support."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|5|mcp:chrome-devtools.new_page",
+  "request": "Run Lighthouse against https://acme.dev/login and summarize the report.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|web-design-guidelines|3|skill:better-interface",
+  "request": "Review my UI.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:better-interface",
+  "alternative_description": "Skill. Reviews a screen, flow or whole interface across accessibility, layout, writing, typography, color and UI polish, and returns one ranked report."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:codex.list_mcp_resources",
+  "request": "Are there any JavaScript console errors on https://acme.dev/checkout?",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|xlsx|3|skill:dataviz",
+  "request": "Make a chart of revenue by region from q3.xlsx.",
+  "designated_target": "xlsx",
+  "target_description": "Skill. Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .xltx, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path \u2014 even casually (like \"the xlsx in my downloads\") \u2014 and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved.",
+  "alternative": "skill:dataviz",
+  "alternative_description": "Skill. (Claude Code built-in skill; description not captured)"
+ },
+ {
+  "id": "skill|security-and-hardening|3|skill:auth-implementation-patterns",
+  "request": "Review how we store session tokens and fix anything risky.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:auth-implementation-patterns",
+  "alternative_description": "Skill. Implement or review authentication and authorization with explicit token, session and resource-access boundaries."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:diagnosing-bugs",
+  "request": "Diagnose why Google isn't indexing our blog posts.",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won't rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:diagnosing-bugs",
+  "alternative_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow."
+ },
+ {
+  "id": "skill|diagnosing-bugs|2|skill:debugging-strategies",
+  "request": "Debug this: the worker crashes intermittently with no stack trace.",
+  "designated_target": "diagnosing-bugs",
+  "target_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+  "alternative": "skill:debugging-strategies",
+  "alternative_description": "Skill. Transform debugging from frustrating guesswork into systematic problem-solving with proven strategies, powerful tools, and methodical approaches."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|0|mcp:chrome-devtools.new_page",
+  "request": "Open https://acme.dev and tell me what errors show up in the browser console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|web-design-guidelines|2|skill:design-how-ui-review",
+  "request": "Check my site against UX best practices.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:design-how-ui-review",
+  "alternative_description": "Skill. Review a rendered screen or flow and rank reproducible usability, accessibility and responsive defects with evidence."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|3|mcp:chrome-devtools.new_page",
+  "request": "Load https://shop.acme.dev and list any warnings in the dev tools console.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|seo-audit|3|skill:canonical-tag-checker",
+  "request": "Are our canonical tags and hreflang set up correctly?",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won't rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:canonical-tag-checker",
+  "alternative_description": "Skill. Canonical Tag Checker. Use when working with HTML and page URL, or accessible page URL."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome-devtools.new_page",
+  "request": "Check https://acme.dev/blog with Lighthouse on mobile.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_snapshot",
+  "request": "On https://acme.dev/newsletter, type test@example.com into the email field.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "skill|frontend-design|0|skill:hallmark",
+  "request": "Build a landing page for my design studio. I don't want it to look generic.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:hallmark",
+  "alternative_description": "Skill. Design skill for websites and new pages that look designed, not generated. Use when the user asks to build or design something new, or names Hallmark. Never use it on an existing design unless the user names Hallmark, as in `/hallmark redesign <path>`."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:chrome-devtools.list_pages",
+  "request": "Profile the page load of https://acme.dev/dashboard in Chrome.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|time.convert_time|3|mcp:12306-mcp.get-current-date",
+  "request": "What's the current time in Singapore?",
+  "designated_target": "time.convert_time",
+  "target_description": "MCP tool. Convert time between timezones",
+  "alternative": "mcp:12306-mcp.get-current-date",
+  "alternative_description": "MCP tool. \u83b7\u53d6\u5f53\u524d\u65e5\u671f\uff0c\u4ee5\u4e0a\u6d77\u65f6\u533a\uff08Asia/Shanghai, UTC+8\uff09\u4e3a\u51c6\uff0c\u8fd4\u56de\u683c\u5f0f\u4e3a \"yyyy-MM-dd\"\u3002\u4e3b\u8981\u7528\u4e8e\u89e3\u6790\u7528\u6237\u63d0\u5230\u7684\u76f8\u5bf9\u65e5\u671f\uff08\u5982\u201c\u660e\u5929\u201d\u3001\u201c\u4e0b\u5468\u4e09\u201d\uff09\uff0c\u4e3a\u5176\u4ed6\u9700\u8981\u65e5\u671f\u7684\u63a5\u53e3\u63d0\u4f9b\u51c6\u786e\u7684\u65e5\u671f\u8f93\u5165\u3002"
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:codex.list_mcp_resource_templates",
+  "request": "Check the console output of https://acme.dev/dashboard after it loads.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|grill-me|5|skill:interview-me",
+  "request": "Interview me about my plan for the onboarding redesign.",
+  "designated_target": "grill-me",
+  "target_description": "Skill. A relentless interview to sharpen a plan or design.",
+  "alternative": "skill:interview-me",
+  "alternative_description": "Skill. Draw out what the user actually wants with one-question-at-a-time interviews until intent is clear \u2014 before any plan, spec, or code exists."
+ },
+ {
+  "id": "skill|security-and-hardening|0|skill:find-bugs",
+  "request": "Audit this login handler for vulnerabilities.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:find-bugs",
+  "alternative_description": "Skill. Find bugs, security vulnerabilities, and code quality issues in local branch changes. Use when asked to review changes, find bugs, security review, or audit code on the current branch."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:chrome_devtools.list_mcp_resources",
+  "request": "Measure Core Web Vitals for https://acme.dev using a real browser trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome_devtools.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.list_pull_requests",
+  "request": "Make a pull request for branch deps-bump in acme/webapp with a short description.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.list_pull_requests",
+  "alternative_description": "MCP tool. List pull requests in a GitHub repository. If the user specifies an author, then DO NOT use this tool and use the search_pull_requests tool instead."
+ },
+ {
+  "id": "skill|web-design-guidelines|0|skill:accessibility-engineering",
+  "request": "Review my UI code for accessibility problems.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:accessibility-engineering",
+  "alternative_description": "Skill. Audits existing interfaces for WCAG 2.2 AA conformance and remediates the violations found. Use when auditing a page or component for accessibility, running axe-core or pa11y, triaging a11y violations, or checking screen reader and contrast issues before shipping."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:codex.list_mcp_resource_templates",
+  "request": "Measure Core Web Vitals for https://acme.dev using a real browser trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|web-design-guidelines|4|skill:design-how-ui-review",
+  "request": "Does this form follow good web interface guidelines?",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:design-how-ui-review",
+  "alternative_description": "Skill. Review a rendered screen or flow and rank reproducible usability, accessibility and responsive defects with evidence."
+ },
+ {
+  "id": "skill|webapp-testing|1|skill:run",
+  "request": "Take a screenshot of the dashboard page of my local dev server and tell me if anything looks broken.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:run",
+  "alternative_description": "Skill. (Claude Code built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:codex.list_mcp_resources",
+  "request": "Run a Chrome performance recording on https://shop.acme.dev and look at the LCP.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|pdf|1|mcp:filesystem.list_allowed_directories",
+  "request": "Pull the table on page 3 of report.pdf out into something I can paste into a spreadsheet.",
+  "designated_target": "pdf",
+  "target_description": "Skill. Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, rotating pages, adding watermarks, creating new PDFs, filling PDF forms, encrypting/decrypting PDFs, extracting images, and OCR on scanned PDFs to make them searchable. If the user mentions a .pdf file or asks to produce one, use this skill.",
+  "alternative": "mcp:filesystem.list_allowed_directories",
+  "alternative_description": "MCP tool. Returns the list of directories that this server is allowed to access. Use this to understand which directories are available before trying to access files."
+ },
+ {
+  "id": "skill|webapp-testing|0|skill:browser-automation",
+  "request": "My app is running on localhost:3000. Check that the login form actually works.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-automation",
+  "alternative_description": "Skill. Build reliable browser checks using observed UI state, semantic locators, bounded waits, isolated test data and explicit outcome verification."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_navigate",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|webapp-testing|3|skill:browser-automation",
+  "request": "Write a Playwright script that verifies the signup page on localhost:5173.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-automation",
+  "alternative_description": "Skill. Build reliable browser checks using observed UI state, semantic locators, bounded waits, isolated test data and explicit outcome verification."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|0|mcp:codex.list_mcp_resources",
+  "request": "Record a performance trace of https://acme.dev while it loads and tell me what's slow.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.get_file_contents",
+  "request": "Can you report this on GitHub for acme/docs? The install page links to a 404.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.get_file_contents",
+  "alternative_description": "MCP tool. Get the contents of a file or directory from a GitHub repository"
+ },
+ {
+  "id": "skill|seo|0|mcp:sitemap.get_sitemap_stats",
+  "request": "Analyze the SEO of acme.dev.",
+  "designated_target": "seo",
+  "target_description": "Skill. Comprehensive SEO analysis for any website or business type. Full site audits, single-page analysis, technical SEO (crawlability, indexability, Core Web Vitals with INP), schema markup, content quality (E-E-A-T), image optimization, sitemap analysis, and GEO for AI Overviews/ChatGPT/Perplexity. Industry detection for SaaS, e-commerce, local, publishers, agencies. Triggers on: SEO, audit, schema, Core Web Vitals, sitemap, E-E-A-T, AI Overviews, GEO, technical SEO, content quality, page speed. Use this hub only when the SEO domain is clear and the requested workflow is not; otherwise use the specific seo-* skill.",
+  "alternative": "mcp:sitemap.get_sitemap_stats",
+  "alternative_description": "MCP tool. Get comprehensive statistics about a website's sitemap structure"
+ },
+ {
+  "id": "skill|diagnosing-bugs|0|skill:debugging-strategies",
+  "request": "Diagnose why the checkout page throws a 500 only in production.",
+  "designated_target": "diagnosing-bugs",
+  "target_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+  "alternative": "skill:debugging-strategies",
+  "alternative_description": "Skill. Transform debugging from frustrating guesswork into systematic problem-solving with proven strategies, powerful tools, and methodical approaches."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|5|mcp:chrome-devtools.new_page",
+  "request": "What does the browser console print when https://acme.dev/settings opens?",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.get_repository_tree",
+  "request": "Can you report this on GitHub for acme/docs? The install page links to a 404.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.get_repository_tree",
+  "alternative_description": "MCP tool. Get the tree structure (files and directories) of a GitHub repository at a specific ref or SHA"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|3|mcp:puppeteer.puppeteer_navigate",
+  "request": "I want to see how https://acme.dev looks right now. Capture the page.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|frontend-design|0|skill:build-design",
+  "request": "Build a landing page for my design studio. I don't want it to look generic.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:build-design",
+  "alternative_description": "Skill. Builds UI from a Figma file or a design image so it matches the design, using the project's existing tokens and components."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:codex.list_mcp_resource_templates",
+  "request": "Start a performance trace on https://acme.dev/search and find long tasks.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|3|mcp:playwright-mcp.browser_navigate",
+  "request": "I want to see how https://acme.dev looks right now. Capture the page.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|animate|3|skill:animation-performance",
+  "request": "I want a smooth transition when this list item is removed.",
+  "designated_target": "animate",
+  "target_description": "Skill. Build an animation from scratch, making the decisions in the order that determines whether it feels right \u2014 should it animate at all, what purpose, which tool, which properties, which curve and duration, how it interrupts, how it exits. Writes the implementation. Use when asked to animate something, add motion, make a component feel alive, or build a transition. For critiquing existing motion use review-animations; for auditing a whole codebase use improve-animations.",
+  "alternative": "skill:animation-performance",
+  "alternative_description": "Skill. Diagnose dropped animation frames and choose properties, rendering paths, and profiling checks for smooth web motion."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|0|mcp:chrome-devtools.new_page",
+  "request": "Run a Lighthouse audit on https://acme.dev.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|5|mcp:chrome-devtools.list_pages",
+  "request": "Run Lighthouse against https://acme.dev/login and summarize the report.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_navigate",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:codex.list_mcp_resources",
+  "request": "Profile the page load of https://acme.dev/dashboard in Chrome.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|pdf|4|mcp:filesystem.list_allowed_directories",
+  "request": "Split handbook.pdf so each chapter is its own file.",
+  "designated_target": "pdf",
+  "target_description": "Skill. Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, rotating pages, adding watermarks, creating new PDFs, filling PDF forms, encrypting/decrypting PDFs, extracting images, and OCR on scanned PDFs to make them searchable. If the user mentions a .pdf file or asks to produce one, use this skill.",
+  "alternative": "mcp:filesystem.list_allowed_directories",
+  "alternative_description": "MCP tool. Returns the list of directories that this server is allowed to access. Use this to understand which directories are available before trying to access files."
+ },
+ {
+  "id": "skill|obsidian-markdown|0|mcp:memory.search_nodes",
+  "request": "Write a note for my Obsidian vault about project Atlas with wikilinks to the people involved.",
+  "designated_target": "obsidian-markdown",
+  "target_description": "Skill. Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax. Use when working with .md files in Obsidian, or when the user mentions wikilinks, callouts, frontmatter, tags, embeds, or Obsidian notes.",
+  "alternative": "mcp:memory.search_nodes",
+  "alternative_description": "MCP tool. Search for nodes in the knowledge graph based on a query"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_snapshot",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:fetch.fetch",
+  "request": "Take a screenshot of https://example.com and tell me what's on it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:chrome-devtools.list_pages",
+  "request": "Start a performance trace on https://acme.dev/search and find long tasks.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_snapshot",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "skill|pptx|3|mcp:ppt.list_presentations",
+  "request": "Combine intro.pptx and results.pptx into one presentation.",
+  "designated_target": "pptx",
+  "target_description": "Skill. Use this skill any time a .pptx or .potx file is involved in any way \u2014 as input, output, or both. This includes: creating slide decks, pitch decks, or presentations; reading, parsing, or extracting text from any .pptx or .potx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates (.potx), layouts, speaker notes, or comments. Trigger whenever the user mentions \"deck,\" \"slides,\" \"presentation,\" or references a .pptx or .potx filename, regardless of what they plan to do with the content afterward. If a .pptx or .potx file needs to be opened, created, or touched, use this skill.",
+  "alternative": "mcp:ppt.list_presentations",
+  "alternative_description": "MCP tool. List all loaded presentations."
+ },
+ {
+  "id": "skill|webapp-testing|1|mcp:chrome-devtools.list_pages",
+  "request": "Take a screenshot of the dashboard page of my local dev server and tell me if anything looks broken.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "skill|webapp-testing|0|mcp:playwright-mcp.browser_navigate",
+  "request": "My app is running on localhost:3000. Check that the login form actually works.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:puppeteer.puppeteer_navigate",
+  "request": "Take a screenshot of https://example.com and tell me what's on it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|3|mcp:playwright-mcp.browser_wait_for",
+  "request": "I want to see how https://acme.dev looks right now. Capture the page.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:playwright-mcp.browser_wait_for",
+  "alternative_description": "MCP tool. Wait for text to appear or disappear or a specified time to pass. When both text and textGone are provided, waits for the first one to happen"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|2|mcp:codex.list_mcp_resources",
+  "request": "Why is https://acme.dev slow to become interactive? Capture a trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|vercel-react-best-practices|4|skill:react-best-practices",
+  "request": "Write a new React component for the product list, following performance best practices.",
+  "designated_target": "vercel-react-best-practices",
+  "target_description": "Skill. React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.",
+  "alternative": "skill:react-best-practices",
+  "alternative_description": "Skill. Comprehensive performance optimization guide for React and Next.js applications, adapted from Vercel\u2019s published guidance. Use when writing new React components or Next.js pages, implementing data fetching (client or server-side), or reviewing code for performance issues."
+ },
+ {
+  "id": "skill|mcp-builder|2|skill:api-integration",
+  "request": "Create an MCP server in TypeScript that lets an LLM query my Postgres database.",
+  "designated_target": "mcp-builder",
+  "target_description": "Skill. Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+  "alternative": "skill:api-integration",
+  "alternative_description": "Skill. Designs event-driven architectures, webhook systems, API chaining flows, ETL pipelines, and integration patterns between services."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_snapshot",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_snapshot",
+  "alternative_description": "MCP tool. Capture accessibility snapshot of the current page, this is better than screenshot"
+ },
+ {
+  "id": "skill|web-design-guidelines|1|skill:design-how-ui-review",
+  "request": "Audit the design of this component against web interface best practices.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:design-how-ui-review",
+  "alternative_description": "Skill. Review a rendered screen or flow and rank reproducible usability, accessibility and responsive defects with evidence."
+ },
+ {
+  "id": "skill|webapp-testing|1|mcp:playwright-mcp.browser_navigate",
+  "request": "Take a screenshot of the dashboard page of my local dev server and tell me if anything looks broken.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|time.convert_time|3|mcp:fetch.fetch",
+  "request": "What's the current time in Singapore?",
+  "designated_target": "time.convert_time",
+  "target_description": "MCP tool. Convert time between timezones",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|2|mcp:codex.list_mcp_resource_templates",
+  "request": "Why is https://acme.dev slow to become interactive? Capture a trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|docx|3|mcp:word-document-server.list_available_documents",
+  "request": "Pull the text out of resume.docx so I can reuse it.",
+  "designated_target": "docx",
+  "target_description": "Skill. Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files) or Word templates (.dotx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+  "alternative": "mcp:word-document-server.list_available_documents",
+  "alternative_description": "MCP tool. List all .docx files in the specified directory."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|0|mcp:codex.list_mcp_resource_templates",
+  "request": "Record a performance trace of https://acme.dev while it loads and tell me what's slow.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|5|mcp:puppeteer.puppeteer_navigate",
+  "request": "Show me what https://acme.dev/login looks like in a real browser.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|4|mcp:codex.list_mcp_resources",
+  "request": "Measure Core Web Vitals for https://acme.dev using a real browser trace.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:chrome-devtools.new_page",
+  "request": "Check the console output of https://acme.dev/dashboard after it loads.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|web-design-guidelines|0|skill:accessibility-compliance-accessibility-audit",
+  "request": "Review my UI code for accessibility problems.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "skill:accessibility-compliance-accessibility-audit",
+  "alternative_description": "Skill. Audit pages and user journeys against a declared WCAG scope. Use when identifying keyboard, screen-reader, focus or contrast barriers and planning verified remediation."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|2|mcp:chrome-devtools.new_page",
+  "request": "Give me Lighthouse scores for performance, SEO and best practices on https://shop.acme.dev.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|seo-audit|4|skill:seo-technical",
+  "request": "Do a technical SEO check on this Next.js site.",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won't rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:seo-technical",
+  "alternative_description": "Skill. Audit technical SEO across crawlability, indexability, security, URLs, mobile, Core Web Vitals, structured data, JavaScript rendering, and related platform signals like robots.txt and AI crawler access."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:chrome_devtools.list_mcp_resources",
+  "request": "Check https://acme.dev/blog with Lighthouse on mobile.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome_devtools.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|security-and-hardening|5|skill:api-security",
+  "request": "Check this webhook handler for security issues before we ship.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:api-security",
+  "alternative_description": "Skill. Authorized security assessment of REST, GraphQL, WebSocket, and SOAP APIs: discovery, authentication and authorization flaws (BOLA/IDOR, JWT/OAuth), rate-limit testing, and a structured multi-phase methodology."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|1|mcp:chrome_devtools.list_mcp_resource_templates",
+  "request": "Are there any JavaScript console errors on https://acme.dev/checkout?",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:chrome_devtools.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|3|mcp:chrome-devtools.navigate_page",
+  "request": "Audit https://acme.dev with Lighthouse and list the top issues.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.navigate_page",
+  "alternative_description": "MCP tool. Go to a URL, or back, forward, or reload. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "In the browser, enter 'wireless headphones' in the search box on https://shop.acme.dev.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:playwright-mcp.browser_navigate",
+  "request": "Check the console output of https://acme.dev/dashboard after it loads.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|docx|5|mcp:word-document-server.list_available_documents",
+  "request": "Insert the logo image at the top of report.docx.",
+  "designated_target": "docx",
+  "target_description": "Skill. Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx files) or Word templates (.dotx files). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, headings, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, performing find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file, use this skill. Do NOT use for PDFs, spreadsheets, Google Docs, or general coding tasks unrelated to document generation.",
+  "alternative": "mcp:word-document-server.list_available_documents",
+  "alternative_description": "MCP tool. List all .docx files in the specified directory."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|1|mcp:codex.list_mcp_resource_templates",
+  "request": "Profile the page load of https://acme.dev/dashboard in Chrome.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|1|mcp:chrome-devtools.list_pages",
+  "request": "What's the Lighthouse accessibility score of https://acme.dev/pricing?",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|4|mcp:codex.list_mcp_resources",
+  "request": "Check https://acme.dev/blog with Lighthouse on mobile.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|security-and-hardening|1|skill:backend-security-coder",
+  "request": "Harden this file upload endpoint.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:backend-security-coder",
+  "alternative_description": "Skill. Expert in secure backend coding practices specializing in input validation, authentication, and API security. Use PROACTIVELY for backend security implementations or security code reviews."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|1|mcp:chrome-devtools.navigate_page",
+  "request": "What's the Lighthouse accessibility score of https://acme.dev/pricing?",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.navigate_page",
+  "alternative_description": "MCP tool. Go to a URL, or back, forward, or reload. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|chrome-devtools.lighthouse_audit|0|mcp:chrome-devtools.list_pages",
+  "request": "Run a Lighthouse audit on https://acme.dev.",
+  "designated_target": "chrome-devtools.lighthouse_audit",
+  "target_description": "MCP tool. Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run [`performance_start_trace`](#performance_start_trace)",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|2|mcp:codex.list_mcp_resources",
+  "request": "Check the console output of https://acme.dev/dashboard after it loads.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:codex.list_mcp_resources",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "skill|web-design-guidelines|5|mcp:chrome-devtools.list_pages",
+  "request": "Audit this page's accessibility and interaction details.",
+  "designated_target": "web-design-guidelines",
+  "target_description": "Skill. Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\".",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "skill|obsidian-markdown|2|mcp:basic-memory.list_memory_projects",
+  "request": "Create an Obsidian note that embeds the diagram from another note.",
+  "designated_target": "obsidian-markdown",
+  "target_description": "Skill. Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax. Use when working with .md files in Obsidian, or when the user mentions wikilinks, callouts, frontmatter, tags, embeds, or Obsidian notes.",
+  "alternative": "mcp:basic-memory.list_memory_projects",
+  "alternative_description": "MCP tool. List all available projects with their status.\n\nShows all Basic Memory projects that are available, indicating which one\nis currently active and which is the default.\n\nReturns:\n    Formatted list of projects with status indicators\n\nExample:\n    list_memory_projects()"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|3|mcp:codex.list_mcp_resource_templates",
+  "request": "Run a Chrome performance recording on https://shop.acme.dev and look at the LCP.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:codex.list_mcp_resource_templates",
+  "alternative_description": "MCP tool. (not in inventory)"
+ },
+ {
+  "id": "tool|context7.get-library-docs|3|mcp:fetch.fetch",
+  "request": "Fetch up-to-date Tailwind CSS v4 documentation on theme variables.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_get",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get",
+  "alternative_description": "MCP tool. Perform an HTTP GET request"
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.list_branches",
+  "request": "My branch hotfix-500 in octo/api is ready. Put up a PR against main.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.list_branches",
+  "alternative_description": "MCP tool. List branches in a GitHub repository"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|5|mcp:chrome-devtools.new_page",
+  "request": "Start a performance trace on https://acme.dev/search and find long tasks.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "skill|frontend-design|0|skill:landing-page",
+  "request": "Build a landing page for my design studio. I don't want it to look generic.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:landing-page",
+  "alternative_description": "Skill. Build landing, home and pricing pages that look like a real product instead of AI output: honest copy, one design system, checked on phone and desktop."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:run",
+  "request": "The button on my local React app does nothing when clicked. Can you debug it in a real browser?",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:run",
+  "alternative_description": "Skill. (Claude Code built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:puppeteer.puppeteer_navigate",
+  "request": "On https://acme.dev/newsletter, type test@example.com into the email field.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|security-and-hardening|5|skill:find-bugs",
+  "request": "Check this webhook handler for security issues before we ship.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:find-bugs",
+  "alternative_description": "Skill. Find bugs, security vulnerabilities, and code quality issues in local branch changes. Use when asked to review changes, find bugs, security review, or audit code on the current branch."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|0|mcp:chrome-devtools.new_page",
+  "request": "Take a screenshot of https://example.com and tell me what's on it.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|chrome-devtools.list_console_messages|4|mcp:playwright-mcp.browser_navigate",
+  "request": "Something on https://acme.dev/login throws in the browser. Read the console logs.",
+  "designated_target": "chrome-devtools.list_console_messages",
+  "target_description": "MCP tool. List all console messages for the target page since the last navigation. This includes console messages originating from extensions content scripts.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|seo-audit|0|mcp:excel.excel_describe_sheets",
+  "request": "Why did our organic traffic drop last month?",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won't rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "mcp:excel.excel_describe_sheets",
+  "alternative_description": "MCP tool. List all sheet information of specified Excel file"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:puppeteer.puppeteer_navigate",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|4|mcp:playwright-mcp.browser_navigate",
+  "request": "In the browser, enter 'wireless headphones' in the search box on https://shop.acme.dev.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "skill|humanizer|1|skill:better-writing",
+  "request": "Edit my blog post draft to remove the AI tells.",
+  "designated_target": "humanizer",
+  "target_description": "Skill. Rewrite AI-sounding text so it reads like the writer without changing what it says.\nUse when editing or reviewing prose for AI tells: not-X-but-Y contrasts, one-line\nclosers, staged openers, forced triads, dashes everywhere, inflated claims, sales\nlanguage, stock AI words, bold labels, or filler.",
+  "alternative": "skill:better-writing",
+  "alternative_description": "Skill. Writes and reviews interface copy, from labels and errors to empty states and confirmations, so it matches the product's voice and tells people what to do next."
+ },
+ {
+  "id": "skill|obsidian-markdown|2|mcp:basic-memory.search_notes",
+  "request": "Create an Obsidian note that embeds the diagram from another note.",
+  "designated_target": "obsidian-markdown",
+  "target_description": "Skill. Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax. Use when working with .md files in Obsidian, or when the user mentions wikilinks, callouts, frontmatter, tags, embeds, or Obsidian notes.",
+  "alternative": "mcp:basic-memory.search_notes",
+  "alternative_description": "MCP tool. Search across all content in the knowledge base with advanced syntax support."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:puppeteer.puppeteer_navigate",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|chrome-devtools.performance_start_trace|0|mcp:chrome-devtools.new_page",
+  "request": "Record a performance trace of https://acme.dev while it loads and tell me what's slow.",
+  "designated_target": "chrome-devtools.performance_start_trace",
+  "target_description": "MCP tool. Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ }
+]
