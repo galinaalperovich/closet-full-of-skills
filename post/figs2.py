@@ -34,7 +34,7 @@ def line_chart(series, xlabels, aria, w=720, h=330, legend_note="", title=""):
             if s.get("ci"):
                 lo, hi = s["ci"][i]
                 lines.append(f'<line x1="{x:.1f}" y1="{Y(lo):.1f}" x2="{x:.1f}" y2="{Y(hi):.1f}" stroke="{s["color"]}" stroke-opacity=".45" stroke-width="1.5"/>')
-            ci_txt = f" (95% interval {s['ci'][i][0]:.0f}–{s['ci'][i][1]:.0f}%)" if s.get("ci") else ""
+            ci_txt = f" (95% CI {s['ci'][i][0]:.0f}–{s['ci'][i][1]:.0f}%)" if s.get("ci") else ""
             lines.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{"var(--surface)" if s.get("dash") else s["color"]}" stroke="{s["color"]}" stroke-width="2"><title>{s["name"]}, {xlabels[i]}: {v:.1f}%{ci_txt}</title></circle>')
         x, y, v, _ = pts[-1]; ends.append([y, s, v])
     ends.sort(key=lambda e: e[0])
@@ -208,22 +208,53 @@ rows_svg.append(f'<text x="{(x0+x1)/2:.1f}" y="{y+10}" text-anchor="middle" font
 out["fig_forest"] = (f'<svg viewBox="0 0 {W} {y+22}" role="img" aria-label="Forest plot of paired changes versus the target alone, with 95% confidence intervals. Skills: Haiku minus 31, 53 and 63 points at 20, 220 and 1,020 skills; Sonnet minus 17, 37 and 59; GPT minus 1, 17 and 90. Single-step MCP tools: Haiku minus 7, 8 and 8 points at 20, 220 and 791 tools; Sonnet minus 11, 16 and 16; GPT minus 8 at 20 tools on 24 requests.">'
                      f'<g {FONT}>{grid}{"".join(rows_svg)}</g></svg>')
 
-# --- Fig: per-skill dumbbell, Sonnet
+# --- Fig: which skills kept being selected (Sonnet): an arrow per skill from "alone" to "with 1,020 skills",
+#     grouped by where the skill ends up. Diverging scheme: teal (kept), grey (sometimes), red-orange (rarely); validated.
 pt = [r for r in rd("e1_per_target.csv") if r["model"] == "sonnet"]
-fr = lambda s: int(s.split("/")[0]) / int(s.split("/")[1]) * 100
-pt.sort(key=lambda r: (-fr(r["crowd1000"]), -fr(r["alone"]), r["target"]))
-x0, x1 = 210, 680; sc = (x1 - x0) / 100; rows = []
-for i, r in enumerate(pt):
-    y = 34 + i * 22; a, c = fr(r["alone"]), fr(r["crowd1000"])
-    rows.append(f'<text x="{x0-12}" y="{y+4}" text-anchor="end" {MONO} font-size="11.5" fill="currentColor">{r["target"]}</text>'
-                f'<line x1="{x0+a*sc:.1f}" y1="{y}" x2="{x0+c*sc:.1f}" y2="{y}" stroke="currentColor" stroke-opacity=".3" stroke-width="2"/>'
-                f'<circle cx="{x0+a*sc:.1f}" cy="{y}" r="5.5" fill="var(--surface)" stroke="var(--s-sonnet)" stroke-width="2"><title>{r["target"]} alone: {r["alone"]}</title></circle>'
-                f'<circle cx="{x0+c*sc:.1f}" cy="{y}" r="5.5" fill="var(--s-sonnet)" stroke="var(--surface)" stroke-width="2"><title>{r["target"]} with 1,020 skills: {r["crowd1000"]}</title></circle>')
-H2 = 34 + len(pt) * 22
-ax = "".join(f'<line x1="{x0+v*sc:.1f}" y1="22" x2="{x0+v*sc:.1f}" y2="{H2-8}" stroke="currentColor" stroke-opacity=".1"/><text x="{x0+v*sc:.1f}" y="{H2+8}" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{v}%</text>' for v in (0, 25, 50, 75, 100))
-out["fig_dumbbell"] = f'''<svg viewBox="0 0 700 {H2+18}" role="img" aria-label="Dot plot for Sonnet, each skill alone (hollow) and with 1,020 skills installed (filled). grill-me and json-canvas stay at 17 of 18; seo-audit, security-and-hardening, diagnosing-bugs and animate fall to 0 of 18.">
-<g {FONT}><circle cx="{x0}" cy="10" r="5" fill="var(--surface)" stroke="var(--s-sonnet)" stroke-width="2"/><text x="{x0+10}" y="14" font-size="11.5" fill="currentColor">target alone</text>
-<circle cx="{x0+110}" cy="10" r="5" fill="var(--s-sonnet)"/><text x="{x0+120}" y="14" font-size="11.5" fill="currentColor">with 1,020 skills (18 runs each)</text>{ax}{"".join(rows)}</g></svg>'''
+frac = lambda s: (int(s.split("/")[0]), int(s.split("/")[1]))
+for r in pt:
+    r["ka"], r["na"] = frac(r["alone"]); r["kc"], r["nc"] = frac(r["crowd1000"])
+    r["a"], r["c"] = 100 * r["ka"] / r["na"], 100 * r["kc"] / r["nc"]
+bands = [("Kept being selected", "two-thirds of runs or more", lambda c: c >= 200 / 3 - 1e-9, "hi"),
+         ("Sometimes", "a third to two-thirds of runs", lambda c: 100 / 3 - 1e-9 <= c < 200 / 3 - 1e-9, "mid"),
+         ("Rarely or never", "under a third of runs", lambda c: c < 100 / 3 - 1e-9, "lo")]
+W = 760; x0, x1 = 200, 600; sc = (x1 - x0) / 100; X = lambda v: x0 + v * sc
+defs = "".join(f'<marker id="dbh-{k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--band-{k})"/></marker>' for k in ("hi", "mid", "lo"))
+parts = []
+# legend: a worked example of one arrow
+ly = 14
+parts.append(f'<circle cx="{x0}" cy="{ly}" r="5.5" fill="currentColor"/>'
+             f'<line x1="{x0+60}" y1="{ly}" x2="{x0+8}" y2="{ly}" stroke="currentColor" stroke-width="2" marker-end="url(#dbh-ex)"/>'
+             f'<circle cx="{x0+66}" cy="{ly}" r="5" fill="var(--surface)" stroke="currentColor" stroke-width="2"/>'
+             f'<text x="{x0+82}" y="{ly+4}" font-size="11.5" fill="currentColor">arrow: from the skill alone (hollow) to the same skill among 1,020 others (filled)</text>')
+defs += '<marker id="dbh-ex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>'
+y = 44
+for v in (0, 25, 50, 75, 100):
+    parts.append(f'<text x="{X(v):.1f}" y="{y}" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{v}%</text>')
+parts.append(f'<text x="{x1+34}" y="{y}" font-size="11" fill="currentColor" fill-opacity=".7">alone → 1,020</text>')
+grid_top = y + 8; y += 26
+for name, sub, test, k in bands:
+    rows = sorted([r for r in pt if test(r["c"])], key=lambda r: (-r["c"], -r["a"], r["target"]))
+    parts.append(f'<rect x="12" y="{y-9}" width="4" height="13" rx="1" fill="var(--band-{k})"/>'
+                 f'<text x="22" y="{y+2}" font-size="12.5" font-weight="600" fill="currentColor">{name}<tspan font-weight="400" fill-opacity=".7"> · {sub} with 1,020 skills ({len(rows)})</tspan></text>')
+    y += 22
+    for r in rows:
+        xa, xc = X(r["a"]), X(r["c"]); col = f"var(--band-{k})"
+        tip = xc + 8 if xa > xc else xc - 8
+        arrow = (f'<line x1="{xa:.1f}" y1="{y}" x2="{tip:.1f}" y2="{y}" stroke="{col}" stroke-width="2.2" marker-end="url(#dbh-{k})"/>' if abs(xa - xc) > 30
+                 else f'<line x1="{xa:.1f}" y1="{y}" x2="{xc:.1f}" y2="{y}" stroke="{col}" stroke-width="2.2"/>')
+        parts.append(f'<text x="{x0-14}" y="{y+4}" text-anchor="end" {MONO} font-size="11.5" fill="currentColor">{r["target"]}</text>' + arrow +
+                     f'<circle cx="{xa:.1f}" cy="{y}" r="5" fill="var(--surface)" stroke="{col}" stroke-width="2"><title>{r["target"]} alone: {r["a"]:.0f}% ({r["ka"]} of {r["na"]})</title></circle>'
+                     f'<circle cx="{xc:.1f}" cy="{y}" r="5.5" fill="{col}"><title>{r["target"]} with 1,020 skills: {r["c"]:.0f}% ({r["kc"]} of {r["nc"]})</title></circle>'
+                     f'<text x="{x1+34}" y="{y+4}" font-size="11.5" fill="currentColor" fill-opacity=".75">{r["a"]:.0f}% → <tspan font-weight="600" fill-opacity="1">{r["c"]:.0f}%</tspan></text>')
+        y += 21
+    y += 12
+grid = "".join(f'<line x1="{X(v):.1f}" y1="{grid_top}" x2="{X(v):.1f}" y2="{y-14}" stroke="currentColor" stroke-opacity=".1"/>' for v in (0, 25, 50, 75, 100))
+out["fig_dumbbell"] = (f'<svg viewBox="0 0 {W} {y}" role="img" aria-label="Arrow chart for Sonnet: each skill from installed alone to installed among 1,020 others, 18 runs each, grouped by where it ends up. '
+                       'Kept being selected: grill-me and json-canvas 100 to 94 percent, mcp-builder 100 to 78, xlsx 83 to 78, pptx 100 to 67. '
+                       'Sometimes: docx 94 to 56, pdf 100 to 50, tdd 100 to 39, obsidian-markdown 83 to 33. '
+                       'Rarely or never: 11 skills, including seo-audit, security-and-hardening, diagnosing-bugs and animate, which fell from 100 to 0.">'
+                       f'<defs>{defs}</defs><g {FONT}>{grid}{"".join(parts)}</g></svg>')
 
 # --- Fig: toy softmax, share of attention left for the target skill (illustration, not data)
 M = 20.0   # target matches the request 20x better than an unrelated skill (score gap ln 20)
