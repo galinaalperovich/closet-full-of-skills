@@ -4,7 +4,7 @@
 
 This repository has everything behind the blog post: the requests, the experiment scripts, every result record, the analysis that turns those records into the published numbers, the methodology with an external review and my response to it, and the post itself. You can reproduce every number without spending anything, and re-run the experiments if you want to pay for it.
 
-**Read the post: https://galinaalperovich.github.io/in-context-forgetting/**
+**Read the post: https://galinaalperovich.github.io/closet-full-of-skills/**
 
 The page is `docs/index.html`, built from the sources in [`post/`](post/). The figures are also exported as PNGs in [`post/images2/`](post/images2/).
 

@@ -37,9 +37,9 @@ L = {
  "price": "https://developers.openai.com/api/docs/models/gpt-6-astra.md",
  "vaswani": "https://arxiv.org/abs/1706.03762", "lost": "https://arxiv.org/abs/2307.03172", "ruler": "https://arxiv.org/abs/2404.06654",
  "nolima": "https://arxiv.org/abs/2502.05167", "rot": "https://research.trychroma.com/context-rot", "ssmax": "https://arxiv.org/abs/2501.19399",
- "ctxeng": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "repo": "https://github.com/galinaalperovich/in-context-forgetting", "r_meth": "https://github.com/galinaalperovich/in-context-forgetting/blob/main/METHODOLOGY.md", "r_chg": "https://github.com/galinaalperovich/in-context-forgetting/blob/main/analysis/CHANGELOG.md", "r_rev": "https://github.com/galinaalperovich/in-context-forgetting/blob/main/METHODOLOGY_REVIEW.md",
- "r_follow": "https://github.com/galinaalperovich/in-context-forgetting/blob/main/FOLLOWUP_PROTOCOL.md", "r_prompts": "https://github.com/galinaalperovich/in-context-forgetting/blob/main/prompts.json", "r_judge": "https://github.com/galinaalperovich/in-context-forgetting/blob/main/analysis/alt_judge_prompt.md",
- "r_cost": "https://github.com/galinaalperovich/in-context-forgetting/blob/main/analysis/derived/v2/cost_by_batch.csv", "contextbolt": "https://contextbolt.com/blog/too-many-mcp-servers/", "davila7": "https://github.com/davila7/claude-code-templates",
+ "ctxeng": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "repo": "https://github.com/galinaalperovich/closet-full-of-skills", "r_meth": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md", "r_chg": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/CHANGELOG.md", "r_rev": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY_REVIEW.md",
+ "r_follow": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/FOLLOWUP_PROTOCOL.md", "r_prompts": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/prompts.json", "r_judge": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md",
+ "r_cost": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/v2/cost_by_batch.csv", "contextbolt": "https://contextbolt.com/blog/too-many-mcp-servers/", "davila7": "https://github.com/davila7/claude-code-templates",
  "i81081": "https://github.com/anthropics/claude-code/issues/81081", "i56710": "https://github.com/anthropics/claude-code/issues/56710", "i64606": "https://github.com/anthropics/claude-code/issues/64606",
  "i10768": "https://github.com/anthropics/claude-code/issues/10768", "c19679": "https://github.com/openai/codex/issues/19679", "r_cc": "https://www.reddit.com/r/ClaudeCode/comments/1qo0s2b/",
  "r_hell": "https://www.reddit.com/r/claudeskills/comments/1w2a45r/", "fsck": "https://blog.fsck.com/2025/12/17/claude-code-skills-not-triggering",
@@ -299,7 +299,7 @@ codex exec --json -s read-only "Audit the SEO of my site." \\
 
 <h2>References</h2>
 <ol class="refs">
-<li>Code, data and methodology for this post: {A(L["repo"], "galinaalperovich/in-context-forgetting")}</li>
+<li>Code, data and methodology for this post: {A(L["repo"], "galinaalperovich/closet-full-of-skills")}</li>
 <li>{A(L["cc_skills"], "Claude Code documentation: Skills")}</li>
 <li>{A(L["codex_skills"], "Codex documentation: Build skills")}</li>
 <li>{A(L["spec"], "Agent Skills specification")}</li>

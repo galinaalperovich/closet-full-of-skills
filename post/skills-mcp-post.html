@@ -126,7 +126,7 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 
 <h2>The experiment</h2>
 <p>I picked 20 well-known skills (<a href="https://github.com/anthropics/skills">Anthropic’s</a> pdf, xlsx, pptx and docx, <a href="https://github.com/mattpocock/skills">Matt Pocock’s</a> tdd and grill-me, and others; the full list is in <a href="#appendix-a">Appendix A</a>) and 20 everyday MCP tools out of 791 real tool definitions from 73 servers (<a href="https://github.com/github/github-mcp-server">GitHub</a>, <a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">Chrome DevTools</a>, <a href="https://github.com/microsoft/playwright-mcp">Playwright</a>, and 70 servers from <a href="https://github.com/icip-cas/LiveMCPBench">LiveMCPBench</a>).</p>
-<p>For each target I wrote six requests the way a person would ask, with no explicit invocation: no <code>/pdf</code>, no “use the pdf skill”. Some overlap with names is unavoidable: 63 of the 150 skill requests share a word with the skill’s name, such as “pdf” or “grill”. <a href="https://github.com/galinaalperovich/in-context-forgetting/blob/main/prompts.json">All requests are in the repo.</a></p>
+<p>For each target I wrote six requests the way a person would ask, with no explicit invocation: no <code>/pdf</code>, no “use the pdf skill”. Some overlap with names is unavoidable: 63 of the 150 skill requests share a word with the skill’s name, such as “pdf” or “grill”. <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/prompts.json">All requests are in the repo.</a></p>
 <div class="wrap"><table>
 <tr><th>Target</th><th>Example requests</th></tr>
 <tr><td><code>pdf</code> skill</td><td>“Merge invoice-jan.pdf and invoice-feb.pdf in this folder into a single file.”</td></tr>
@@ -147,7 +147,7 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 <li><b>Stubs.</b> Every skill keeps its real name and description, but its instructions are one line: “reply with one short sentence”. MCP tools return a similar stub. Whatever happens <em>after</em> the first selection is not normal behaviour.</li>
 <li><b>Empty folders.</b> Each run starts in a fresh folder with no files, so a request about <code>report.pdf</code> has no such file.</li>
 <li><b>Observation window.</b> Claude Code was capped at 3 turns (4 with MCP). A Codex run is one user turn, which can contain several model and tool steps, with no cap. A selection later than the window is not seen.</li>
-<li><b>Scoring.</b> A skill request counts only if the designated skill is selected. A tool request also counts an equivalent tool on another server. Afterwards, a separate Claude session rated every selected alternative, seeing only the request and the two descriptions. That is a retrospective rating by a model, not human validation (<a href="https://github.com/galinaalperovich/in-context-forgetting/blob/main/analysis/alt_judge_prompt.md">prompt and rules</a>).</li>
+<li><b>Scoring.</b> A skill request counts only if the designated skill is selected. A tool request also counts an equivalent tool on another server. Afterwards, a separate Claude session rated every selected alternative, seeing only the request and the two descriptions. That is a retrospective rating by a model, not human validation (<a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md">prompt and rules</a>).</li>
 </ul>
 
 <h2>Result 1: skills fade</h2>
@@ -267,7 +267,7 @@ codex exec --json -s read-only "Audit the SEO of my site." \
 <tr><td><b>Calculated API fees</b></td><td class="n">650</td><td class="n"><b>$171.73</b></td></tr>
 <tr><td>Claude Haiku and Sonnet in Claude Code (my Claude subscription; API list price for reference)</td><td class="n">4,020</td><td class="n">$0 extra ($192.61 list)</td></tr>
 </table></div>
-<p>The GPT figures are calculated from the token usage Codex reported, at <a href="https://developers.openai.com/api/docs/models/gpt-6-astra.md">OpenAI’s list prices</a>. I have not reconciled them against the invoice. Cache writes were 76–87% of each run’s calculated cost. <a href="https://github.com/galinaalperovich/in-context-forgetting/blob/main/analysis/derived/v2/cost_by_batch.csv">The per-batch breakdown is in the repo.</a></p>
+<p>The GPT figures are calculated from the token usage Codex reported, at <a href="https://developers.openai.com/api/docs/models/gpt-6-astra.md">OpenAI’s list prices</a>. I have not reconciled them against the invoice. Cache writes were 76–87% of each run’s calculated cost. <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/v2/cost_by_batch.csv">The per-batch breakdown is in the repo.</a></p>
 <p>Running every remaining GPT cell at full size would cost about $1,400 by my estimate, most of it in the mixed setups. That assumes Codex loads every tool definition, as my 20-tool runs suggest. <a href="https://contextbolt.com/blog/too-many-mcp-servers/">Another measured post</a> reports that Codex defers MCP tools, so the estimate may be too high. I have not reconciled the two.</p>
 
 <h2>Limitations</h2>
@@ -280,7 +280,7 @@ codex exec --json -s read-only "Audit the SEO of my site." \
 <li><b>GPT data is thinner.</b> One run per request, and MCP only with 1 tool and, partly, with 20.</li>
 <li><b>Things change.</b> Harness limits, commands and prices are as documented in November 2026. The issue reports I link are motivation, not evidence of current behaviour.</li>
 </ul>
-<p>The <a href="https://github.com/galinaalperovich/in-context-forgetting/blob/main/METHODOLOGY.md">full methodology</a>, <a href="https://github.com/galinaalperovich/in-context-forgetting/blob/main/METHODOLOGY_REVIEW.md">an external review of it</a>, <a href="https://github.com/galinaalperovich/in-context-forgetting/blob/main/analysis/CHANGELOG.md">my response to that review</a>, and all data and scripts are in <a href="https://github.com/galinaalperovich/in-context-forgetting">the GitHub repo</a>.</p>
+<p>The <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md">full methodology</a>, <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY_REVIEW.md">an external review of it</a>, <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/CHANGELOG.md">my response to that review</a>, and all data and scripts are in <a href="https://github.com/galinaalperovich/closet-full-of-skills">the GitHub repo</a>.</p>
 
 <h2>What’s next</h2>
 <p>Three tests come first:</p>
@@ -289,7 +289,7 @@ codex exec --json -s read-only "Audit the SEO of my site." \
 <li><b>More catalogs.</b> Repeat with other random samples of extra skills, and add control requests.</li>
 <li><b>Search and a crossed design.</b> Search on and off, skills and tools varied separately, and browser tasks with realistic stub responses.</li>
 </ol>
-<p>The full plan with costs is in <a href="https://github.com/galinaalperovich/in-context-forgetting/blob/main/FOLLOWUP_PROTOCOL.md">the follow-up protocol</a>. Its GPT part is cut down to fit $100 of API fees, and its Claude part runs on my subscription.</p>
+<p>The full plan with costs is in <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/FOLLOWUP_PROTOCOL.md">the follow-up protocol</a>. Its GPT part is cut down to fit $100 of API fees, and its Claude part runs on my subscription.</p>
 
 <h2>Conclusion</h2>
 <p>I started with a simple question: if I install a thousand skills, does my agent get more capable? What changed my view is the difference between installing a capability and having it reliably available when a request needs it. In this test, selection of the designated skill fell as the collection grew, while single-step MCP tool selection in Claude Code held up better. Before adding another big collection, I would check what the agent can actually see, and I would measure answer quality separately before deciding that more activation is always better.</p>
@@ -352,7 +352,7 @@ codex exec --json -s read-only "Audit the SEO of my site." \
 
 <h2>References</h2>
 <ol class="refs">
-<li>Code, data and methodology for this post: <a href="https://github.com/galinaalperovich/in-context-forgetting">galinaalperovich/in-context-forgetting</a></li>
+<li>Code, data and methodology for this post: <a href="https://github.com/galinaalperovich/closet-full-of-skills">galinaalperovich/closet-full-of-skills</a></li>
 <li><a href="https://code.claude.com/docs/en/skills.md">Claude Code documentation: Skills</a></li>
 <li><a href="https://learn.chatgpt.com/docs/build-skills">Codex documentation: Build skills</a></li>
 <li><a href="https://agentskills.io/specification">Agent Skills specification</a></li>

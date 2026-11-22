@@ -2,7 +2,7 @@
 Run after build_post2.py."""
 import html, os, re, shutil
 B = os.path.dirname(os.path.abspath(__file__)); R = os.path.dirname(B)
-SITE = "https://galinaalperovich.github.io/in-context-forgetting/"
+SITE = "https://galinaalperovich.github.io/closet-full-of-skills/"
 frag = open(os.path.join(B, "skills-mcp-post.html")).read()
 css = frag[frag.index("<style>") + 7:frag.index("</style>")]
 body = frag[frag.index("</style>") + 8:].strip()
