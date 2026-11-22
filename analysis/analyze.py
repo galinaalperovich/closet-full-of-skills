@@ -310,6 +310,38 @@ for m in ["haiku", "sonnet"]:
             [r for r in sel(model=m, setup=s, kind="tool") if r["target"] not in BROWSER], "target_sel")))
 write_csv("e3_paired.csv", e3p)
 
+# ---------------------------------------------------------------- 5b. extra tables for the post's charts (added for post v3; additive)
+def req_rate_row(rs, metric):
+    """Request-weighted rate: each request counts once, whatever its number of repetitions."""
+    m = req_means(rs, metric); keys = sorted(m)
+    f = lambda s: sum(m[x] for x in s) / len(s)
+    b1 = boot(f, keys); b2 = boot(f, keys, True)
+    return dict(n_requests=len(keys), n_runs=len(rs), rate=f(keys), req_lo=b1[0], req_hi=b1[1], skill_lo=b2[0], skill_hi=b2[1])
+# paired change versus "alone" at every size (forest plot)
+pva = []
+for m in MODELS:
+    for b in ["pack20", "crowd200", "crowd1000"]:
+        ra, rb = sel(exp="E1", model=m, setup="alone"), sel(exp="E1", model=m, setup=b)
+        if ra and rb: pva.append(dict(experiment="E1 skills", model=m, to_setup=b, **paired_row(ra, rb, "target_sel")))
+for m in MODELS:
+    ra = [r for r in sel(exp="E2", model=m, setup="mcp_alone") if r["target"] not in BROWSER]
+    for b in ["mcp_pack20", "mcp_crowd200", "mcp_crowdall"]:
+        rb = [r for r in sel(exp="E2", model=m, setup=b) if r["target"] not in BROWSER]
+        if ra and rb: pva.append(dict(experiment="E2 MCP single-step tools", model=m, to_setup=b, **paired_row(ra, rb, "target_sel")))
+write_csv("paired_vs_alone.csv", pva)
+# rates behind the mixed-scenario chart, request-weighted, with intervals
+e3c = []
+for m in ["haiku", "sonnet"]:
+    base = sel(exp="E1", model=m, setup="alone") + sel(exp="E3b", model=m, setup="sk_alone")
+    e3c.append(dict(model=m, series="skill requests", setup="single component", **req_rate_row(base, "target_sel")))
+    for s in ["mixed_smaller", "mixed_larger"]:
+        e3c.append(dict(model=m, series="skill requests", setup=s, **req_rate_row(sel(model=m, setup=s, kind="skill"), "target_sel")))
+    nb = lambda rs: [r for r in rs if r["target"] not in BROWSER]
+    e3c.append(dict(model=m, series="single-step tool requests", setup="single component", **req_rate_row(nb(sel(exp="E2", model=m, setup="mcp_alone")), "target_sel")))
+    for s in ["mixed_smaller", "mixed_larger"]:
+        e3c.append(dict(model=m, series="single-step tool requests", setup=s, **req_rate_row(nb(sel(model=m, setup=s, kind="tool")), "target_sel")))
+write_csv("e3_chart_rates.csv", e3c)
+
 # ---------------------------------------------------------------- 6. builtin actions in mixed skill misses
 bi = Counter()
 for r in retained:

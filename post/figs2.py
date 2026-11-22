@@ -106,7 +106,8 @@ e2 = {(r["model"], r["setup"]): r for r in rd("e2_mcp_rates.csv")}
 M = ["mcp_alone", "mcp_pack20", "mcp_crowd200", "mcp_crowdall"]
 ser = []
 for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku")):
-    ser.append(dict(name=f"{nm} skills", short=f"{nm} skills", color=COL[nm], values=[100 * F(e1[(m, s)]["rate"]) for s in S]))
+    ser.append(dict(name=f"{nm} skills", short=f"{nm} skills", color=COL[nm], values=[100 * F(e1[(m, s)]["rate"]) for s in S],
+                    ci=[(100 * F(e1[(m, s)]["req_boot_lo"]), 100 * F(e1[(m, s)]["req_boot_hi"])) for s in S]))
     ser.append(dict(name=f"{nm} MCP tools", short=f"{nm} tools", color=COL[nm], dash=True,
                     values=[100 * F(e2[(m, s)]["nonbrowser_rate"]) for s in M],
                     ci=[(100 * F(e2[(m, s)]["nonbrowser_req_lo"]), 100 * F(e2[(m, s)]["nonbrowser_req_hi"])) for s in M]))
@@ -143,17 +144,13 @@ out["fig_misses"] = f'''<svg viewBox="0 0 740 216" role="img" aria-label="Stacke
 <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/></pattern></defs>
 <g {FONT}>{"".join(leg)}{"".join(parts)}</g></svg>'''
 
-# --- Fig: mixed scenarios (sequential ramp: load level)
-e3 = {(r["model"], r["setup"], r["kind"]): r for r in rd("e3_mixed_rates.csv")}
-e3p = {(r["model"], r["comparison"]): r for r in rd("e3_paired.csv")}
+# --- Fig: mixed scenarios (sequential ramp: load level), request-weighted rates with 95% intervals
+ec = {(r["model"], r["series"], r["setup"]): r for r in rd("e3_chart_rates.csv")}
 groups = []
 for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet")):
-    base_sk = (120 * F(e1[(m, "alone")]["target_selected"]) / F(e1[(m, "alone")]["n"]) + F(e3[(m, "sk_alone", "skill")]["strict"])) / 150 * 100   # each of the 150 requests weighted equally
-    sk = [base_sk, 100 * F(e3[(m, "mixed_smaller", "skill")]["strict_rate"]), 100 * F(e3[(m, "mixed_larger", "skill")]["strict_rate"])]
-    nb0 = 100 * F(e2[(m, "mcp_alone")]["nonbrowser_rate"])
-    tl = [nb0, nb0 + 100 * F(e3p[(m, "tool nonbrowser: mcp_alone -> mixed_smaller")]["diff"]), nb0 + 100 * F(e3p[(m, "tool nonbrowser: mcp_alone -> mixed_larger")]["diff"])]
-    groups += [(f"{nm}", "150 skill requests", sk), (f"{nm}", "90 tool requests", tl)]
-W, Hh = 720, 330; L, T, Bm = 50, 40, 62; pw = W - L - 20; ph = Hh - T - Bm
+    for series, lab in (("skill requests", "150 skill requests"), ("single-step tool requests", "90 tool requests")):
+        groups.append((nm, lab, [ec[(m, series, st)] for st in ("single component", "mixed_smaller", "mixed_larger")]))
+W, Hh = 720, 340; L, T, Bm = 50, 40, 62; pw = W - L - 20; ph = Hh - T - Bm
 Y = lambda v: T + ph * (1 - v / 100)
 gp = []; gw = pw / len(groups); bwid = 30
 for v in (0, 25, 50, 75, 100):
@@ -162,14 +159,45 @@ labs = ["Single component", "Mixed, smaller", "Mixed, larger"]
 lx = L
 for k, lab in enumerate(labs):
     gp.append(f'<rect x="{lx}" y="10" width="12" height="12" rx="2" fill="var(--seq{k+1})"/><text x="{lx+17}" y="20" font-size="11.5" fill="currentColor">{lab}</text>'); lx += 34 + 6.4 * len(lab)
-for gi, (nm, kind, vals) in enumerate(groups):
+gp.append(f'<text x="{lx+4}" y="20" font-size="11.5" fill="currentColor" fill-opacity=".75">whiskers: 95% CI</text>')
+for gi, (nm, kind, rows) in enumerate(groups):
     cx = L + gw * gi + gw / 2 - 1.5 * bwid - 3
-    for k, v in enumerate(vals):
-        x = cx + k * (bwid + 3); y = Y(v)
-        gp.append(f'<path d="M{x:.1f},{Y(0):.1f} V{y+4:.1f} Q{x:.1f},{y:.1f} {x+4:.1f},{y:.1f} H{x+bwid-4:.1f} Q{x+bwid:.1f},{y:.1f} {x+bwid:.1f},{y+4:.1f} V{Y(0):.1f} Z" fill="var(--seq{k+1})"><title>{nm} {kind}, {labs[k]}: {v:.1f}%</title></path>')
-        gp.append(f'<text x="{x+bwid/2:.1f}" y="{y-6:.1f}" text-anchor="middle" font-size="11" fill="currentColor">{v:.0f}</text>')
+    for k, r in enumerate(rows):
+        v, lo, hi = 100 * F(r["rate"]), 100 * F(r["req_lo"]), 100 * F(r["req_hi"])
+        x = cx + k * (bwid + 3); y = Y(v); xm = x + bwid / 2
+        gp.append(f'<path d="M{x:.1f},{Y(0):.1f} V{y+4:.1f} Q{x:.1f},{y:.1f} {x+4:.1f},{y:.1f} H{x+bwid-4:.1f} Q{x+bwid:.1f},{y:.1f} {x+bwid:.1f},{y+4:.1f} V{Y(0):.1f} Z" fill="var(--seq{k+1})"><title>{nm} {kind}, {labs[k]}: {v:.1f}% (95% CI {lo:.0f}–{hi:.0f}%)</title></path>')
+        gp.append(f'<path d="M{xm:.1f},{Y(hi):.1f} V{Y(lo):.1f} M{xm-4:.1f},{Y(hi):.1f} H{xm+4:.1f} M{xm-4:.1f},{Y(lo):.1f} H{xm+4:.1f}" stroke="currentColor" stroke-opacity=".7" stroke-width="1.3" fill="none"/>')
+        gp.append(f'<text x="{xm:.1f}" y="{Y(hi)-5:.1f}" text-anchor="middle" font-size="11" fill="currentColor">{v:.0f}</text>')
     gp.append(f'<text x="{L+gw*gi+gw/2:.1f}" y="{T+ph+20}" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">{nm}</text><text x="{L+gw*gi+gw/2:.1f}" y="{T+ph+37}" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity=".8">{kind}</text>')
-out["fig_mix"] = f'<svg viewBox="0 0 {W} {Hh}" role="img" aria-label="Grouped bars, Claude Code. Skill requests: Haiku 79, 31, 24 percent; Sonnet 93, 43, 34 percent. Single-step tool requests: Haiku 86, 77, 73 percent; Sonnet 92, 76, 74 percent, for single component, mixed smaller and mixed larger setups."><g {FONT}>{"".join(gp)}</g></svg>'
+out["fig_mix"] = f'<svg viewBox="0 0 {W} {Hh}" role="img" aria-label="Grouped bars with 95% intervals, Claude Code. Skill requests: Haiku 79, 31, 24 percent; Sonnet 93, 43, 34 percent. Single-step tool requests: Haiku 86, 77, 73 percent; Sonnet 92, 76, 74 percent, for single component, mixed smaller and mixed larger setups."><g {FONT}>{"".join(gp)}</g></svg>'
+
+# --- Fig: forest plot, paired change versus "alone" (percentage points, 95% CI by request-cluster bootstrap)
+pv = rd("paired_vs_alone.csv")
+SIZE = {"pack20": "20", "crowd200": "~220", "crowd1000": "1,020", "mcp_pack20": "20", "mcp_crowd200": "~220", "mcp_crowdall": "791"}
+NM = {"haiku": "Haiku", "sonnet": "Sonnet", "gpt": "GPT"}
+sections = [("Skills: change vs target skill alone", "E1 skills", "skills"), ("Single-step MCP tools: change vs target tool alone", "E2 MCP single-step tools", "tools")]
+W = 720; x0, x1 = 210, 580; X = lambda d: x0 + (x1 - x0) * (d + 100) / 110
+rows_svg = []; y = 44
+for v in (-100, -75, -50, -25, 0):
+    rows_svg.append(f'<text x="{X(v):.1f}" y="30" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{v:+d}</text>'.replace("+0", "0"))
+grid_top = y
+for title, exp, unit in sections:
+    rows_svg.append(f'<text x="12" y="{y+14}" font-size="12.5" font-weight="600" fill="currentColor">{title}</text>'); y += 26
+    for r in [r for r in pv if r["experiment"] == exp]:
+        d, lo, hi = (100 * F(r[k]) for k in ("diff", "req_lo", "req_hi"))
+        col = COL[NM[r["model"]]]; n = r["n_pairs"]
+        lab = f'{NM[r["model"]]}, {SIZE[r["to_setup"]]} {unit}' + (" (24 requests)" if n == "24" else "")
+        fill = col if unit == "skills" else "var(--surface)"
+        rows_svg.append(f'<text x="{x0-12}" y="{y+4}" text-anchor="end" font-size="12" fill="currentColor">{lab}</text>'
+                        f'<line x1="{X(lo):.1f}" y1="{y}" x2="{X(hi):.1f}" y2="{y}" stroke="{col}" stroke-width="2.5" stroke-linecap="round"/>'
+                        f'<circle cx="{X(d):.1f}" cy="{y}" r="5.5" fill="{fill}" stroke="{col}" stroke-width="2"><title>{lab}: {d:+.1f} pp (95% CI {lo:+.1f} to {hi:+.1f}), {n} paired requests</title></circle>'
+                        f'<text x="{x1+12}" y="{y+4}" font-size="11.5" fill="currentColor"><tspan font-weight="600">{d:+.0f}</tspan> [{lo:+.0f}, {hi:+.0f}]</text>'.replace("+0]", "0]").replace("[+0,", "[0,"))
+        y += 22
+    y += 10
+grid = "".join(f'<line x1="{X(v):.1f}" y1="{grid_top}" x2="{X(v):.1f}" y2="{y-6}" stroke="currentColor" stroke-opacity="{.45 if v==0 else .1}" stroke-width="{1.5 if v==0 else 1}"/>' for v in (-100, -75, -50, -25, 0))
+rows_svg.append(f'<text x="{(x0+x1)/2:.1f}" y="{y+10}" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity=".75">change in percentage points (same requests in both setups)</text>')
+out["fig_forest"] = (f'<svg viewBox="0 0 {W} {y+22}" role="img" aria-label="Forest plot of paired changes versus the target alone, with 95% confidence intervals. Skills: Haiku minus 31, 53 and 63 points at 20, 220 and 1,020 skills; Sonnet minus 17, 37 and 59; GPT minus 1, 17 and 90. Single-step MCP tools: Haiku minus 7, 8 and 8 points at 20, 220 and 791 tools; Sonnet minus 11, 16 and 16; GPT minus 8 at 20 tools on 24 requests.">'
+                     f'<g {FONT}>{grid}{"".join(rows_svg)}</g></svg>')
 
 # --- Fig: per-skill dumbbell, Sonnet
 pt = [r for r in rd("e1_per_target.csv") if r["model"] == "sonnet"]

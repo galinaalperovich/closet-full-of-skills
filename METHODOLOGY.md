@@ -418,6 +418,7 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 | `analysis/analyze.py` | The single analysis entry point (this document's numbers) |
 | `analysis/budget.py` | Follow-up cost model |
 | `analysis/REPORT.md`, `analysis/derived/v2/*.csv`, `manifest.json` | Derived tables; SHA-256 of every input |
+| `analysis/derived/v2/paired_vs_alone.csv`, `e3_chart_rates.csv` | Tables behind the post's forest plot and mixed-scenario chart (paired change from alone; request-weighted rates with intervals) |
 | `analysis/alt_judge_input.json`, `analysis/alt_judgments.json` | Blind alternative ratings |
 | `analysis/CHANGELOG.md` | Claim-by-claim change log |
 | `METHODOLOGY_v1.md` | Version 1, unchanged |

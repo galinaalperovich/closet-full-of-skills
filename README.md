@@ -15,11 +15,12 @@ I asked Claude Code and Codex natural requests that were written for one particu
 | | Claude Code + Haiku | Claude Code + Sonnet | Codex + GPT |
 |---|---|---|---|
 | **Skills** (E1): target alone → 20 → 220 → 1,020 skills | 78% → 48% → 25% → 16% | 93% → 76% → 56% → 34% | 100% → 99% → 83% → 10% |
-| **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 86% → 79% → 78% → 78% | 92% → 81% → 77% → 77% | 91% alone (82 of 90). With 20 tools, only 24 requests were run: 22 of 24, down from 24 of 24 on the same requests. Larger setups not run |
+| **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 86% → 79% → 78% → 78% | 92% → 81% → 77% → 77% | 91% alone (82 of 90). With 20 tools only 24 requests were run: 92% (22 of 24), down from 100% (24 of 24) on the same requests. Larger setups not run |
 | **Skills + tools together** (E3), change against the single component | skill requests −48 to −59 points (both models); tool requests −9 to −18 | | not run (cost) |
 
 - 4,674 retained runs: 4,020 Claude Code runs and 654 GPT runs. On top of those there is one excluded, rate-limited GPT batch (`gpt_subscription_failed.jsonl`).
 - What is measured is **selection of the designated component within the observation window**, not the quality of the answer.
+- Every rate and paired change has a 95% confidence interval (request-cluster bootstrap, 2,000 resamples, fixed seed; Wilson score interval where all runs succeeded) in `analysis/derived/v2/`. See `METHODOLOGY.md` §8.
 - The full design, statistics, limitations and every number are in [`METHODOLOGY.md`](METHODOLOGY.md). Read it before you reuse a number.
 
 ## Reproduce the published numbers (free, about a minute)
