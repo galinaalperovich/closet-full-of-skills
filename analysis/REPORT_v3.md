@@ -23,6 +23,8 @@ All rates are **designated-target selection within the observation window** (Cla
 
 All match: True.
 
+This check uses the original E1 records. All later E1 tables use the isolated rerun for Sonnet / caveman / alone (18 runs).
+
 ## Audit
 
 | Exp | Model | Setup | Access | Attempts | Retained | Infra failures | Turn-limited | ...without target | Exposure (init counts) |
@@ -71,7 +73,7 @@ Raw event logs: none of the retained runs has one (see methodology §7).
 | haiku | pack20 | 57/120 | 47.5% | 38.3–56.7 | 35.0–61.7 | 56 | 32 (6) | 57 (47.5%) |
 | haiku | crowd200 | 30/120 | 25.0% | 18.3–32.5 | 15.0–35.9 | 29 | 53 (6) | 31 (25.8%) |
 | haiku | crowd1000 | 19/120 | 15.8% | 9.2–22.5 | 5.8–28.3 | 19 | 60 (4) | 20 (16.7%) |
-| sonnet | alone | 334/360 | 92.8% | 88.1–96.9 | 83.6–99.4 | 334 | 2 (2) | 334 (92.8%) |
+| sonnet | alone | 339/360 | 94.2% | 90.0–97.8 | 87.2–99.4 | 339 | 2 (2) | 339 (94.2%) |
 | sonnet | pack20 | 272/360 | 75.6% | 68.0–82.5 | 62.8–87.5 | 272 | 3 (0) | 272 (75.6%) |
 | sonnet | crowd200 | 202/360 | 56.1% | 47.8–64.4 | 41.4–70.6 | 202 | 55 (0) | 208 (57.8%) |
 | sonnet | crowd1000 | 121/360 | 33.6% | 26.1–41.7 | 18.3–49.2 | 121 | 71 (0) | 129 (35.8%) |
@@ -88,7 +90,7 @@ Miss breakdown:
 | haiku | pack20 | 0 | 1 | 1 | 3 | 36 | 22 |
 | haiku | crowd200 | 1 | 0 | 0 | 1 | 42 | 46 |
 | haiku | crowd1000 | 1 | 0 | 0 | 3 | 44 | 53 |
-| sonnet | alone | 0 | 0 | 0 | 0 | 26 | 0 |
+| sonnet | alone | 0 | 0 | 0 | 0 | 21 | 0 |
 | sonnet | pack20 | 0 | 0 | 0 | 0 | 85 | 3 |
 | sonnet | crowd200 | 6 | 0 | 0 | 0 | 97 | 55 |
 | sonnet | crowd1000 | 8 | 0 | 0 | 1 | 160 | 70 |
@@ -105,10 +107,10 @@ Paired changes (percentage points; same requests in both conditions):
 | haiku | pack20 → crowd200 | -22.5 | -30.0 to -15.0 | -36.7 to -10.0 | 28 / 1 |
 | haiku | crowd200 → crowd1000 | -9.2 | -17.5 to -0.8 | -20.0 to +3.3 | 19 / 8 |
 | haiku | alone → crowd1000 | -62.5 | -71.7 to -53.3 | -75.9 to -47.5 | 76 / 1 |
-| sonnet | alone → pack20 | -17.2 | -23.6 to -11.4 | -28.9 to -7.5 | 27 / 0 |
+| sonnet | alone → pack20 | -18.6 | -25.0 to -12.5 | -30.3 to -8.6 | 30 / 0 |
 | sonnet | pack20 → crowd200 | -19.4 | -26.1 to -13.3 | -28.9 to -11.4 | 35 / 2 |
 | sonnet | crowd200 → crowd1000 | -22.5 | -30.3 to -15.0 | -35.8 to -10.0 | 40 / 6 |
-| sonnet | alone → crowd1000 | -59.2 | -67.0 to -50.8 | -75.8 to -43.3 | 79 / 0 |
+| sonnet | alone → crowd1000 | -60.6 | -68.6 to -52.5 | -76.4 to -44.7 | 82 / 0 |
 | gpt | alone → pack20 | -0.8 | -2.5 to +0.0 | -3.3 to +0.0 | 1 / 0 |
 | gpt | pack20 → crowd200 | -15.8 | -22.5 to -10.0 | -28.3 to -5.8 | 19 / 0 |
 | gpt | crowd200 → crowd1000 | -73.3 | -80.8 to -65.0 | -87.5 to -56.7 | 88 / 0 |
@@ -192,10 +194,10 @@ Paired changes:
 | haiku | skill: single-skill baseline -> mixed_larger | -58.0 | -66.0 to -50.0 | -70.7 to -44.0 |
 | haiku | tool: mcp_alone -> mixed_larger | -11.7 | -18.3 to -5.8 | -21.7 to -3.3 |
 | haiku | tool nonbrowser: mcp_alone -> mixed_larger | -8.9 | -15.6 to -2.2 | -21.1 to +1.1 |
-| sonnet | skill: single-skill baseline -> mixed_smaller | -48.2 | -56.0 to -40.2 | -61.3 to -35.8 |
+| sonnet | skill: single-skill baseline -> mixed_smaller | -49.3 | -57.3 to -41.3 | -62.2 to -36.9 |
 | sonnet | tool: mcp_alone -> mixed_smaller | -20.8 | -29.2 to -13.3 | -35.8 to -7.5 |
 | sonnet | tool nonbrowser: mcp_alone -> mixed_smaller | -13.3 | -21.1 to -5.6 | -27.8 to -1.1 |
-| sonnet | skill: single-skill baseline -> mixed_larger | -58.9 | -66.7 to -51.1 | -71.6 to -46.2 |
+| sonnet | skill: single-skill baseline -> mixed_larger | -60.0 | -68.0 to -52.2 | -72.7 to -47.8 |
 | sonnet | tool: mcp_alone -> mixed_larger | -22.5 | -30.8 to -15.0 | -37.5 to -9.2 |
 | sonnet | tool nonbrowser: mcp_alone -> mixed_larger | -17.8 | -26.7 to -10.0 | -34.4 to -2.2 |
 
@@ -224,4 +226,4 @@ Built-in actions in mixed-scenario skill misses: builtin:Glob 300, builtin:Grep 
 
 ## Cost
 
-Billed per token (API key, GPT): $171.73. List-price equivalent of everything, including subscription runs: $371.22. Details: `cost_by_batch.csv`.
+Billed per token (API key, GPT): $171.73. List-price equivalent of everything, including subscription runs: $371.36. Details: `cost_by_batch.csv`.

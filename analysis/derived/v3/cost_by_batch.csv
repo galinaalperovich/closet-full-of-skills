@@ -11,7 +11,7 @@ E1,haiku,subscription,main,alone,120,9101412,,,,,,0.2735,0.0,"Claude Code total_
 E1,haiku,subscription,main,crowd1000,120,13826394,,,,,,0.6465,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,haiku,subscription,main,crowd200,120,12829268,,,,,,0.5882,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,haiku,subscription,main,pack20,120,10420401,,,,,,0.38,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
-E1,sonnet,subscription,main,alone,360,23222852,,,,,,11.8048,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E1,sonnet,subscription,main,alone,360,23383045,,,,,,11.9441,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,sonnet,subscription,main,crowd1000,360,36787941,,,,,,31.6868,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,sonnet,subscription,main,crowd200,360,32743921,,,,,,26.3952,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,sonnet,subscription,main,pack20,360,25737541,,,,,,15.9854,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"

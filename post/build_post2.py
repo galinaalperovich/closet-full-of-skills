@@ -132,7 +132,7 @@ T_EXAMPLES = """<div class="wrap"><table>
 </table></div>"""
 T_SKILLS = """<div class="wrap"><table>
 <tr><th>Setup</th><th class="n">Skills</th><th class="n">Haiku (Claude Code)</th><th class="n">Sonnet (Claude Code)</th><th class="n">GPT (Codex)</th></tr>
-<tr class="row-good"><td>Target skill alone</td><td class="n">1</td><td class="n">78% <span class="ci">[71–85]</span></td><td class="n">93% <span class="ci">[88–97]</span></td><td class="n">100% <span class="ci">[97–100]</span></td></tr>
+<tr class="row-good"><td>Target skill alone</td><td class="n">1</td><td class="n">78% <span class="ci">[71–85]</span></td><td class="n">94% <span class="ci">[90–98]</span></td><td class="n">100% <span class="ci">[97–100]</span></td></tr>
 <tr><td>20 skills together</td><td class="n">20</td><td class="n">48% <span class="ci">[38–57]</span></td><td class="n">76% <span class="ci">[68–82]</span></td><td class="n">99% <span class="ci">[98–100]</span></td></tr>
 <tr><td>Plus 200 others</td><td class="n">220</td><td class="n">25% <span class="ci">[18–32]</span></td><td class="n">56% <span class="ci">[48–64]</span></td><td class="n">83% <span class="ci">[77–89]</span></td></tr>
 <tr class="row-bad"><td>Plus 1,000 others</td><td class="n">1,020</td><td class="n">16% <span class="ci">[9–22]</span></td><td class="n">34% <span class="ci">[26–42]</span></td><td class="n">10% <span class="ci">[5–16]</span></td></tr>
@@ -176,8 +176,8 @@ T_COST = f"""<div class="wrap"><table>
 <tr><td>GPT, skills experiment (OpenAI API)</td><td class="n">480</td><td class="n">$119.13</td></tr>
 <tr><td>GPT, MCP experiment so far (OpenAI API)</td><td class="n">170</td><td class="n">$52.60</td></tr>
 <tr><td><b>Calculated API fees</b></td><td class="n">650</td><td class="n"><b>$171.73</b></td></tr>
-<tr><td>Claude Haiku and Sonnet in Claude Code, the runs in these results (my Claude subscription; API list price for reference)</td><td class="n">4,020</td><td class="n">$0 extra ($197.88 list)</td></tr>
-<tr><td>Claude Code runs I discarded: the first MCP and mixed runs, and a rerun I stopped (same subscription)</td><td class="n">3,215</td><td class="n">$0 extra ($149.11 list)</td></tr>
+<tr><td>Claude Haiku and Sonnet in Claude Code, the runs in these results (my Claude subscription; API list price for reference)</td><td class="n">4,020</td><td class="n">$0 extra ($198.02 list)</td></tr>
+<tr><td>Claude Code runs I discarded: the first MCP and mixed runs, a rerun I stopped, and 18 skill runs I repeated (same subscription)</td><td class="n">3,233</td><td class="n">$0 extra ($149.64 list)</td></tr>
 </table></div>"""
 _sk = [E3P[(m, f"skill: single-skill baseline -> {st}")]["diff"] for m in CM for st in ("mixed_smaller", "mixed_larger")]
 _tl = [E3P[(m, f"tool nonbrowser: mcp_alone -> {st}")]["diff"] for m in CM for st in ("mixed_smaller", "mixed_larger")]
@@ -202,7 +202,7 @@ body = f"""
 <div><span class="lbl">A skill to check your own agent:</span> <span class="soon">coming soon</span></div>
 </div>
 
-<p class="update">Updated on 22 November 2026: I found two setup errors in the Claude Code MCP runs and reran all of them. The MCP numbers below come from the rerun, and the conclusions did not change. {A(L["r_chg"], "What changed and why")}.</p>
+<p class="update">Updated on 22 November 2026: I found two setup errors in the Claude Code MCP runs and reran all of them, plus 18 skill runs that one of the errors had touched. The numbers below come from the reruns, and the conclusions did not change. {A(L["r_chg"], "What changed and why")}.</p>
 
 <p class="tldr">tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill. With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%. MCP tools held up much better: in Claude Code, single-step tool selection went from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in CM)}% with the tool alone to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in CM)}% with all 791 tools installed. The experiment has its limits (empty folders, stub skills, a short observation window, one sample of extra skills), but they don’t change the main point: the more you install, the less reliably the right skill gets picked. At the end I share a few tricks for dealing with it.</p>
 

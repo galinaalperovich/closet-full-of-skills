@@ -21,7 +21,9 @@ from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 # ANALYSIS_VERSION=3: Claude Code E2/E3 come from the v3 rerun, in which the stub MCP servers were allowed
-# (in v2, headless Claude Code denied every MCP call). E1, E3b and all Codex records are unchanged. Default: 2.
+# (in v2, headless Claude Code denied every MCP call). The 18 E1 runs of Sonnet / caveman / alone come from an isolated
+# rerun, because a memory note saved by one original run reached later runs in that folder. Everything else in E1, E3b
+# and all Codex records are unchanged. Default: 2.
 VERSION = int(os.environ.get("ANALYSIS_VERSION", "2"))
 OUT = os.path.join(HERE, "derived", f"v{VERSION}"); os.makedirs(OUT, exist_ok=True)
 SEED = 20261120; B = 2000
@@ -37,6 +39,8 @@ INPUTS = {
 }
 if VERSION >= 3:
     INPUTS["V3"] = [("mcp/haiku_v3.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_v3.jsonl", "claude", "sonnet", "subscription")]
+    INPUTS["E1_v3"] = [("sonnet_e1_caveman_v3.jsonl", "claude", "sonnet", "subscription")]
+E1_RERUN = lambda r: r["model"] == "sonnet" and r["setup"] == "alone" and r["target"] == "caveman"
 OTHER = ["prompts.json", "mcp/mcp_targets.json", "mcp/trending_skill_prompts.json", "mcp/tools_inventory.json",
          "build.py", "run.py", "run_codex.py", "mcp/build_v2.py", "mcp/run2.py", "mcp/stub_server.py",
          "scan.py", "weight.py", "report.py", "scan2.json", "weight2.json", "source_commits.tsv",
@@ -49,7 +53,7 @@ for grp in INPUTS.values():
         manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f)))})
 for f in OTHER:
     if os.path.exists(P(f)): manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f), errors="replace"))})
-json.dump({"analysis_version": VERSION, "collection_date": "2026-11-20" if VERSION == 2 else "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude E2/E3 rerun)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
+json.dump({"analysis_version": VERSION, "collection_date": "2026-11-20" if VERSION == 2 else "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude E2/E3 rerun, Sonnet caveman alone E1 rerun)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
           open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 
 # ---------------------------------------------------------------- normalise records
@@ -70,7 +74,7 @@ def termination(rec, harness):
     if "Timeout" in err: return "timeout"
     return "harness_error" if err else "unknown"
 
-rows, attempts = [], []
+rows, attempts, SUPERSEDED = [], [], []
 def norm_e1(rec, harness, model, access, f, ln):
     fired = [x.split(":")[-1] for x in rec.get("fired", [])]
     return dict(exp="E1", harness=harness, model=model, access=access, file=f, line=ln, setup=rec["cond"], kind="skill",
@@ -98,6 +102,7 @@ for grp, items in INPUTS.items():
             acc = access if access != "by_line" else ("api_key" if "ts" not in rec else "subscription")
             r = (norm_e1 if grp.startswith("E1") else norm_v2)(rec, harness, model, acc, f, ln)
             if VERSION >= 3 and grp == "V2" and harness == "claude" and r["exp"] in ("E2", "E3"): continue   # superseded by the v3 rerun
+            if VERSION >= 3 and grp == "E1" and E1_RERUN(r): SUPERSEDED.append(r); continue   # replaced by the isolated v3 rerun
             r["batch"] = "excluded_429_batch" if grp == "E1_excluded" else "main"
             r["infra_fail"] = r["term"] in ("api_error", "timeout", "harness_error", "unknown")
             attempts.append(r)
@@ -213,7 +218,10 @@ ORIG = {("haiku", "alone"): 94, ("haiku", "pack20"): 57, ("haiku", "crowd200"): 
         ("gpt", "alone"): 120, ("gpt", "pack20"): 119, ("gpt", "crowd200"): 100, ("gpt", "crowd1000"): 12}
 repro = []
 for (m, s), k in ORIG.items():
-    rs = sel(exp="E1", model=m, setup=s); got = sum(1 for r in rs if r["target_sel"])
+    rs = sel(exp="E1", model=m, setup=s)
+    if VERSION >= 3:   # the reproduction check uses the original records, not the isolated rerun
+        rs = [r for r in rs if r["file"] != "sonnet_e1_caveman_v3.jsonl"] + [r for r in SUPERSEDED if r["model"] == m and r["setup"] == s]
+    got = sum(1 for r in rs if r["target_sel"])
     repro.append(dict(exp="E1", model=m, setup=s, methodology_v1_hits=k, reproduced_hits=got, n=len(rs), match=got == k))
 write_csv("reproduction_e1.csv", repro)
 
@@ -468,6 +476,7 @@ w("## Reproduction of methodology v1 (E1)\n")
 w("| Model | Setup | v1 hits | Reproduced | n |\n|---|---|---|---|---|")
 for r in repro: w(f'| {r["model"]} | {r["setup"]} | {r["methodology_v1_hits"]} | {r["reproduced_hits"]} | {r["n"]} |')
 w(f'\nAll match: {all(r["match"] for r in repro)}.\n')
+if VERSION >= 3: w("This check uses the original E1 records. All later E1 tables use the isolated rerun for Sonnet / caveman / alone (18 runs).\n")
 w("## Audit\n")
 w("| Exp | Model | Setup | Access | Attempts | Retained | Infra failures | Turn-limited | ...without target | Exposure (init counts) |\n|---|---|---|---|---|---|---|---|---|---|")
 for a in audit: w(f'| {a["exp"]} | {a["model"]} | {a["setup"]} | {a["access"]}{"" if a["batch"]=="main" else " (excluded batch)"} | {a["attempts"]} | {a["retained"]} | {a["infra_failures"]} | {a["turn_limit"]} | {a["turn_limit_no_target"]} | {a["exposure_counts"]} |')

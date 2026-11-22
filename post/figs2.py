@@ -149,7 +149,7 @@ for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku"), ("gpt", "GPT")):
     if m == "gpt": ci[0] = (96.9, 100)
     ser.append(dict(name=f"{nm} ({'Codex' if m=='gpt' else 'Claude Code'})", short=nm, color=COL[nm], values=vals, ci=ci))
 out["fig_skills"] = line_chart(ser, ["Target alone", "20 skills", "220 skills", "1,020 skills"],
-    "Line chart: share of requests where the designated skill was selected. Sonnet 93, 76, 56, 34 percent; Haiku 78, 48, 25, 16; GPT 100, 99, 83, 10, for the target alone, 20, 220 and 1,020 skills installed.")
+    "Line chart: share of requests where the designated skill was selected. Sonnet 94, 76, 56, 34 percent; Haiku 78, 48, 25, 16; GPT 100, 99, 83, 10, for the target alone, 20, 220 and 1,020 skills installed.")
 
 # --- Fig: skills fade, tools bend (Claude, non-browser tools)
 e2 = {(r["model"], r["setup"]): r for r in rd("e2_mcp_rates.csv")}
@@ -163,7 +163,7 @@ for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku")):
                     ci=[(100 * F(e2[(m, s)]["nonbrowser_req_lo"]), 100 * F(e2[(m, s)]["nonbrowser_req_hi"])) for s in M]))
 _tl = lambda m: ", ".join(f"{100 * F(e2[(m, s)]['nonbrowser_rate']):.0f}" for s in M)
 out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "All installed"], title="Claude Code: skills (solid) vs the 15 single-step, non-browser MCP tool targets (dashed)", aria=
-    f"Line chart for Claude Code. Skills, solid lines: Sonnet 93 to 34 percent, Haiku 78 to 16 percent. Single-step MCP tools, dashed: Sonnet {_tl('sonnet')} percent; Haiku {_tl('haiku')} percent, for the target alone, 20, about 220 and all installed.")
+    f"Line chart for Claude Code. Skills, solid lines: Sonnet 94 to 34 percent, Haiku 78 to 16 percent. Single-step MCP tools, dashed: Sonnet {_tl('sonnet')} percent; Haiku {_tl('haiku')} percent, for the target alone, 20, about 220 and all installed.")
 
 # --- Fig: what happened on misses at 1,020 skills
 segs = [("Designated skill", "target"), ("Equivalent alternative", "eq"), ("Other alternative", "alt"), ("No skill, finished", "none"), ("No skill, hit turn limit", "cap")]

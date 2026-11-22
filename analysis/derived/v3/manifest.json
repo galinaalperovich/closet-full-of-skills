@@ -1,6 +1,6 @@
 {
  "analysis_version": 3,
- "collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude E2/E3 rerun)",
+ "collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude E2/E3 rerun, Sonnet caveman alone E1 rerun)",
  "seed": 20261120,
  "bootstrap_resamples": 2000,
  "files": [
@@ -50,6 +50,11 @@
    "lines": 1020
   },
   {
+   "file": "sonnet_e1_caveman_v3.jsonl",
+   "sha256": "56c0e143fb209e2a2494e9c0d9570c0ca1da23485171a3e61baa665454d48962",
+   "lines": 18
+  },
+  {
    "file": "prompts.json",
    "sha256": "1c96bf4fd4d6f54b3c25dc34bee20c3a39b95c6bcbe8669f38ba446c58c06e75",
    "lines": 22
@@ -76,8 +81,8 @@
   },
   {
    "file": "run.py",
-   "sha256": "6958b681d773d56b28771ac07a3de778a0bf67028177c2c40c79e84679f18233",
-   "lines": 38
+   "sha256": "53d9f443b2843a279f19693d2ff67d2b35af577fd2653c520fcd18943310ffc6",
+   "lines": 71
   },
   {
    "file": "run_codex.py",
@@ -141,8 +146,8 @@
   },
   {
    "file": "analysis/analyze.py",
-   "sha256": "d7ee684eb564b1cecf3053a39845c32a3993097e04684bb4e4b4c521c56b152d",
-   "lines": 508
+   "sha256": "d0e7fdd99185b6bf27b7655d6d51a646e5ca8b8e7b5acc93531f5061af528701",
+   "lines": 517
   }
  ]
 }

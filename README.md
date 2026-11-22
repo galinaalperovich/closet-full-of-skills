@@ -14,12 +14,12 @@ I asked Claude Code and Codex natural requests that were written for one particu
 
 | | Claude Code + Haiku | Claude Code + Sonnet | Codex + GPT |
 |---|---|---|---|
-| **Skills** (E1): target alone → 20 → 220 → 1,020 skills | 78% → 48% → 25% → 16% | 93% → 76% → 56% → 34% | 100% → 99% → 83% → 10% |
+| **Skills** (E1): target alone → 20 → 220 → 1,020 skills | 78% → 48% → 25% → 16% | 94% → 76% → 56% → 34% | 100% → 99% → 83% → 10% |
 | **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 84% → 82% → 79% → 80% | 88% → 76% → 78% → 77% | 91% alone (82 of 90). With 20 tools only 24 requests were run: 92% (22 of 24), down from 100% (24 of 24) on the same requests. Larger setups not run |
-| **Skills + tools together** (E3), change against the single component | skill requests −46 to −59 points (both models); tool requests −6 to −18 | | not run (cost) |
+| **Skills + tools together** (E3), change against the single component | skill requests −46 to −60 points (both models); tool requests −6 to −18 | | not run (cost) |
 
 - 4,674 retained runs: 4,020 Claude Code runs and 654 GPT runs. On top of those there is one excluded, rate-limited GPT batch (`gpt_subscription_failed.jsonl`).
-- **Version 3 (22 November 2026):** the Claude Code runs of E2 and E3 were repeated after two setup errors were found: headless Claude Code had refused every MCP call, and its per-folder auto-memory carried notes from one run to the next. The numbers above are from the rerun. What changed and why is in [`analysis/CHANGELOG.md`](analysis/CHANGELOG.md) and `METHODOLOGY.md` §0.
+- **Version 3 (22 November 2026):** the Claude Code runs of E2 and E3 were repeated after two setup errors were found: headless Claude Code had refused every MCP call, and its per-folder auto-memory carried notes from one run to the next. The 18 E1 runs of the one skill folder with a carried-over memory note (Sonnet, `caveman`, alone) were rerun the same way. The numbers above are from the reruns. What changed and why is in [`analysis/CHANGELOG.md`](analysis/CHANGELOG.md) and `METHODOLOGY.md` §0.
 - What is measured is **selection of the designated component within the observation window**, not the quality of the answer.
 - Every rate and paired change has a 95% confidence interval (request-cluster bootstrap, 2,000 resamples, fixed seed; Wilson score interval where all runs succeeded) in `analysis/derived/v3/`. See `METHODOLOGY.md` §8.
 - The full design, statistics, limitations and every number are in [`METHODOLOGY.md`](METHODOLOGY.md). Read it before you reuse a number.
@@ -68,8 +68,8 @@ python3 mcp/build_v2.py   # E2/E3 -> envs2/  (MCP-only setups, trending skills a
 **3. Run.** Always write to a **new** output file. The runners resume from the file you name, so never point them at the shipped results.
 ```bash
 # E1, skills only. Arguments: setups, repeats per request, model, output file
-python3 run.py alone,pack20,crowd200,crowd1000 1 haiku  results/haiku_rerun.jsonl
-python3 run.py alone,pack20,crowd200,crowd1000 3 sonnet results/sonnet_rerun.jsonl
+ISOLATE=1 python3 run.py alone,pack20,crowd200,crowd1000 1 haiku  results/haiku_rerun.jsonl
+ISOLATE=1 python3 run.py alone,pack20,crowd200,crowd1000 3 sonnet results/sonnet_rerun.jsonl
 python3 run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_rerun.jsonl
 
 # E2 (MCP only), E3b (trending skills alone), E3 (mixed). Arguments: harness, model, job set, output file
@@ -80,10 +80,10 @@ python3 mcp/run2.py codex  gpt   mcp   results/gpt_mcp.jsonl
 - Run `mkdir results` first.
 - Useful environment variables:
   - `PAR`: parallel runs (default 6 for E1, 4 for E2/E3).
-  - `ONLY_ENV` and `ONLY_I`: run a subset.
+  - `ONLY_ENV`, `ONLY_I` and `ONLY_TARGET`: run a subset (`run.py` takes `ONLY_TARGET`).
   - `STOP_ON_429=1`: stop at the first rate limit.
   - `ALLOW_MCP=1` (Claude Code): pre-approve the stub MCP servers. Without it, headless Claude Code refuses every MCP call, which is what happened in version 2.
-  - `ISOLATE=1` (Claude Code): run each job in a fresh copy of its test folder, so Claude Code's per-folder auto-memory starts empty every time.
+  - `ISOLATE=1` (Claude Code, `run.py` and `mcp/run2.py`): run each job in a fresh copy of its test folder, so Claude Code's per-folder auto-memory starts empty every time, and keep the raw output.
   - `LOAD_MAX=<n>`: wait before starting a job while the 1-minute load average is above n. The mixed setups start up to 73 stub servers per run; 8 parallel runs once made a 10-core laptop unresponsive.
   - `SKILL_REPOS` and `ENVS2_DIR`: move the inputs and test folders.
   - `CODEX_BIN`: the path to Codex.
@@ -94,7 +94,7 @@ python3 mcp/run2.py codex  gpt   mcp   results/gpt_mcp.jsonl
 
 | Configuration | Per run | This study |
 |---|---|---|
-| Claude Code, Haiku | about $0.002–0.009 | covered by a Claude subscription ($197.88 list price for the 4,020 Claude runs in the results, plus $149.11 for 3,215 discarded runs) |
+| Claude Code, Haiku | about $0.002–0.009 | covered by a Claude subscription ($198.02 list price for the 4,020 Claude runs in the results, plus $149.64 for 3,233 discarded runs) |
 | Claude Code, Sonnet | about $0.03–0.14 | (included above) |
 | Codex + GPT, skills (E1) | $0.19–0.31 measured | $119.13 for 480 runs |
 | Codex + GPT, MCP alone / 20 tools | $0.29 / $0.35 measured | $52.60 for 170 API runs |
@@ -121,6 +121,7 @@ Most of a GPT run's cost is writing the prompt prefix (system prompt, skill list
 | `mcp/build_v2.py`, `mcp/run2.py`, `mcp/stub_server.py` | E2, E3, E3b: build the MCP and mixed setups; run both harnesses; the stub MCP server |
 | `mcp/tools_inventory.json` | The frozen inventory of 791 MCP tool definitions from 73 servers (see `THIRD_PARTY.md`) |
 | `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl` | E1 results: one record per run |
+| `sonnet_e1_caveman_v3.jsonl`, `raw_e1/` | Version 3 rerun of Sonnet / `caveman` / alone (18 runs, one fresh folder each) and its raw logs; replaces those 18 records of `sonnet.jsonl` |
 | `gpt_subscription_failed.jsonl` | The excluded E1 GPT batch (rate-limited subscription runs), kept for transparency |
 | `mcp/haiku_v2.jsonl`, `mcp/sonnet_v2.jsonl`, `mcp/gpt_v2.jsonl` | E2, E3 and E3b results of version 2 (GPT and E3b are still current) |
 | `mcp/haiku_v3.jsonl`, `mcp/sonnet_v3.jsonl` | Version 3 Claude Code E2 and E3 results (MCP allowed, a fresh folder per run) |

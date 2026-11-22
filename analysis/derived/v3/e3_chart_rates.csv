@@ -5,7 +5,7 @@ haiku,skill requests,mixed_larger,150,150,0.2133,0.1533,0.28,0.1133,0.3268
 haiku,single-step tool requests,single component,90,90,0.8444,0.7667,0.9111,0.6667,0.9889
 haiku,single-step tool requests,mixed_smaller,90,90,0.7889,0.7,0.8667,0.6,0.9444
 haiku,single-step tool requests,mixed_larger,90,90,0.7556,0.6667,0.8444,0.5667,0.9222
-sonnet,skill requests,single component,150,390,0.9289,0.8822,0.9667,0.8511,0.9867
+sonnet,skill requests,single component,150,390,0.94,0.9,0.9733,0.88,0.9889
 sonnet,skill requests,mixed_smaller,150,150,0.4467,0.3667,0.5267,0.3067,0.5867
 sonnet,skill requests,mixed_larger,150,150,0.34,0.26,0.4133,0.2133,0.4667
 sonnet,single-step tool requests,single component,90,90,0.8778,0.8111,0.9444,0.7111,1.0

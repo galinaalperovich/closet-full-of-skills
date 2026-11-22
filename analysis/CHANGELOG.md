@@ -1,17 +1,18 @@
 # Change log: version 2 → version 3
 
-Date: 22 November 2026. The Claude Code runs of Experiments 2 and 3 were repeated after two setup errors were found. E1, E3b and every Codex run are unchanged. The version 2 result files are unchanged on disk, and `python3 analysis/analyze.py` still reproduces version 2; `ANALYSIS_VERSION=3` produces the numbers below (`derived/v3/`). Details are in `METHODOLOGY.md` §0.
+Date: 22 November 2026. The Claude Code runs of Experiments 2 and 3, and the 18 E1 runs of the one affected E1 folder, were repeated after two setup errors were found. The rest of E1, E3b and every Codex run are unchanged. The version 2 result files are unchanged on disk, and `python3 analysis/analyze.py` still reproduces version 2; `ANALYSIS_VERSION=3` produces the numbers below (`derived/v3/`). Details are in `METHODOLOGY.md` §0.
 
 ## What was wrong
 
 | Problem | Effect on version 2 | How it was found |
 |---|---|---|
 | **MCP calls were refused.** Headless Claude Code (`claude -p`) asks permission before running an MCP tool; with nobody to approve, every call returned “Claude requested permissions to use mcp__…, but you haven't granted it yet” instead of the stub result. | Which tool was called first is measured correctly. What the agent did after the refusal was not the documented design: retries, other tools, browser second steps, any-time selection. | A recorded example of a headless MCP call, made while building a selection checker, showed the refusal. |
-| **Auto-memory carried over between runs.** Claude Code keeps a memory per folder path and loads it at every start. All runs of a setup shared one folder. | Agents answering the `memory.create_entities` requests saved notes with Claude Code's own memory; later runs in six E2/E3 folders (from 20 November 14:18) started with them. One E1 folder (Sonnet, `caveman`, `alone`) was affected too. | The raw logs of the first v3 pass showed runs reading notes “saved in an earlier session”. |
+| **Auto-memory carried over between runs.** Claude Code keeps a memory per folder path and loads it at every start. All runs of a setup shared one folder. | Agents answering the `memory.create_entities` requests saved notes with Claude Code's own memory; later runs in six E2/E3 folders (from 20 November 14:18) started with them. One E1 folder (Sonnet, `caveman`, `alone`) was affected too; its 18 runs were rerun. | The raw logs of the first v3 pass showed runs reading notes “saved in an earlier session”. |
 
 ## What was done
 
 - All Claude Code E2/E3 runs repeated (2 × 1,020) with the stub MCP servers pre-approved (`ALLOW_MCP=1`) and every run in a fresh copy of its test folder (`ISOLATE=1`). Nothing else changed: Claude Code 2.1.328, models, folders, requests, tool definitions, stub text, turn limits.
+- The 18 E1 runs of Sonnet / `caveman` / `alone` repeated the same way (`ISOLATE=1` in `run.py`), with the original command. Results in `sonnet_e1_caveman_v3.jsonl`, raw logs in `raw_e1/`; they replace the original 18 records in version 3.
 - Raw event logs kept for every run (`mcp/raw/`, local paths removed). New `analysis/raw_checks.py`: all 1,677 MCP calls reached the stub, none were refused; 229 of 230 `Skill` calls returned without an error (the exception was a built-in skill, not a study skill).
 - A first v3 pass with MCP allowed but shared folders (E2 complete, E3 partial) is kept as `mcp/*_v3_shared.jsonl`. New `analysis/compare_versions.py` compares v2, that pass and v3 run by run.
 - Runner: `LOAD_MAX` waits for the machine's load to drop before starting a job; 8 parallel mixed-setup runs (up to 73 stub servers each) had made a 10-core laptop unresponsive.
@@ -23,7 +24,9 @@ Date: 22 November 2026. The Claude Code runs of Experiments 2 and 3 were repeate
 | MCP, 15 single-step targets: alone → 20 → ~220 → 791 | 86 → 79 → 78 → 78% becomes 84 → 82 → 79 → 80% | 92 → 81 → 77 → 77% becomes 88 → 76 → 78 → 77% |
 | MCP, paired change alone → 791 (single-step) | −7.8 → −4.4 pp | −15.6 → −11.1 pp |
 | MCP, paired change ~220 → 791 (single-step) | 0.0 → +1.1 pp | 0.0 → −1.1 pp |
-| Mixed, skill requests: baseline → smaller / larger | −48.0 / −55.3 → −46.0 / −58.0 pp | −49.6 / −58.9 → −48.2 / −58.9 pp |
+| E1, Sonnet `alone` (caveman folder rerun) | unchanged | 334/360 (92.8%) → 339/360 (94.2%) |
+| E1, Sonnet paired change alone → 1,020 skills | unchanged | −59.2 → −60.6 pp |
+| Mixed, skill requests: baseline → smaller / larger | −48.0 / −55.3 → −46.0 / −58.0 pp | −49.6 / −58.9 → −49.3 / −60.0 pp |
 | Mixed, single-step tool requests: alone → smaller / larger | −8.9 / −12.2 → −5.6 / −8.9 pp | −16.7 / −17.8 → −13.3 / −17.8 pp |
 
 Matched run by run, requests flipped in both directions between versions (`derived/v3/v2_vs_v3_runs.csv`); no setup moved by more than 6 points. **The conclusions did not change.**
@@ -36,7 +39,8 @@ Matched run by run, requests flipped in both directions between versions (`deriv
 | Flat from ~220 to 791 tools | Still flat: +1.1 and −1.1 pp | Unchanged |
 | Browser targets: “the stub answered ‘reply with one short sentence’, and the run ended” | In v2 the permission refusal ended the run; in v3 the stub does. The raw logs show the target tool's definition had been loaded with `ToolSearch` in all 120 browser runs of the two larger setups, and the target was called in 20 | Corrected (mechanism), with new evidence |
 | `ToolSearch` called in 81–95% of MCP runs | 62–92% | Corrected |
-| Mixed setups: skill requests lost 48–59 pp, single-step tool requests 9–18 pp | 46–59 pp and 6–18 pp | Corrected (numbers) |
+| Mixed setups: skill requests lost 48–59 pp, single-step tool requests 9–18 pp | 46–60 pp and 6–18 pp | Corrected (numbers) |
+| Sonnet selected the skill alone in 93% of runs (334 of 360) | 94% (339 of 360), after rerunning the one E1 folder with a carried-over memory note | Corrected (numbers) |
 | 76% of skill misses in the mixed setups used built-in tools only (306 of 401) | 79% (317 of 400) | Corrected (numbers) |
 | “No retained run has a raw log” | Every v3 Claude Code E2/E3 run has one | Corrected |
 | “Built-in web tools were not disabled, so a run can fetch public web pages” | Claude Code refused web searches and most page fetches in headless mode; Codex's own web search worked (46 of 175 E2 runs) | Corrected |
@@ -45,7 +49,7 @@ Matched run by run, requests flipped in both directions between versions (`deriv
 ## New findings (exploratory)
 1. **The memory target competes with Claude Code's own memory.** `memory.create_entities` was selected in 1 of 6 requests in every setup, alone included, in v2 and v3; in the other runs the agent saved the fact with its built-in memory.
 2. **Codex had web search, Claude Code did not.** One more way the configurations differ.
-3. **Auto-memory in E1:** at most five Sonnet `caveman` `alone` runs could have started with a carried-over note. Even if all five had been hits, Sonnet `alone` would be 94.2% instead of 92.8%.
+3. **Auto-memory in E1:** five Sonnet `caveman` `alone` runs had started with a carried-over note, all misses. In the isolated rerun of that folder, 11 of 18 runs selected the skill (6 of 18 originally); four of the five affected runs became hits. Sonnet `alone` is now 94.2% instead of 92.8%.
 4. **Alternatives not rated:** 13 of the 247 v3 misses with an alternative chose only alternatives the v2 rater never saw. They count as not judged.
 
 ---

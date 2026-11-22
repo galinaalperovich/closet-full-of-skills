@@ -1,6 +1,6 @@
 # Skill and MCP tool selection under load: methodology (version 3)
 
-**Status:** version 3, 22 November 2026. The Claude Code runs of Experiments 2 and 3 were repeated after two setup errors were found (§0). Version 2, revised after external review (`METHODOLOGY_REVIEW.md`) on 20 November, is preserved unchanged as `METHODOLOGY_v2.md`, and version 1 as `METHODOLOGY_v1.md`. Every change is listed in `analysis/CHANGELOG.md`. All numbers below are produced by `ANALYSIS_VERSION=3 python3 analysis/analyze.py`; the full generated tables are in `analysis/REPORT_v3.md` and the CSVs in `analysis/derived/v3/`. `python3 analysis/analyze.py` without the variable still reproduces version 2 byte for byte.
+**Status:** version 3, 22 November 2026. The Claude Code runs of Experiments 2 and 3, and the 18 E1 runs of one folder, were repeated after two setup errors were found (§0). Version 2, revised after external review (`METHODOLOGY_REVIEW.md`) on 20 November, is preserved unchanged as `METHODOLOGY_v2.md`, and version 1 as `METHODOLOGY_v1.md`. Every change is listed in `analysis/CHANGELOG.md`. All numbers below are produced by `ANALYSIS_VERSION=3 python3 analysis/analyze.py`; the full generated tables are in `analysis/REPORT_v3.md` and the CSVs in `analysis/derived/v3/`. `python3 analysis/analyze.py` without the variable still reproduces version 2 byte for byte.
 
 **Research question (exploratory):** in these model–harness configurations, how often is a designated skill, or an accepted MCP operation, selected within the observation window as the installed collection changes?
 
@@ -27,9 +27,11 @@ Two problems in how Claude Code was launched affected the Claude Code runs of Ex
 - `--allowedTools mcp__<server>` for every configured server (`ALLOW_MCP=1` in `mcp/run2.py`), so calls reach the stub;
 - every run in a fresh copy of its test folder, at a new path with the same folder name (`ISOLATE=1`), so every run starts with an empty auto-memory. Notes a run saves are kept in its raw log.
 
-Harness version (2.1.328), models, folders, requests, tool definitions, stub text and turn limits are unchanged. A first v3 pass with MCP allowed but shared folders (E2 complete, E3 partial) is kept as `mcp/*_v3_shared.jsonl` for comparison. E1, E3b and every Codex run are unchanged. The v2 result files are unchanged on disk.
+Harness version (2.1.328), models, folders, requests, tool definitions, stub text and turn limits are unchanged. A first v3 pass with MCP allowed but shared folders (E2 complete, E3 partial) is kept as `mcp/*_v3_shared.jsonl` for comparison.
 
-**Raw logs.** Every v3 run kept its full event stream (`mcp/raw/`, with local paths removed). `analysis/raw_checks.py` uses them to check what the records alone could not (§7.5).
+**Also rerun: the one affected E1 folder.** The 18 runs of Sonnet, `caveman`, `alone` (6 requests × 3 repetitions) were repeated the same way, one fresh folder per run (`ISOLATE=1` in `run.py`), with the original command and 3-turn limit. Results are in `sonnet_e1_caveman_v3.jsonl` and replace the original 18 records in version 3 (§9.1). The rest of E1, E3b and every Codex run are unchanged. The original result files are unchanged on disk.
+
+**Raw logs.** Every v3 run kept its full event stream (`mcp/raw/` and, for the E1 rerun, `raw_e1/`, with local paths removed). `analysis/raw_checks.py` uses them to check what the records alone could not (§7.5).
 
 ---
 
@@ -152,6 +154,7 @@ claude -p "<request>" --model <haiku|sonnet> --output-format stream-json --verbo
   --setting-sources project --strict-mcp-config --no-session-persistence \
   --max-turns 3 --disallowedTools Bash
 ```
+The 18 rerun runs of version 3 (§9.1) used the same command in a fresh copy of the folder.
 
 Codex (`run_codex.py`):
 ```
@@ -161,7 +164,7 @@ codex exec --json --ephemeral --skip-git-repo-check -s read-only \
 `CODEX_HOME` was a scratch folder containing only an API-key login and `model = "gpt-6-astra"`.
 
 ### 4.5 Repetitions
-Haiku 1, Sonnet 3, GPT 1 repetition per request: 480 + 1,440 + 480 runs, all executed on 20 November 2026. Repetitions are not new task scenarios: the 2,400 runs reuse 120 requests attached to 20 skills.
+Haiku 1, Sonnet 3, GPT 1 repetition per request: 480 + 1,440 + 480 runs, all executed on 20 November 2026. The 18 Sonnet runs of `caveman` `alone` were repeated on 22 November (§9.1). Repetitions are not new task scenarios: the 2,400 runs reuse 120 requests attached to 20 skills.
 
 ---
 
@@ -323,7 +326,7 @@ The ratings were made after the results and only for alternatives that actually 
 | Haiku | pack20 | 57/120 | 47.5% | 38.3–56.7 | 35.0–61.7 | 32 (6) |
 | Haiku | crowd200 | 30/120 | 25.0% | 18.3–32.5 | 15.0–35.9 | 53 (6) |
 | Haiku | crowd1000 | 19/120 | 15.8% | 9.2–22.5 | 5.8–28.3 | 60 (4) |
-| Sonnet | alone | 334/360 | 92.8% | 88.1–96.9 | 83.6–99.4 | 2 (2) |
+| Sonnet | alone | 339/360 | 94.2% | 90.0–97.8 | 87.2–99.4 | 2 (2) |
 | Sonnet | pack20 | 272/360 | 75.6% | 68.0–82.5 | 62.8–87.5 | 3 (0) |
 | Sonnet | crowd200 | 202/360 | 56.1% | 47.8–64.4 | 41.4–70.6 | 55 (0) |
 | Sonnet | crowd1000 | 121/360 | 33.6% | 26.1–41.7 | 18.3–49.2 | 71 (0) |
@@ -332,21 +335,21 @@ The ratings were made after the results and only for alternatives that actually 
 | GPT | crowd200 | 100/120 | 83.3% | 76.7–89.2 | 70.8–93.3 | – |
 | GPT | crowd1000 | 12/120 | 10.0% | 5.0–15.8 | 0.8–21.7 | – |
 
-The v1 hit totals are reproduced exactly (`derived/v2/reproduction_e1.csv`).
+The v1 hit totals are reproduced exactly from the original records (`derived/v2/reproduction_e1.csv`; version 3 repeats the check in `derived/v3/reproduction_e1.csv`). The Sonnet `alone` row uses the 18 rerun records for `caveman`.
 
 **Turn limits.** 158 of 480 Haiku runs and 131 of 1,440 Sonnet runs ended at the 3-turn limit, concentrated in the larger setups. Selection within the window is what is measured. How many capped runs would have selected the target later is unknown.
 
-**Auto-memory in E1 (found in version 3).** One E1 folder had a carried-over memory note: Sonnet, `caveman`, `alone`. Two runs of one request saved “keep answers short” with Claude Code's memory instead of loading the skill (their first action was `Write`), and up to five runs that finished after them started with that note. All five missed, but so had runs of an earlier request before the note existed. Sonnet `caveman` `alone` was 6/18. If all five had been hits, Sonnet `alone` would be 339/360 (94.2%) instead of 334/360 (92.8%). Haiku's E1 runs had finished before the note was written, and no other E1 folder had memory notes.
+**Auto-memory in E1 (found and rerun in version 3).** One E1 folder had a carried-over memory note: Sonnet, `caveman`, `alone`. Two runs of one request saved “keep answers short” with Claude Code's memory instead of loading the skill (their first action was `Write`), and up to five runs that finished after them started with that note. Haiku's E1 runs had finished before the note was written, and no other E1 folder had memory notes. The 18 runs of that folder were repeated with one fresh folder per run: **11 of 18** selected the skill, against 6 of 18 originally, so Sonnet `alone` is 339/360 (94.2%) instead of 334/360 (92.8%). The gain is where the note could have mattered: the five runs that had started with the note went from 0 to 4 hits in the rerun, and the request whose runs wrote the note went from 0 to 1 of 3. One rerun saved a memory note again, which no other run could see. No rerun had an error.
 
 **Paired change from `alone` to `crowd1000`:**
 
 | Model | Change | Request-cluster 95% | Two-stage 95% | Requests worse / better |
 |---|---|---|---|---|
 | Haiku | −62.5 pp | −71.7 to −53.3 | −75.9 to −47.5 | 76 / 1 |
-| Sonnet | −59.2 pp | −67.0 to −50.8 | −75.8 to −43.3 | 79 / 0 |
+| Sonnet | −60.6 pp | −68.6 to −52.5 | −76.4 to −44.7 | 82 / 0 |
 | GPT | −90.0 pp | −95.0 to −84.2 | −99.2 to −78.3 | 108 / 0 |
 
-Every adjacent step is in `derived/v2/e1_paired.csv`. Every adjacent step is negative. The two-stage interval includes zero only for Haiku `crowd200→crowd1000` (−20.0 to +3.3) and for GPT `alone→pack20`.
+Every adjacent step is in `derived/v3/e1_paired.csv`. Every adjacent step is negative. The two-stage interval includes zero only for Haiku `crowd200→crowd1000` (−20.0 to +3.3) and for GPT `alone→pack20`.
 
 **Target misses at `crowd1000`:**
 
@@ -386,7 +389,7 @@ Claude Code rows are version 3 (MCP allowed, one fresh folder per run). GPT rows
 | Haiku | single-skill baseline* | 119/150 (79.3%) | 95/120 (79.2%) | 84.4% |
 | Haiku | mixed_smaller | 50/150 (33.3%) | 82/120 (68.3%) | 78.9% |
 | Haiku | mixed_larger | 32/150 (21.3%) | 81/120 (67.5%) | 75.6% |
-| Sonnet | single-skill baseline* | 362/390 runs (92.8%) | 94/120 (78.3%) | 87.8% |
+| Sonnet | single-skill baseline* | 367/390 runs (94.1%) | 94/120 (78.3%) | 87.8% |
 | Sonnet | mixed_smaller | 67/150 (44.7%) | 69/120 (57.5%) | 74.5% |
 | Sonnet | mixed_larger | 51/150 (34.0%) | 67/120 (55.8%) | 70.0% |
 
@@ -394,7 +397,7 @@ Claude Code rows are version 3 (MCP allowed, one fresh folder per run). GPT rows
 
 | Paired change | Haiku | Sonnet |
 |---|---|---|
-| Skill requests, baseline → `mixed_larger` | −58.0 pp (−66.0 to −50.0) | −58.9 pp (−66.7 to −51.1) |
+| Skill requests, baseline → `mixed_larger` | −58.0 pp (−66.0 to −50.0) | −60.0 pp (−68.0 to −52.2) |
 | Non-browser tool requests, `mcp_alone` → `mixed_larger` | −8.9 pp (−15.6 to −2.2) | −17.8 pp (−26.7 to −10.0) |
 
 **Skill-request misses** in the mixed scenarios were mostly built-in actions only: Haiku 83 and 93, Sonnet 59 and 82 (smaller, larger). The commonest were `Glob`, `Grep` and `Read`, consistent with searching the empty folder for files the requests mention. Of these built-in-only runs, Haiku 73, Sonnet 25 hit the turn limit.
@@ -422,8 +425,8 @@ These scenarios show a larger decline for skill requests than for single-step to
 | E1 GPT, API key | 480 | List price × reported usage | **$119.13 billed** |
 | E2 GPT, API key | 170 | Same | **$52.60 billed** |
 | GPT via ChatGPT plan (E1 excluded batch, five E2 runs) | 485 attempts | Plan, not billed per token | $0 (list-price equivalent $1.61) |
-| Claude Code, all experiments (runs in the results) | 4,020 | Claude Code's `total_cost_usd` estimate; Claude plan, not billed per token | $0 (list-price equivalent $197.88) |
-| Claude Code, discarded runs (v2 E2/E3, superseded; the stopped shared-folder v3 pass) | 3,215 | Same | $0 (list-price equivalent $149.11) |
+| Claude Code, all experiments (runs in the results) | 4,020 | Claude Code's `total_cost_usd` estimate; Claude plan, not billed per token | $0 (list-price equivalent $198.02) |
+| Claude Code, discarded runs (v2 E2/E3, superseded; the stopped shared-folder v3 pass; the 18 original Sonnet `caveman` `alone` E1 runs) | 3,233 | Same | $0 (list-price equivalent $149.64) |
 | **Total billed** | | | **$171.73** |
 
 Actual billing should be checked against the OpenAI usage dashboard. The figures above are list-price calculations from reported usage.
@@ -439,11 +442,13 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 | File | Content |
 |---|---|
 | `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl` | E1 results (unchanged) |
+| `sonnet_e1_caveman_v3.jsonl` | Version 3 rerun of Sonnet / `caveman` / `alone` (18 runs, one fresh folder per run); replaces those 18 records of `sonnet.jsonl` in version 3 |
 | `gpt_subscription_failed.jsonl` | Excluded E1 batch (unchanged) |
 | `mcp/haiku_v2.jsonl`, `mcp/sonnet_v2.jsonl`, `mcp/gpt_v2.jsonl` | E2/E3/E3b results of version 2 (unchanged). Version 3 uses their GPT and E3b records |
 | `mcp/haiku_v3.jsonl`, `mcp/sonnet_v3.jsonl` | Version 3 Claude Code E2/E3 results: MCP allowed, one fresh folder per run |
 | `mcp/haiku_v3_shared.jsonl`, `mcp/sonnet_v3_shared.jsonl` | First v3 pass, MCP allowed but shared folders (stopped after E2 and part of E3); comparison only |
 | `mcp/raw/claude_haiku/`, `mcp/raw/claude_sonnet/` | Raw event logs of both v3 passes, local paths removed |
+| `raw_e1/claude_sonnet/` | Raw event logs of the E1 rerun, local paths removed |
 | `analysis/analyze.py` | The single analysis entry point (this document's numbers) |
 | `analysis/budget.py` | Follow-up cost model |
 | `analysis/REPORT.md`, `analysis/derived/v2/*.csv`, `manifest.json` | Derived tables; SHA-256 of every input |
@@ -455,7 +460,7 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 | Experiment scripts | `prompts.json`, `build.py`, `run.py`, `run_codex.py`, `mcp/*` |
 | Survey files | `scan*.py/json`, `weight*`, `report*`, `source_commits.tsv` |
 
-**Raw logs.** `mcp/raw/` was added to the runner during the original experiment, too late for any retained v2 run (every Claude batch started under the earlier runner, and the GPT runs after the change ended in a rate limit). Every v3 run has one (3,215 logs: the 2,040 retained runs and the 1,175 of the stopped shared-folder pass). Local paths, the user ID in temporary paths and the working folder's name (also where an agent mentioned it in its text) were replaced with placeholders, and the `init` event's machine-specific fields (memory and scratch paths, socket, timings) were dropped. `analysis/raw_checks.py` gives identical results on the scrubbed and the original logs.
+**Raw logs.** `mcp/raw/` was added to the runner during the original experiment, too late for any retained v2 run (every Claude batch started under the earlier runner, and the GPT runs after the change ended in a rate limit). Every v3 run has one (3,215 logs: the 2,040 retained runs and the 1,175 of the stopped shared-folder pass; plus 18 for the E1 rerun in `raw_e1/`). Local paths, the user ID in temporary paths and the working folder's name (also where an agent mentioned it in its text) were replaced with placeholders, and the `init` event's machine-specific fields (memory and scratch paths, socket, timings) were dropped. `analysis/raw_checks.py` gives identical results on the scrubbed and the original logs.
 
 **Reproducing.**
 1. `python3 analysis/analyze.py` regenerates every number in this document.
