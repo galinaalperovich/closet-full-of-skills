@@ -47,20 +47,22 @@ def line_chart(series, xlabels, aria, w=720, h=330, legend_note="", title=""):
     return f'<svg viewBox="0 0 {w} {h+dy}" role="img" aria-label="{aria}"><g {FONT}>{ttl}<g transform="translate(0,{dy})">{"".join(g)}{"".join(lg)}{"".join(lines)}</g></g></svg>'
 
 # --- Fig: how selection works (skills vs MCP tools)
-out["fig_how"] = f'''<svg viewBox="0 0 760 330" role="img" aria-label="Diagram. Every request is sent with the skill listing (all names and descriptions, capped at a share of the context) and with MCP tool definitions. Claude Code sends tool names and fetches schemas on demand with ToolSearch; For Codex, reported tokens grew when 20 tool definitions were added. From that, the model either loads a skill, calls a tool, or uses only built-in actions.">
+out["fig_how"] = f'''<svg viewBox="0 0 980 330" role="img" aria-label="Diagram. Every request is sent with the skill listing (all names and descriptions, capped at a share of the context) and with MCP tool definitions. Claude Code sends tool names and fetches schemas on demand with ToolSearch; for Codex, reported tokens grew when 20 tool definitions were added. The model loads a skill, calls a tool, or uses only built-in actions. Loading a skill is itself a tool call (the Skill tool in Claude Code, a shell read of SKILL.md in Codex) that returns the skill instructions; the work then happens in more tool calls.">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <g fill="none" stroke="currentColor" stroke-width="1.5">
-<rect x="10" y="135" width="140" height="60" rx="6"/>
+<rect x="2" y="135" width="164" height="60" rx="6"/>
 <rect x="200" y="14" width="300" height="128" rx="6"/>
 <rect x="200" y="182" width="300" height="134" rx="6"/>
 <rect x="550" y="14" width="200" height="50" rx="6" stroke="var(--accent)" stroke-width="2"/>
 <rect x="550" y="86" width="200" height="50" rx="6" stroke-dasharray="5 4"/>
 <rect x="550" y="182" width="200" height="50" rx="6" stroke="var(--accent)" stroke-width="2"/>
 <rect x="550" y="254" width="200" height="50" rx="6" stroke-dasharray="5 4"/>
+<rect x="790" y="6" width="180" height="66" rx="6"/>
+<rect x="790" y="96" width="180" height="50" rx="6"/>
 </g>
 <g {FONT} font-size="13" fill="currentColor">
-<text x="80" y="161" text-anchor="middle" font-weight="600">Your request</text>
-<text x="80" y="180" text-anchor="middle" font-size="11.5" fill-opacity=".75">“Audit the SEO of my site.”</text>
+<text x="84" y="161" text-anchor="middle" font-weight="600">Your request</text>
+<text x="84" y="180" text-anchor="middle" font-size="11.5" fill-opacity=".75">“Audit the SEO of my site.”</text>
 <text x="214" y="36" font-weight="600">Skill listing, sent every time</text>
 <text x="214" y="58" {MONO} font-size="11">seo-audit: When the user wants to…</text>
 <text x="214" y="76" {MONO} font-size="11">pdf: Use this skill whenever…</text>
@@ -77,14 +79,21 @@ out["fig_how"] = f'''<svg viewBox="0 0 760 330" role="img" aria-label="Diagram. 
 <text x="650" y="116" text-anchor="middle" font-weight="600">No skill selected</text>
 <text x="650" y="212" text-anchor="middle" font-weight="600">Call an MCP tool</text>
 <text x="650" y="284" text-anchor="middle" font-weight="600">Built-in actions only</text>
+<text x="880" y="28" text-anchor="middle" font-weight="600">Called as a tool</text>
+<text x="880" y="46" text-anchor="middle" font-size="11">Skill tool (Claude Code)</text>
+<text x="880" y="62" text-anchor="middle" font-size="11">shell read of SKILL.md (Codex)</text>
+<text x="880" y="118" text-anchor="middle" font-weight="600">Instructions come back</text>
+<text x="880" y="135" text-anchor="middle" font-size="11">the work is more tool calls</text>
 </g>
 <g stroke="currentColor" stroke-width="1.5" fill="none" marker-end="url(#ah)">
-<line x1="150" y1="155" x2="196" y2="92"/>
-<line x1="150" y1="175" x2="196" y2="238"/>
+<line x1="166" y1="152" x2="196" y2="96"/>
+<line x1="166" y1="178" x2="196" y2="234"/>
 <line x1="500" y1="62" x2="546" y2="42"/>
 <line x1="500" y1="94" x2="546" y2="110"/>
 <line x1="500" y1="230" x2="546" y2="210"/>
 <line x1="500" y1="262" x2="546" y2="278"/>
+<line x1="750" y1="39" x2="786" y2="39"/>
+<line x1="880" y1="72" x2="880" y2="92"/>
 </g>
 <g {FONT} font-size="11" fill="currentColor" fill-opacity=".75"><text x="505" y="160">model</text><text x="505" y="174">decides</text></g>
 </svg>'''
