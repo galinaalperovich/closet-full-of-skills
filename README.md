@@ -15,24 +15,28 @@ I asked Claude Code and Codex natural requests that were written for one particu
 | | Claude Code + Haiku | Claude Code + Sonnet | Codex + GPT |
 |---|---|---|---|
 | **Skills** (E1): target alone → 20 → 220 → 1,020 skills | 78% → 48% → 25% → 16% | 93% → 76% → 56% → 34% | 100% → 99% → 83% → 10% |
-| **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 86% → 79% → 78% → 78% | 92% → 81% → 77% → 77% | 91% alone (82 of 90). With 20 tools only 24 requests were run: 92% (22 of 24), down from 100% (24 of 24) on the same requests. Larger setups not run |
-| **Skills + tools together** (E3), change against the single component | skill requests −48 to −59 points (both models); tool requests −9 to −18 | | not run (cost) |
+| **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 84% → 82% → 79% → 80% | 88% → 76% → 78% → 77% | 91% alone (82 of 90). With 20 tools only 24 requests were run: 92% (22 of 24), down from 100% (24 of 24) on the same requests. Larger setups not run |
+| **Skills + tools together** (E3), change against the single component | skill requests −46 to −59 points (both models); tool requests −6 to −18 | | not run (cost) |
 
 - 4,674 retained runs: 4,020 Claude Code runs and 654 GPT runs. On top of those there is one excluded, rate-limited GPT batch (`gpt_subscription_failed.jsonl`).
+- **Version 3 (22 November 2026):** the Claude Code runs of E2 and E3 were repeated after two setup errors were found: headless Claude Code had refused every MCP call, and its per-folder auto-memory carried notes from one run to the next. The numbers above are from the rerun. What changed and why is in [`analysis/CHANGELOG.md`](analysis/CHANGELOG.md) and `METHODOLOGY.md` §0.
 - What is measured is **selection of the designated component within the observation window**, not the quality of the answer.
-- Every rate and paired change has a 95% confidence interval (request-cluster bootstrap, 2,000 resamples, fixed seed; Wilson score interval where all runs succeeded) in `analysis/derived/v2/`. See `METHODOLOGY.md` §8.
+- Every rate and paired change has a 95% confidence interval (request-cluster bootstrap, 2,000 resamples, fixed seed; Wilson score interval where all runs succeeded) in `analysis/derived/v3/`. See `METHODOLOGY.md` §8.
 - The full design, statistics, limitations and every number are in [`METHODOLOGY.md`](METHODOLOGY.md). Read it before you reuse a number.
 
 ## Reproduce the published numbers (free, about a minute)
 
 ```bash
-pip install pyyaml               # the only dependency (Python 3.9+)
-python3 analysis/analyze.py      # rewrites analysis/REPORT.md and analysis/derived/v2/
-git status --short analysis/     # expect no changes: you get the same tables
-python3 analysis/budget.py       # the cost model behind the follow-up plan
+pip install pyyaml                                  # the only dependency (Python 3.9+)
+ANALYSIS_VERSION=3 python3 analysis/analyze.py      # the published numbers: analysis/REPORT_v3.md and analysis/derived/v3/
+python3 analysis/raw_checks.py                      # checks that need the raw logs (v3 Claude Code E2/E3 runs)
+python3 analysis/compare_versions.py                # version 2 against version 3, run by run
+python3 analysis/analyze.py                         # version 2, unchanged: analysis/REPORT.md and analysis/derived/v2/
+git status --short analysis/                        # expect no changes: you get the same tables
+python3 analysis/budget.py                          # the cost model behind the follow-up plan
 ```
 
-`analysis/derived/v2/manifest.json` records the SHA-256 of every input. The result files (`*.jsonl`) are byte-identical to the ones the analysis was first run on. Only two kinds of file differ from my working copy: scripts whose machine-specific paths became environment variables, and `scan*.json`, where other people's home-folder names found by the survey scanner were replaced with `<user>`.
+`analysis/derived/v3/manifest.json` (and `v2/` for version 2) records the SHA-256 of every input. The result files (`*.jsonl`) are byte-identical to the ones the analysis was first run on. Only two kinds of file differ from my working copy: scripts whose machine-specific paths became environment variables, and `scan*.json`, where other people's home-folder names found by the survey scanner were replaced with `<user>`.
 
 To rebuild the post and its figures:
 
@@ -69,8 +73,8 @@ python3 run.py alone,pack20,crowd200,crowd1000 3 sonnet results/sonnet_rerun.jso
 python3 run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_rerun.jsonl
 
 # E2 (MCP only), E3b (trending skills alone), E3 (mixed). Arguments: harness, model, job set, output file
-python3 mcp/run2.py claude haiku mcp   results/haiku_mcp.jsonl
-python3 mcp/run2.py claude sonnet mixed results/sonnet_mixed.jsonl
+ALLOW_MCP=1 ISOLATE=1 LOAD_MAX=20 PAR=2 python3 mcp/run2.py claude haiku mcp   results/haiku_mcp.jsonl
+ALLOW_MCP=1 ISOLATE=1 LOAD_MAX=20 PAR=2 python3 mcp/run2.py claude sonnet mixed results/sonnet_mixed.jsonl
 python3 mcp/run2.py codex  gpt   mcp   results/gpt_mcp.jsonl
 ```
 - Run `mkdir results` first.
@@ -78,16 +82,19 @@ python3 mcp/run2.py codex  gpt   mcp   results/gpt_mcp.jsonl
   - `PAR`: parallel runs (default 6 for E1, 4 for E2/E3).
   - `ONLY_ENV` and `ONLY_I`: run a subset.
   - `STOP_ON_429=1`: stop at the first rate limit.
+  - `ALLOW_MCP=1` (Claude Code): pre-approve the stub MCP servers. Without it, headless Claude Code refuses every MCP call, which is what happened in version 2.
+  - `ISOLATE=1` (Claude Code): run each job in a fresh copy of its test folder, so Claude Code's per-folder auto-memory starts empty every time.
+  - `LOAD_MAX=<n>`: wait before starting a job while the 1-minute load average is above n. The mixed setups start up to 73 stub servers per run; 8 parallel runs once made a 10-core laptop unresponsive.
   - `SKILL_REPOS` and `ENVS2_DIR`: move the inputs and test folders.
   - `CODEX_BIN`: the path to Codex.
 - For Codex, use a separate `CODEX_HOME` that is logged in with an API key, so your personal Codex settings and skills don't leak into the runs.
-- `analysis/analyze.py` reads the original file names. To analyse a rerun, point its input list at your files.
+- `analysis/analyze.py` reads the original file names (`ANALYSIS_VERSION=3` adds `mcp/haiku_v3.jsonl` and `mcp/sonnet_v3.jsonl`). To analyse a rerun, point its input list at your files.
 
 **What it costs** (list prices; details in `analysis/derived/v2/cost_by_batch.csv`)
 
 | Configuration | Per run | This study |
 |---|---|---|
-| Claude Code, Haiku | about $0.002–0.009 | covered by a Claude subscription ($192.61 list price for all 4,020 Claude runs) |
+| Claude Code, Haiku | about $0.002–0.009 | covered by a Claude subscription ($197.88 list price for the 4,020 Claude runs in the results, plus $149.11 for 3,215 discarded runs) |
 | Claude Code, Sonnet | about $0.03–0.14 | (included above) |
 | Codex + GPT, skills (E1) | $0.19–0.31 measured | $119.13 for 480 runs |
 | Codex + GPT, MCP alone / 20 tools | $0.29 / $0.35 measured | $52.60 for 170 API runs |
@@ -99,14 +106,14 @@ Most of a GPT run's cost is writing the prompt prefix (system prompt, skill list
 **Safety.**
 - Every skill keeps its real name and description, but its instructions are replaced with a one-line stub. Every MCP tool is served by `mcp/stub_server.py`, which returns its definition and a stub result. No code from the fetched repositories is ever run.
 - Claude Code runs use `--disallowedTools Bash --strict-mcp-config --setting-sources project`, and Codex runs use `-s read-only`.
-- Built-in web tools were **not** disabled, so a run can fetch public web pages.
+- Built-in web tools were not disabled. In headless mode, with nobody to approve, Claude Code refused web searches and most page fetches (it allows a few documentation sites). Codex's own web search worked.
 
 ## Repository layout
 
 | Path | What it is |
 |---|---|
-| `METHODOLOGY.md` | The current methodology (v2): design, measurement, statistics, all results, boundaries |
-| `METHODOLOGY_v1.md`, `METHODOLOGY_REVIEW.md` | The first version, and the external review it received |
+| `METHODOLOGY.md` | The current methodology (v3): design, measurement, statistics, all results, boundaries |
+| `METHODOLOGY_v2.md`, `METHODOLOGY_v1.md`, `METHODOLOGY_REVIEW.md` | Earlier versions, and the external review version 1 received |
 | `analysis/CHANGELOG.md` | Response to the review, claim by claim: corrected, narrowed, removed, unresolved |
 | `FOLLOWUP_PROTOCOL.md` | A costed plan to finish the study (proposal, not results) |
 | `prompts.json`, `mcp/trending_skill_prompts.json`, `mcp/mcp_targets.json` | The 20 skill targets, the 5 trending skills and the 20 MCP tool targets, each with 6 requests |
@@ -115,9 +122,13 @@ Most of a GPT run's cost is writing the prompt prefix (system prompt, skill list
 | `mcp/tools_inventory.json` | The frozen inventory of 791 MCP tool definitions from 73 servers (see `THIRD_PARTY.md`) |
 | `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl` | E1 results: one record per run |
 | `gpt_subscription_failed.jsonl` | The excluded E1 GPT batch (rate-limited subscription runs), kept for transparency |
-| `mcp/haiku_v2.jsonl`, `mcp/sonnet_v2.jsonl`, `mcp/gpt_v2.jsonl` | E2, E3 and E3b results |
-| `analysis/analyze.py` | The single entry point that produces every published number |
-| `analysis/REPORT.md`, `analysis/derived/v2/` | Its outputs: rates, paired differences, intervals, costs, audits, input hashes |
+| `mcp/haiku_v2.jsonl`, `mcp/sonnet_v2.jsonl`, `mcp/gpt_v2.jsonl` | E2, E3 and E3b results of version 2 (GPT and E3b are still current) |
+| `mcp/haiku_v3.jsonl`, `mcp/sonnet_v3.jsonl` | Version 3 Claude Code E2 and E3 results (MCP allowed, a fresh folder per run) |
+| `mcp/haiku_v3_shared.jsonl`, `mcp/sonnet_v3_shared.jsonl` | A first v3 pass with shared folders, stopped early; kept for comparison |
+| `mcp/raw/` | Raw event logs of every v3 run, with local paths removed |
+| `analysis/analyze.py` | The single entry point that produces every published number (`ANALYSIS_VERSION=3`) |
+| `analysis/REPORT_v3.md`, `analysis/derived/v3/` | Its outputs: rates, paired differences, intervals, costs, audits, input hashes (`REPORT.md` and `derived/v2/` for version 2) |
+| `analysis/raw_checks.py`, `analysis/compare_versions.py` | Raw-log checks for the v3 runs; version 2 against version 3 |
 | `analysis/alt_judge_*` | Blind rating of the 210 alternatives agents chose: input, the rater's prompt, its rules, its labels |
 | `analysis/budget.py` | The cost model for the follow-up plan |
 | `scan.py`, `report.py`, `weight.py`, `stdlib.json` | Experiment 0: the static survey of skill repositories (read-only, runs no repo code) |
@@ -133,8 +144,8 @@ Run records use the setup names from the time the runs were made: `mixed_typical
 
 - **Selection, not quality.** A run without the skill can still produce a fine answer.
 - **Minimal setup.** Empty folders, stub instructions, and 3–4 turns in Claude Code.
-- **Few samples.** One sample of extra skills, and six requests per target, all written by me.
-- **No raw logs.** The retained runs kept what the agent called, not its text.
+- **Few samples.** One sample of extra skills, and six LLM-written requests per target.
+- **Few raw logs.** Only the v3 Claude Code E2/E3 runs kept their full event stream. The other runs kept what the agent called, not its text.
 - **Thinner GPT data.** One run per request, and only two MCP setups.
 - **Configurations, not models.** Differences between harnesses belong to the whole configuration.
 

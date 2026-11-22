@@ -7,7 +7,7 @@ tmp = tempfile.mkdtemp(prefix="png2_")
 W = 800
 for k, svg in fig.items():
     vb = [float(x) for x in re.search(r'viewBox="([^"]+)"', svg).group(1).split()]
-    h = int((W - 40) * vb[3] / vb[2]) + 40
+    h = int((W - 40) * vb[3] / vb[2]) + 90   # extra room: Chrome sometimes reserves space below the first paint
     page = f'<!doctype html><html data-theme="light"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"><style>{css} body{{margin:0;background:#ffffff}} .f{{padding:20px;width:{W-40}px}} .f svg{{width:100%;height:auto;display:block;color:var(--fg)}}</style></head><body><div class="f">{svg}</div></body></html>'
     hp = os.path.join(tmp, k + ".html"); open(hp, "w").write(page)
     out = os.path.join(B, "images2", k + ".png")

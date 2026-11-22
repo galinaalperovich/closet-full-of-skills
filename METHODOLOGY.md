@@ -1,6 +1,6 @@
-# Skill and MCP tool selection under load: methodology (version 2)
+# Skill and MCP tool selection under load: methodology (version 3)
 
-**Status:** revised after external review (`METHODOLOGY_REVIEW.md`), 20 November 2026. Version 1 is preserved unchanged as `METHODOLOGY_v1.md`; every change is listed in `analysis/CHANGELOG.md`. All numbers below are produced by `analysis/analyze.py` from the unchanged result files. The full generated tables are in `analysis/REPORT.md` and the CSVs in `analysis/derived/v2/`.
+**Status:** version 3, 22 November 2026. The Claude Code runs of Experiments 2 and 3 were repeated after two setup errors were found (§0). Version 2, revised after external review (`METHODOLOGY_REVIEW.md`) on 20 November, is preserved unchanged as `METHODOLOGY_v2.md`, and version 1 as `METHODOLOGY_v1.md`. Every change is listed in `analysis/CHANGELOG.md`. All numbers below are produced by `ANALYSIS_VERSION=3 python3 analysis/analyze.py`; the full generated tables are in `analysis/REPORT_v3.md` and the CSVs in `analysis/derived/v3/`. `python3 analysis/analyze.py` without the variable still reproduces version 2 byte for byte.
 
 **Research question (exploratory):** in these model–harness configurations, how often is a designated skill, or an accepted MCP operation, selected within the observation window as the installed collection changes?
 
@@ -12,7 +12,24 @@ The study keeps three questions apart:
 | **Appropriate routing:** was some acceptable component selected for the request? | Partly. Retrospective and exploratory (§7.4). |
 | **Task performance:** was the request completed correctly? | No. Skill bodies and tool results are stubs; files do not exist. |
 
-All paths are relative to `skill-trigger-spike/`.
+All paths are relative to the repository root.
+
+---
+
+## 0. Version 3: what was wrong, and what was rerun
+
+Two problems in how Claude Code was launched affected the Claude Code runs of Experiments 2 and 3 in version 2:
+
+1. **MCP calls were refused.** In headless mode (`claude -p`), Claude Code asks for permission before it runs an MCP tool, and with nobody to approve, the call is refused. The v2 runner never pre-approved the stub servers, so every Claude Code MCP call returned “Claude requested permissions to use mcp__…, but you haven't granted it yet” instead of the stub result. The runner recorded selection from the call itself, so **which tool was called first is measured correctly**. Everything after that first call was not the documented design: what the agent did after the refusal, second steps of browser tasks, and the any-time selection metric. Codex runs are not affected (`approval_policy="never"` records the call before execution, §5.5). Skill loads are not affected (the `Skill` tool needs no approval; every v3 `Skill` call returned without an error).
+2. **Claude Code's auto-memory carried over between runs.** Claude Code keeps an auto-memory per folder path and loads its index at the start of every session in that folder. All runs of one setup shared one folder. Agents answering the `memory.create_entities` requests usually saved the fact with Claude Code's own memory instead of calling the memory MCP tool, and later runs in the same folder then started with those notes (five short entries about a fictional manager, project and package manager). This affected six E2/E3 folders in v2 from 20 November 14:18 onwards, and one E1 folder (§9.1).
+
+**What was rerun.** All Claude Code runs of E2 and E3, for Haiku and Sonnet (2 × 1,020), with two changes and nothing else:
+- `--allowedTools mcp__<server>` for every configured server (`ALLOW_MCP=1` in `mcp/run2.py`), so calls reach the stub;
+- every run in a fresh copy of its test folder, at a new path with the same folder name (`ISOLATE=1`), so every run starts with an empty auto-memory. Notes a run saves are kept in its raw log.
+
+Harness version (2.1.328), models, folders, requests, tool definitions, stub text and turn limits are unchanged. A first v3 pass with MCP allowed but shared folders (E2 complete, E3 partial) is kept as `mcp/*_v3_shared.jsonl` for comparison. E1, E3b and every Codex run are unchanged. The v2 result files are unchanged on disk.
+
+**Raw logs.** Every v3 run kept its full event stream (`mcp/raw/`, with local paths removed). `analysis/raw_checks.py` uses them to check what the records alone could not (§7.5).
 
 ---
 
@@ -22,8 +39,8 @@ All paths are relative to `skill-trigger-spike/`.
 |---|---|---|---|
 | 0 | Static survey of a selected sample of popular skill repositories | Done | n/a (no model calls) |
 | 1 | Skills only: does the designated skill get selected as more skills are installed? | Done: Haiku, Sonnet, GPT | 2,400 |
-| 2 | MCP tools only: same design with published MCP tool definitions | Done: Haiku, Sonnet. GPT partial (`mcp_alone` 120, `mcp_pack20` 54) | 1,134 |
-| 3 | Two constructed mixed scenarios, skills and MCP servers together (`mixed_smaller`, `mixed_larger`) | Done: Haiku, Sonnet. GPT not run | 1,080 |
+| 2 | MCP tools only: same design with published MCP tool definitions | Done: Haiku, Sonnet (rerun in v3). GPT partial (`mcp_alone` 120, `mcp_pack20` 54) | 1,134 |
+| 3 | Two constructed mixed scenarios, skills and MCP servers together (`mixed_smaller`, `mixed_larger`) | Done: Haiku, Sonnet (rerun in v3). GPT not run | 1,080 |
 | 3b | Five skills from GitHub-trending repositories, installed alone | Done: Haiku, Sonnet. GPT not run | 60 |
 
 A **run** is one request sent once to one model–harness configuration in one setup. A proposed follow-up, kept separate from these results, is in `FOLLOWUP_PROTOCOL.md`.
@@ -43,13 +60,17 @@ Model IDs are the aliases as requested. Resolved model IDs were not recorded.
 
 **Observation windows.** Claude Code: `--max-turns 3` in E1 and `--max-turns 4` in E2/E3/E3b. Codex `exec`: one turn with no turn cap; timeouts were 300 s (E1) and 420 s (E2). The two harnesses therefore had different opportunities to select a component. The size and direction of that effect on cross-harness comparison is not quantified.
 
-**Harness-provided capabilities.** “Alone” means one *experimental* component, not one available capability. The Claude Code `init` event reported 23 built-in skills in every setup (24/43/243/1,043 skills in total in E1), plus built-in tools (`Glob`, `Read`, `WebFetch`, `ToolSearch`…). MCP tools were deferred behind `ToolSearch`. Codex exposes a shell and its own MCP discovery tools (`list_mcp_resources`, `list_mcp_resource_templates`). The Codex tool inventory was not recorded.
+**Harness-provided capabilities.** “Alone” means one *experimental* component, not one available capability. The Claude Code `init` event reported 23 built-in skills in every setup (24/43/243/1,043 skills in total in E1), plus 27 built-in tools. The v3 raw logs record the list: `Glob`, `Grep`, `Read`, `Write`, `Edit`, `NotebookEdit`, `WebSearch`, `ToolSearch`, `Skill`, `Task`, and tools that came from the Claude desktop app environment the runs were launched from (`Artifact`, `CronCreate`, `PushNotification`, `SendMessage`, `Workflow` and others). `Bash` was disallowed. MCP tools and some built-ins (such as `WebFetch`) were deferred behind `ToolSearch`. Codex exposes a shell and its own MCP discovery tools (`list_mcp_resources`, `list_mcp_resource_templates`). The Codex tool inventory was not recorded.
+
+**Permissions (Claude Code).** Runs used the default permission mode with nobody to approve, so any call that needed approval was refused: `WebSearch` always, `WebFetch` except for a few pre-approved documentation sites, searches and reads outside the test folder, writes into the test folder, and most subagent launches. Reads and writes in Claude Code's own memory and session scratch folders were allowed. Codex, by contrast, completed its own built-in web search in 46 of its 175 E2 runs, so web search was an alternative route for GPT but not for Claude. This is one more way the configurations differ. In v2 this also refused every MCP call (§0). In v3 only the stub MCP servers were pre-approved. The raw-log counts are in `derived/v3/raw_checks.csv`.
+
+**Auto-memory (Claude Code).** On, as by default. In v3 each run starts with an empty memory (§0).
 
 **Documented listing limits** (motivation only, not a measured mechanism; sources: [Claude Code skills docs](https://code.claude.com/docs/en/skills.md), [Codex skills docs](https://learn.chatgpt.com/docs/build-skills), [Agent Skills spec](https://agentskills.io/specification)):
 - **Claude Code:** the skill listing gets 1% of the context window. Each description is capped at 1,536 characters. When the listing overflows, descriptions of the least-used skills are dropped.
 - **Codex:** the listing gets 2% of the context window, up to 10,000 tokens, and descriptions may be shortened or omitted.
 
-What each model actually saw was **not captured** in any run.
+The rendered listing each model received was **not captured** in any run. For the v3 Claude Code E2/E3 runs, the raw `init` event records the names of the skills and tools that were exposed, but not the text the model saw.
 
 ---
 
@@ -101,7 +122,7 @@ Full tables: `report2.txt`, `weight2.txt`, `analysis/derived/v2/survey.json`.
 - `JuliusBrussee/caveman`
 - `coreyhaines31/marketingskills`: `seo-audit`, `copywriting`
 
-**Requests.** There are 120 experimenter-written requests, 6 per skill (`prompts.json`). They were written before any model run and not edited afterwards. The prompt audit (`derived/v2/prompt_audit.csv`) found none with explicit invocation syntax, meaning a slash command, the word “skill”, `$name` or “use the <name>”.
+**Requests.** There are 120 requests, 6 per skill (`prompts.json`), written with an LLM. They were written before any model run and not edited afterwards. The prompt audit (`derived/v2/prompt_audit.csv`) found none with explicit invocation syntax, meaning a slash command, the word “skill”, `$name` or “use the <name>”.
 
 63 of the 150 skill requests (E1 plus E3b) contain a word from the target's name, for example “Grill me…” or “report.pdf”. Lexical overlap is not a flaw in itself, but it affects any interpretation about distinctiveness.
 
@@ -164,7 +185,7 @@ Haiku 1, Sonnet 3, GPT 1 repetition per request: 480 + 1,440 + 480 runs, all exe
 Both harnesses accepted the definitions (no connection failures; see the audit). The study does not assert that schema differences cannot affect selection.
 
 ### 5.2 Stub MCP server
-`mcp/stub_server.py` implements `initialize`, `tools/list`, `tools/call` and `ping` over stdio. Every call returns “Stub result: this tool is disabled in a test. Reply with one short sentence.” This is synthetic feedback that ends most episodes after the first call (§7.3).
+`mcp/stub_server.py` implements `initialize`, `tools/list`, `tools/call` and `ping` over stdio. Every call returns “Stub result: this tool is disabled in a test. Reply with one short sentence.” This is synthetic feedback that ends most episodes after the first call (§7.3). In the v2 Claude Code runs the stub was never reached, because the calls were refused (§0). In v3, every Claude Code MCP call returned the stub text (`derived/v3/raw_checks.csv`).
 
 ### 5.3 Targets, requests and accepted operations
 There are 20 target tools with 6 requests each (`mcp/mcp_targets.json`):
@@ -190,7 +211,7 @@ The sets were written before the main runs, with one pilot-informed addition (`i
 | `mcp_crowdall` | 20 targets plus all 771 others |
 
 ### 5.5 Invocation
-Claude Code: as in §4.4, plus `--mcp-config` and `--max-turns 4`.
+Claude Code: as in §4.4, plus `--mcp-config` and `--max-turns 4`. In v3, also `--allowedTools mcp__<server>,…` for every configured server, and each run in a fresh copy of the test folder (§0).
 
 Codex: `codex exec --json --ephemeral --skip-git-repo-check [--ignore-user-config] -s read-only -c model="gpt-6-astra" -c model_reasoning_effort="medium" -c approval_policy="never" -c mcp_servers.<name>.command=... "<request>"`.
 
@@ -219,7 +240,7 @@ E3b runs the five trending skills `alone` with 4 turns.
 
 ---
 
-## 7. Measurement (analysis version 2)
+## 7. Measurement (analysis versions 2 and 3)
 
 ### 7.1 Termination status
 Termination status is derived independently of selection:
@@ -264,7 +285,7 @@ A target miss falls into one of these classes:
 
 The 210 distinct (request, alternative) pairs that occurred in target misses were rated by an independent LLM rater. The rater saw only the request, the two descriptions and the label definitions. It was blind to model, setup, frequency and outcome (`analysis/alt_judge_input.json`, `analysis/alt_judgments.json`).
 
-The ratings were made after the results and only for alternatives that actually occurred, so they are labelled **retrospective/exploratory**. Accepted sets for new runs must be frozen beforehand (`FOLLOWUP_PROTOCOL.md`).
+The ratings were made after the results and only for alternatives that actually occurred, so they are labelled **retrospective/exploratory**. They were made for the version 2 runs. In version 3, 13 of the 247 Claude Code E2/E3 misses that selected an alternative chose only alternatives the rater never saw (15 distinct pairs). Those count as “not judged”, never as acceptable, so the v3 acceptable rates are, if anything, slightly low. Accepted sets for new runs must be frozen beforehand (`FOLLOWUP_PROTOCOL.md`).
 
 **Reclassification.** Codex's own discovery calls (`list_mcp_resources`, `list_mcp_resource_templates`) were stored as MCP calls in v1. In v2 they are classed as harness built-ins. This changes miss classes only, never `designated_target_selection`.
 
@@ -276,7 +297,7 @@ The ratings were made after the results and only for alternatives that actually 
 - Codex command exit status.
 - Ordered events, beyond the deduplicated `used` list and Claude's `first_tool`.
 
-**No retained run has a raw log** (§11). Historical detection therefore cannot be validated retroactively. A validation rerun is part of the follow-up.
+**Raw logs exist only for the v3 Claude Code E2/E3 runs** (§0, §11). For those runs the list above is answered by the event stream: agent text, tool arguments and results, and event order. E1, E3b and all Codex runs have no raw log, so their detection cannot be validated retroactively. A validation rerun for them is part of the follow-up.
 
 ---
 
@@ -315,6 +336,8 @@ The v1 hit totals are reproduced exactly (`derived/v2/reproduction_e1.csv`).
 
 **Turn limits.** 158 of 480 Haiku runs and 131 of 1,440 Sonnet runs ended at the 3-turn limit, concentrated in the larger setups. Selection within the window is what is measured. How many capped runs would have selected the target later is unknown.
 
+**Auto-memory in E1 (found in version 3).** One E1 folder had a carried-over memory note: Sonnet, `caveman`, `alone`. Two runs of one request saved “keep answers short” with Claude Code's memory instead of loading the skill (their first action was `Write`), and up to five runs that finished after them started with that note. All five missed, but so had runs of an earlier request before the note existed. Sonnet `caveman` `alone` was 6/18. If all five had been hits, Sonnet `alone` would be 339/360 (94.2%) instead of 334/360 (92.8%). Haiku's E1 runs had finished before the note was written, and no other E1 folder had memory notes.
+
 **Paired change from `alone` to `crowd1000`:**
 
 | Model | Change | Request-cluster 95% | Two-stage 95% | Requests worse / better |
@@ -337,44 +360,46 @@ Counting rated-equivalent alternatives as acceptable raises the `crowd1000` rate
 
 ### 9.2 Experiment 2: MCP tools only
 
-| Model | Setup | Strict accepted tool (all 20) | Non-browser 15 targets | Browser 5: strict / capable server | Turn-limited |
-|---|---|---|---|---|---|
-| Haiku | mcp_alone | 99/120 (82.5%) | 77/90 (85.6%) | 22 / 22 of 30 | 30 |
-| Haiku | mcp_pack20 | 81/120 (67.5%) | 71/90 (78.9%) | 10 / 13 | 44 |
-| Haiku | mcp_crowd200 | 71/120 (59.2%) | 70/90 (77.8%) | 1 / 25 | 34 |
-| Haiku | mcp_crowdall | 75/120 (62.5%) | 70/90 (77.8%) | 5 / 30 | 31 |
-| Sonnet | mcp_alone | 102/120 (85.0%) | 83/90 (92.2%) | 19 / 19 | 0 |
-| Sonnet | mcp_pack20 | 79/120 (65.8%) | 73/90 (81.1%) | 6 / 7 | 3 |
-| Sonnet | mcp_crowd200 | 69/120 (57.5%) | 69/90 (76.7%) | 0 / 28 | 10 |
-| Sonnet | mcp_crowdall | 69/120 (57.5%) | 69/90 (76.7%) | 0 / 30 | 9 |
-| GPT | mcp_alone | 104/120 (86.7%) | 82/90 (91.1%) | 22 / 22 | – |
-| GPT | mcp_pack20 (partial) | 33/54 (61.1%) | 22/24 (91.7%) | 11 / 18 of 30 | – |
+Claude Code rows are version 3 (MCP allowed, one fresh folder per run). GPT rows are unchanged from version 2.
 
-- **Non-browser targets:** the paired change `mcp_alone→mcp_crowdall` was −7.8 pp for Haiku (request-cluster −14.4 to −2.2; two-stage −20.0 to +1.1) and −15.6 pp for Sonnet (−23.3 to −7.8; −31.1 to −2.2). Between `crowd200` and `crowdall`, the change was 0.0 for both models.
-- **Claude Code:** used `ToolSearch` in 81–95% of runs.
-- **Browser targets:** in larger setups, the first call is almost always a navigation tool. The independent rater classed it as a “preliminary step”: 24–31 runs in each Claude `crowd` setup. The stub's “reply with one short sentence” then ends the episode, so the requested operation is unobserved. The strict browser rate in larger setups mostly measures this stubbed environment. The capable-server rate measures only the first routing step. **Neither measures completion.**
+| Model | Setup | Strict accepted tool (all 20) | Non-browser 15 targets | Browser 5: strict / capable server | Turn-limited | ToolSearch called |
+|---|---|---|---|---|---|---|
+| Haiku | mcp_alone | 95/120 (79.2%) | 76/90 (84.4%) | 19 / 19 of 30 | 32 | 107/120 |
+| Haiku | mcp_pack20 | 83/120 (69.2%) | 74/90 (82.2%) | 9 / 12 of 30 | 54 | 106/120 |
+| Haiku | mcp_crowd200 | 79/120 (65.8%) | 71/90 (78.9%) | 8 / 26 of 30 | 45 | 104/120 |
+| Haiku | mcp_crowdall | 82/120 (68.3%) | 72/90 (80.0%) | 10 / 30 of 30 | 59 | 102/120 |
+| Sonnet | mcp_alone | 94/120 (78.3%) | 79/90 (87.8%) | 15 / 15 of 30 | 0 | 110/120 |
+| Sonnet | mcp_pack20 | 74/120 (61.7%) | 68/90 (75.6%) | 6 / 6 of 30 | 7 | 102/120 |
+| Sonnet | mcp_crowd200 | 71/120 (59.2%) | 70/90 (77.8%) | 1 / 27 of 30 | 8 | 94/120 |
+| Sonnet | mcp_crowdall | 70/120 (58.3%) | 69/90 (76.7%) | 1 / 30 of 30 | 2 | 75/120 |
+| GPT | mcp_alone | 104/120 (86.7%) | 82/90 (91.1%) | 22 / 22 of 30 | – | – |
+| GPT | mcp_pack20 (partial) | 33/54 (61.1%) | 22/24 (91.7%) | 11 / 18 of 30 | – | – |
+
+- **Non-browser targets:** the paired change `mcp_alone→mcp_crowdall` was −4.4 pp for Haiku (request-cluster −10.0 to 0.0; two-stage −14.4 to +3.3) and −11.1 pp for Sonnet (request-cluster −17.8 to −4.4; two-stage −24.4 to −1.1). Between `crowd200` and `crowdall` it was +1.1 pp for Haiku (−2.2 to +5.6) and −1.1 pp for Sonnet (−6.7 to +4.4).
+- **Claude Code** called `ToolSearch` in 62–92% of runs per setup.
+- **Browser targets:** in the larger setups the first call is almost always a navigation tool, which the stub answers with “reply with one short sentence”, and the episode ends. The raw logs show that `ToolSearch` had already loaded the target tool's definition in 120 of 120 browser runs in the two `crowd` setups, while the target was called in 20. The strict browser rate in larger setups therefore mostly measures this stubbed environment, and the capable-server rate only the first routing step. **Neither measures completion.**
 
 ### 9.3 Experiment 3 (constructed scenarios) and 3b
 
 | Model | Setup | Skill requests: target | Tool requests: strict | Tool requests: non-browser strict |
 |---|---|---|---|---|
-| Haiku | single-skill baseline* | 119/150 (79.3%) | 99/120 (82.5%) | 85.6% |
-| Haiku | mixed_smaller | 47/150 (31.3%) | 73/120 (60.8%) | 76.7% |
-| Haiku | mixed_larger | 36/150 (24.0%) | 69/120 (57.5%) | 73.3% |
-| Sonnet | single-skill baseline* | 362/390 runs (92.8%) | 102/120 (85.0%) | 92.2% |
-| Sonnet | mixed_smaller | 65/150 (43.3%) | 68/120 (56.7%) | 75.6% |
-| Sonnet | mixed_larger | 51/150 (34.0%) | 68/120 (56.7%) | 74.4% |
+| Haiku | single-skill baseline* | 119/150 (79.3%) | 95/120 (79.2%) | 84.4% |
+| Haiku | mixed_smaller | 50/150 (33.3%) | 82/120 (68.3%) | 78.9% |
+| Haiku | mixed_larger | 32/150 (21.3%) | 81/120 (67.5%) | 75.6% |
+| Sonnet | single-skill baseline* | 362/390 runs (92.8%) | 94/120 (78.3%) | 87.8% |
+| Sonnet | mixed_smaller | 67/150 (44.7%) | 69/120 (57.5%) | 74.5% |
+| Sonnet | mixed_larger | 51/150 (34.0%) | 67/120 (55.8%) | 70.0% |
 
-\* The baseline for the 20 E1 skills is E1 `alone` with a 3-turn window. The baseline for the five trending skills is E3b with 4 turns (Haiku 25/30, Sonnet 28/30). The mixed scenarios had 4 turns, so the window difference favours the mixed scenarios.
+\* The baseline for the 20 E1 skills is E1 `alone` with a 3-turn window. The baseline for the five trending skills is E3b with 4 turns (Haiku 25/30, Sonnet 28/30). The mixed scenarios had 4 turns, so the window difference favours the mixed scenarios. The tool baseline is the version 3 `mcp_alone`.
 
 | Paired change | Haiku | Sonnet |
 |---|---|---|
-| Skill requests, baseline → `mixed_larger` | −55.3 pp (−63.3 to −46.7) | −58.9 pp (−66.7 to −51.1) |
-| Non-browser tool requests, `mcp_alone` → `mixed_larger` | −12.2 pp (−20.0 to −5.6) | −17.8 pp (−26.7 to −10.0) |
+| Skill requests, baseline → `mixed_larger` | −58.0 pp (−66.0 to −50.0) | −58.9 pp (−66.7 to −51.1) |
+| Non-browser tool requests, `mcp_alone` → `mixed_larger` | −8.9 pp (−15.6 to −2.2) | −17.8 pp (−26.7 to −10.0) |
 
-**Skill-request misses** in the mixed scenarios were mostly built-in actions only: Haiku 78 and 90, Sonnet 62 and 76. The commonest were `Glob`, `Grep` and `Read`, consistent with searching the empty folder for files the requests mention. A share of these runs then hit the turn limit (Haiku 27/33, Sonnet 13/15).
+**Skill-request misses** in the mixed scenarios were mostly built-in actions only: Haiku 83 and 93, Sonnet 59 and 82 (smaller, larger). The commonest were `Glob`, `Grep` and `Read`, consistent with searching the empty folder for files the requests mention. Of these built-in-only runs, Haiku 73, Sonnet 25 hit the turn limit.
 
-**Overlapping tool families** were selected on 3–9 skill requests per setup.
+**Overlapping tool families** were selected on 3–6 skill requests per setup.
 
 These scenarios show a larger decline for skill requests than for single-step tool requests *in these two constructed setups*. They do not identify an interaction.
 
@@ -397,7 +422,8 @@ These scenarios show a larger decline for skill requests than for single-step to
 | E1 GPT, API key | 480 | List price × reported usage | **$119.13 billed** |
 | E2 GPT, API key | 170 | Same | **$52.60 billed** |
 | GPT via ChatGPT plan (E1 excluded batch, five E2 runs) | 485 attempts | Plan, not billed per token | $0 (list-price equivalent $1.61) |
-| Claude Code, all experiments | 4,020 | Claude Code's `total_cost_usd` estimate; Claude plan, not billed per token | $0 (list-price equivalent $192.61) |
+| Claude Code, all experiments (runs in the results) | 4,020 | Claude Code's `total_cost_usd` estimate; Claude plan, not billed per token | $0 (list-price equivalent $197.88) |
+| Claude Code, discarded runs (v2 E2/E3, superseded; the stopped shared-folder v3 pass) | 3,215 | Same | $0 (list-price equivalent $149.11) |
 | **Total billed** | | | **$171.73** |
 
 Actual billing should be checked against the OpenAI usage dashboard. The figures above are list-price calculations from reported usage.
@@ -414,19 +440,22 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 |---|---|
 | `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl` | E1 results (unchanged) |
 | `gpt_subscription_failed.jsonl` | Excluded E1 batch (unchanged) |
-| `mcp/haiku_v2.jsonl`, `mcp/sonnet_v2.jsonl`, `mcp/gpt_v2.jsonl` | E2/E3/E3b results (unchanged) |
+| `mcp/haiku_v2.jsonl`, `mcp/sonnet_v2.jsonl`, `mcp/gpt_v2.jsonl` | E2/E3/E3b results of version 2 (unchanged). Version 3 uses their GPT and E3b records |
+| `mcp/haiku_v3.jsonl`, `mcp/sonnet_v3.jsonl` | Version 3 Claude Code E2/E3 results: MCP allowed, one fresh folder per run |
+| `mcp/haiku_v3_shared.jsonl`, `mcp/sonnet_v3_shared.jsonl` | First v3 pass, MCP allowed but shared folders (stopped after E2 and part of E3); comparison only |
+| `mcp/raw/claude_haiku/`, `mcp/raw/claude_sonnet/` | Raw event logs of both v3 passes, local paths removed |
 | `analysis/analyze.py` | The single analysis entry point (this document's numbers) |
 | `analysis/budget.py` | Follow-up cost model |
 | `analysis/REPORT.md`, `analysis/derived/v2/*.csv`, `manifest.json` | Derived tables; SHA-256 of every input |
 | `analysis/derived/v2/paired_vs_alone.csv`, `e3_chart_rates.csv` | Tables behind the post's forest plot and mixed-scenario chart (paired change from alone; request-weighted rates with intervals) |
 | `analysis/alt_judge_input.json`, `analysis/alt_judgments.json` | Blind alternative ratings |
 | `analysis/CHANGELOG.md` | Claim-by-claim change log |
-| `METHODOLOGY_v1.md` | Version 1, unchanged |
+| `METHODOLOGY_v2.md`, `METHODOLOGY_v1.md` | Versions 2 and 1, unchanged |
 | `FOLLOWUP_PROTOCOL.md` | Proposed follow-up (not results) |
 | Experiment scripts | `prompts.json`, `build.py`, `run.py`, `run_codex.py`, `mcp/*` |
 | Survey files | `scan*.py/json`, `weight*`, `report*`, `source_commits.tsv` |
 
-**Raw logs.** `mcp/raw/` was added to the runner during the experiment. No retained run has one: every Claude batch started under the earlier runner, and the GPT runs after the change ended in a rate limit.
+**Raw logs.** `mcp/raw/` was added to the runner during the original experiment, too late for any retained v2 run (every Claude batch started under the earlier runner, and the GPT runs after the change ended in a rate limit). Every v3 run has one (3,215 logs: the 2,040 retained runs and the 1,175 of the stopped shared-folder pass). Local paths, the user ID in temporary paths and the working folder's name (also where an agent mentioned it in its text) were replaced with placeholders, and the `init` event's machine-specific fields (memory and scratch paths, socket, timings) were dropped. `analysis/raw_checks.py` gives identical results on the scrubbed and the original logs.
 
 **Reproducing.**
 1. `python3 analysis/analyze.py` regenerates every number in this document.
@@ -442,8 +471,10 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 | Fixed turn limits | Bounded selection window | Rates are “within the window”; capped misses are not “never selected” |
 | Exact-target scoring | Target retention | A miss can be an appropriate alternative; the appropriateness analysis is retrospective |
 | Stub bodies and results | Initial routing test | Post-stub behaviour is not normal agent behaviour; browser operations beyond the first call are unobserved |
+| Default permission mode, nobody to approve | Stub MCP servers pre-approved in v3; other approval-gated calls refused | Web search and most web fetches were unavailable in every Claude Code run |
+| Auto-memory on (harness default) | One fresh folder per run in v3 | v2 E2/E3 and one E1 folder had notes carried over between runs (§0) |
 | Empty folders, Codex read-only, Claude `Bash` disallowed | Minimal-context routing benchmark | No claims about ordinary task execution or the reasons for abstaining |
-| One filler sample, experimenter-written requests | Case study | Inference limited to this collection and these requests |
+| One filler sample, LLM-written requests | Case study | Inference limited to this collection and these requests |
 | Built-ins and native discovery (`ToolSearch`, Codex shell, Codex MCP discovery) | End-to-end configuration test | Differences are between configurations, not models |
 | Mixed API and plan access for GPT E2 | Separately tagged batches | No equivalence assumed; the 5 plan runs are shown separately in the audit |
 | Reconstructed MCP schemas | Fidelity-labelled | Structural defects listed; no claim that schemas cannot matter |

@@ -1,0 +1,17 @@
+experiment,model,to_setup,diff,req_lo,req_hi,skill_lo,skill_hi,n_pairs,requests_worse,requests_better
+E1 skills,haiku,pack20,-0.3083,-0.4,-0.2167,-0.45,-0.15,120,41,4
+E1 skills,haiku,crowd200,-0.5333,-0.625,-0.4417,-0.6669,-0.3917,120,64,0
+E1 skills,haiku,crowd1000,-0.625,-0.7167,-0.5333,-0.7585,-0.475,120,76,1
+E1 skills,sonnet,pack20,-0.1722,-0.2361,-0.1139,-0.2889,-0.075,120,27,0
+E1 skills,sonnet,crowd200,-0.3667,-0.4417,-0.2861,-0.5139,-0.2361,120,52,0
+E1 skills,sonnet,crowd1000,-0.5917,-0.6695,-0.5083,-0.7583,-0.4333,120,79,0
+E1 skills,gpt,pack20,-0.0083,-0.025,0.0,-0.0333,0.0,120,1,0
+E1 skills,gpt,crowd200,-0.1667,-0.2333,-0.1083,-0.2917,-0.0667,120,20,0
+E1 skills,gpt,crowd1000,-0.9,-0.95,-0.8417,-0.9917,-0.7833,120,108,0
+E2 MCP single-step tools,haiku,mcp_pack20,-0.0222,-0.0556,0.0,-0.0667,0.0,90,2,0
+E2 MCP single-step tools,haiku,mcp_crowd200,-0.0556,-0.1111,-0.0111,-0.1444,0.0,90,5,0
+E2 MCP single-step tools,haiku,mcp_crowdall,-0.0444,-0.1,0.0,-0.1444,0.0333,90,5,1
+E2 MCP single-step tools,sonnet,mcp_pack20,-0.1222,-0.2,-0.0556,-0.2556,-0.0111,90,12,1
+E2 MCP single-step tools,sonnet,mcp_crowd200,-0.1,-0.1667,-0.0444,-0.2333,-0.0111,90,9,0
+E2 MCP single-step tools,sonnet,mcp_crowdall,-0.1111,-0.1778,-0.0444,-0.2444,-0.0111,90,11,1
+E2 MCP single-step tools,gpt,mcp_pack20,-0.0833,-0.2083,0.0,-0.25,0.0,24,2,0

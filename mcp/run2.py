@@ -1,5 +1,5 @@
 """Runner for experiments 2 and 3. Usage: run2.py <claude|codex> <model> <jobset: mcp|trend|mixed> <out.jsonl>"""
-import json, os, re, shutil, subprocess, sys, threading, time, gzip
+import json, os, re, shutil, subprocess, sys, threading, time, gzip, uuid
 from concurrent.futures import ThreadPoolExecutor
 H=os.path.dirname(os.path.abspath(__file__)); SP=os.path.dirname(H)
 ENV=os.environ.get("ENVS2_DIR", os.path.join(SP,"envs2"))
@@ -30,6 +30,7 @@ if os.path.exists(out):
 jobs=[j for j in jobs if (j["env"],j["target"],j["i"]) not in done]
 if os.environ.get("ONLY_ENV"): jobs=[j for j in jobs if j["env"]==os.environ["ONLY_ENV"]]
 if os.environ.get("ONLY_I"): jobs=[j for j in jobs if j["i"]==int(os.environ["ONLY_I"])]
+if os.environ.get("ONLY_TARGET"): jobs=[j for j in jobs if j["target"]==os.environ["ONLY_TARGET"]]
 lock=threading.Lock(); f=open(out,"a")
 SK=re.compile(r"skills/([a-z0-9][a-z0-9\-]*)/SKILL\.md")
 FAMILY={"playwright-mcp.browser_take_screenshot":{"playwright-mcp","chrome-devtools","puppeteer","playwright-ea"},
@@ -51,23 +52,48 @@ def classify(rec, used):
     ov=OVERLAP.get(rec["target"]) if rec["kind"]=="skill" else None
     rec["overlap_tool"]=bool(ov) and any(u.startswith("mcp:") and any(u[4:].startswith(o) for o in ov) for u in used)
 RAW=os.path.join(H,"raw")
-def save_raw(rec, pr, cmd):
+# ISOLATE=1 (v3): run each Claude Code job in a fresh copy of its test folder, at a new path with the same folder name.
+# Claude Code keeps auto-memory per folder path (~/.claude/projects/<path>/memory), and in v2 and the first v3 pass
+# notes saved by one run were loaded by later runs in the same folder. Memory files a run writes are kept in its raw log.
+ISO=os.environ.get("ISOLATE")
+PROJ=os.path.join(os.path.expanduser("~"),".claude","projects")
+def proj_dir(path): return os.path.join(PROJ, re.sub(r"[^A-Za-z0-9]","-",path))
+def read_memory(path):
+    m=os.path.join(proj_dir(path),"memory"); out={}
+    if os.path.isdir(m):
+        for n in sorted(os.listdir(m)):
+            try: out[n]=open(os.path.join(m,n),errors="replace").read()[:4000]
+            except OSError: pass
+    return out
+def save_raw(rec, pr, cmd, extra=None):
     d=os.path.join(RAW,f'{rec["harness"]}_{rec["model"]}',rec["env"].replace("/","__")); os.makedirs(d,exist_ok=True)
     fn=os.path.join(d,f'{rec["target"]}__{rec["i"]}__{int(time.time()*1000)}.json.gz')
-    with gzip.open(fn,"wt") as g: json.dump({"cmd":[c for c in cmd],"stdout_events":pr.stdout,"stderr":pr.stderr[-20000:],"returncode":pr.returncode},g)
+    with gzip.open(fn,"wt") as g: json.dump({"cmd":[c for c in cmd],"stdout_events":pr.stdout,"stderr":pr.stderr[-20000:],"returncode":pr.returncode,**(extra or {})},g)
     rec["raw"]=os.path.relpath(fn,H)
 STOP=[False]
+# LOAD_MAX=<n>: wait before starting a job while the 1-minute load average is above n. The mixed setups start up to
+# 73 stub servers per run, and 8 parallel runs once made the machine unresponsive. Default off.
+LOAD_MAX=float(os.environ.get("LOAD_MAX","0"))
 def one(j):
     if STOP[0]: return {"skipped":True}
+    while LOAD_MAX and os.getloadavg()[0]>LOAD_MAX: time.sleep(5)
     cwd=os.path.join(ENV,j["env"]); cfg=json.load(open(os.path.join(cwd,"_mcp.json")))["mcpServers"]
+    iso=None
+    if ISO and harness=="claude":
+        iso=os.path.join(ENV+"_iso",uuid.uuid4().hex[:12]); dst=os.path.join(iso,os.path.basename(cwd))
+        shutil.copytree(cwd,dst,symlinks=True); cwd=dst
     rec=dict(j, harness=harness, model=model)
     used=[]; ts=False
     try:
         if harness=="claude":
             cmd=["claude","-p",j["prompt"],"--model",model,"--output-format","stream-json","--verbose","--setting-sources","project","--strict-mcp-config","--no-session-persistence","--max-turns","4","--disallowedTools","Bash"]
             if cfg: cmd+=["--mcp-config",os.path.join(cwd,"_mcp.json")]
+            # ALLOW_MCP=1 (v3 rerun): headless Claude Code denies MCP calls that are not allowed, so the v2 runs got a
+            # permission denial instead of the stub result. Default off, so this file still reproduces the v2 runs.
+            if cfg and os.environ.get("ALLOW_MCP"): cmd+=["--allowedTools",",".join("mcp__"+s for s in cfg)]
             pr=subprocess.run(cmd,cwd=cwd,capture_output=True,text=True,timeout=420,stdin=subprocess.DEVNULL)
-            save_raw(rec, pr, cmd)
+            mem=read_memory(cwd); rec["memory_files_after"]=len(mem)
+            save_raw(rec, pr, cmd, {"isolated":bool(iso),"memory_after":mem})
             for l in pr.stdout.splitlines():
                 try: e=json.loads(l)
                 except Exception: continue
@@ -108,6 +134,12 @@ def one(j):
                 if e.get("type")=="turn.failed": rec["error"]=json.dumps(e)[:300]
             if "sub" not in rec and "error" not in rec: rec["error"]=(pr.stderr or pr.stdout)[-300:]
     except Exception as ex: rec["error"]=repr(ex)[:300]
+    finally:
+        if iso:   # remove the copy and the per-path data Claude Code created for it (memory is already in the raw log)
+            shutil.rmtree(iso,ignore_errors=True)
+            pd=proj_dir(cwd)
+            if os.path.basename(pd).find("-envs2-iso-")>0 and os.path.dirname(pd)==PROJ: shutil.rmtree(pd,ignore_errors=True)
+    rec["isolated"]=bool(iso)
     rec["toolsearch"]=ts
     seen=[]; [seen.append(u) for u in used if u not in seen]
     classify(rec, seen)

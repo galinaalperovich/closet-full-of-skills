@@ -20,7 +20,10 @@ import csv, gzip, hashlib, json, math, os, random, re, sys
 from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
-OUT = os.path.join(HERE, "derived", "v2"); os.makedirs(OUT, exist_ok=True)
+# ANALYSIS_VERSION=3: Claude Code E2/E3 come from the v3 rerun, in which the stub MCP servers were allowed
+# (in v2, headless Claude Code denied every MCP call). E1, E3b and all Codex records are unchanged. Default: 2.
+VERSION = int(os.environ.get("ANALYSIS_VERSION", "2"))
+OUT = os.path.join(HERE, "derived", f"v{VERSION}"); os.makedirs(OUT, exist_ok=True)
 SEED = 20261120; B = 2000
 P = lambda *a: os.path.join(ROOT, *a)
 
@@ -32,6 +35,8 @@ INPUTS = {
     "V2": [("mcp/haiku_v2.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_v2.jsonl", "claude", "sonnet", "subscription"),
            ("mcp/gpt_v2.jsonl", "codex", "gpt", "by_line")],
 }
+if VERSION >= 3:
+    INPUTS["V3"] = [("mcp/haiku_v3.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_v3.jsonl", "claude", "sonnet", "subscription")]
 OTHER = ["prompts.json", "mcp/mcp_targets.json", "mcp/trending_skill_prompts.json", "mcp/tools_inventory.json",
          "build.py", "run.py", "run_codex.py", "mcp/build_v2.py", "mcp/run2.py", "mcp/stub_server.py",
          "scan.py", "weight.py", "report.py", "scan2.json", "weight2.json", "source_commits.tsv",
@@ -44,7 +49,7 @@ for grp in INPUTS.values():
         manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f)))})
 for f in OTHER:
     if os.path.exists(P(f)): manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f), errors="replace"))})
-json.dump({"analysis_version": 2, "collection_date": "2026-11-20", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
+json.dump({"analysis_version": VERSION, "collection_date": "2026-11-20" if VERSION == 2 else "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude E2/E3 rerun)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
           open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 
 # ---------------------------------------------------------------- normalise records
@@ -92,6 +97,7 @@ for grp, items in INPUTS.items():
             rec = json.loads(l)
             acc = access if access != "by_line" else ("api_key" if "ts" not in rec else "subscription")
             r = (norm_e1 if grp.startswith("E1") else norm_v2)(rec, harness, model, acc, f, ln)
+            if VERSION >= 3 and grp == "V2" and harness == "claude" and r["exp"] in ("E2", "E3"): continue   # superseded by the v3 rerun
             r["batch"] = "excluded_429_batch" if grp == "E1_excluded" else "main"
             r["infra_fail"] = r["term"] in ("api_error", "timeout", "harness_error", "unknown")
             attempts.append(r)
@@ -496,6 +502,7 @@ w(f"{len(pa)} skill requests. Explicit invocation syntax (slash command, the wor
 w("## Cost\n")
 tb = sum(r["billed_usd"] for r in cost); tl = sum(r["list_price_usd"] for r in cost)
 w(f"Billed per token (API key, GPT): ${tb:.2f}. List-price equivalent of everything, including subscription runs: ${tl:.2f}. Details: `cost_by_batch.csv`.\n")
-open(os.path.join(HERE, "REPORT.md"), "w").write("\n".join(L))
-print("wrote", os.path.join(HERE, "REPORT.md"))
+RPT = os.path.join(HERE, "REPORT.md" if VERSION == 2 else f"REPORT_v{VERSION}.md")
+open(RPT, "w").write("\n".join(L))
+print("wrote", RPT)
 print("billed", round(tb, 2), "list", round(tl, 2), "judgments", len(JUD))

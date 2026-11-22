@@ -81,8 +81,8 @@
   },
   {
    "file": "mcp/run2.py",
-   "sha256": "c87c9caf570df56137e807c8aa1dddd65d503323f88917034f796a7ef7df4245",
-   "lines": 121
+   "sha256": "cd62f67829062adcd864db689d9764bc395d63a9fa7c63a325dc8c276f4059b8",
+   "lines": 153
   },
   {
    "file": "mcp/stub_server.py",
@@ -131,8 +131,8 @@
   },
   {
    "file": "analysis/analyze.py",
-   "sha256": "10168a16c8ba33f31a962ba388456a6469fc7b35e42f95b9e91760777fc185b3",
-   "lines": 501
+   "sha256": "d7ee684eb564b1cecf3053a39845c32a3993097e04684bb4e4b4c521c56b152d",
+   "lines": 508
   }
  ]
 }

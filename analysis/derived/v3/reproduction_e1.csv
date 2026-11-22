@@ -1,0 +1,13 @@
+exp,model,setup,methodology_v1_hits,reproduced_hits,n,match
+E1,haiku,alone,94,94,120,True
+E1,haiku,pack20,57,57,120,True
+E1,haiku,crowd200,30,30,120,True
+E1,haiku,crowd1000,19,19,120,True
+E1,sonnet,alone,334,334,360,True
+E1,sonnet,pack20,272,272,360,True
+E1,sonnet,crowd200,202,202,360,True
+E1,sonnet,crowd1000,121,121,360,True
+E1,gpt,alone,120,120,120,True
+E1,gpt,pack20,119,119,120,True
+E1,gpt,crowd200,100,100,120,True
+E1,gpt,crowd1000,12,12,120,True
