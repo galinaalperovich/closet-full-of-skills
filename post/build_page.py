@@ -11,6 +11,13 @@ nav = (f'<nav style="font:500 .9rem var(--sans);display:flex;gap:1.2rem">'
        f'<a href="{HOME}">← Galina Alperovich</a><a href="{HOME}blog/">blog</a></nav>')
 assert body.startswith("<article>")
 body = body.replace("<article>", "<article>\n" + nav, 1)   # link back to the personal site
+# comments: giscus, stored in the personal site repo's GitHub Discussions ("Announcements")
+giscus = ('<section id="comments"><h2>Comments</h2>'
+          '<script src="https://giscus.app/client.js" data-repo="galinaalperovich/galinaalperovich.github.io" data-repo-id="R_kgDOV3uGlQ" '
+          'data-category="Announcements" data-category-id="DIC_kwDOV3uGlc4DLuo6" data-mapping="pathname" data-strict="1" '
+          'data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" '
+          'data-lang="en" data-loading="lazy" crossorigin="anonymous" async></script></section>')
+i = body.rindex("</article>"); body = body[:i] + giscus + "\n" + body[i:]
 fonts = re.search(r'<link rel="stylesheet" href="[^"]+">', frag).group(0)
 plain = lambda s: html.escape(re.sub(r"<[^>]+>", "", s).strip(), quote=True)
 title = plain(re.search(r"<h1>(.*?)</h1>", body, re.S).group(1))

@@ -34,7 +34,8 @@ def line_chart(series, xlabels, aria, w=720, h=330, legend_note="", title=""):
             if s.get("ci"):
                 lo, hi = s["ci"][i]
                 lines.append(f'<line x1="{x:.1f}" y1="{Y(lo):.1f}" x2="{x:.1f}" y2="{Y(hi):.1f}" stroke="{s["color"]}" stroke-opacity=".45" stroke-width="1.5"/>')
-            lines.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{"var(--surface)" if s.get("dash") else s["color"]}" stroke="{s["color"]}" stroke-width="2"><title>{s["name"]}, {xlabels[i]}: {v:.1f}%</title></circle>')
+            ci_txt = f" (95% interval {s['ci'][i][0]:.0f}–{s['ci'][i][1]:.0f}%)" if s.get("ci") else ""
+            lines.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{"var(--surface)" if s.get("dash") else s["color"]}" stroke="{s["color"]}" stroke-width="2"><title>{s["name"]}, {xlabels[i]}: {v:.1f}%{ci_txt}</title></circle>')
         x, y, v, _ = pts[-1]; ends.append([y, s, v])
     ends.sort(key=lambda e: e[0])
     for k in range(1, len(ends)):

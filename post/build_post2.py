@@ -14,6 +14,13 @@ css += """
 .matrix td{min-width:13rem} .matrix td b{display:block;font-weight:600;margin-top:.35rem} .matrix td b:first-child{margin-top:0}
 .note{font:.88rem/1.55 var(--sans);color:var(--muted)}
 .callout{border-left:3px solid var(--accent);padding:.2rem 0 .2rem .9rem;font-style:italic}
+.chart-tip{position:fixed;left:0;top:0;z-index:50;pointer-events:none;opacity:0;transition:opacity .12s;max-width:320px;padding:.45rem .65rem;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);font:.82rem/1.45 var(--sans);box-shadow:0 4px 14px rgba(0,0,0,.14)}
+.chart-tip .hd{font-weight:600;margin-bottom:.15rem}
+.chart-tip .sw{display:inline-block;width:.7em;height:.7em;border-radius:2px;margin-right:.45em;vertical-align:-.05em}
+figure svg [data-tip]{transition:opacity .12s}
+figure svg.dim [data-tip]:not(.on){opacity:.35}
+figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+
 .warning{border-left:3px solid var(--warn);padding:.3rem 0 .3rem .9rem}
 .dek{font:1.2rem/1.45 var(--serif);color:var(--muted);margin:.3rem 0 .9rem}
 .formula{text-align:center;font:1.15rem/1.6 var(--serif);margin:1.1rem 0;overflow-x:auto}
@@ -313,6 +320,73 @@ codex exec --json -s read-only "Audit the SEO of my site." \\
 </ol>
 </article>
 """
-html = f'<title>A Closet Full of Skills</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">\n<style>{css}</style>\n{body}'
+CHART_JS = """<script>
+/* Interactive charts: the values shown are the ones already in each chart's <title> elements. */
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const tip = document.createElement('div'); tip.className = 'chart-tip'; tip.setAttribute('aria-hidden', 'true'); document.body.appendChild(tip);
+  const esc = t => t.replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const place = (x, y) => { const r = tip.getBoundingClientRect(); let L = x + 14, T = y + 14;
+    if (L + r.width > innerWidth - 8) L = x - r.width - 14; if (T + r.height > innerHeight - 8) T = y - r.height - 14;
+    tip.style.transform = `translate(${Math.max(8, L)}px, ${Math.max(8, T)}px)`; };
+  const show = (html, x, y) => { tip.innerHTML = html; tip.style.opacity = 1; place(x, y); };
+  const hide = () => { tip.style.opacity = 0; };
+  document.querySelectorAll('figure svg').forEach(svg => {
+    const marks = [...svg.querySelectorAll('title')].map(t => { const el = t.parentElement; el.dataset.tip = t.textContent; t.remove(); return el; });
+    if (!marks.length) return;
+    const circles = marks.filter(m => m.tagName === 'circle');
+    if (svg.querySelector('polyline') && circles.length === marks.length) {
+      // Line chart: a crosshair snaps to the nearest x position and lists every series there.
+      const host = circles[0].parentNode, groups = new Map();
+      circles.forEach(c => { const x = +c.getAttribute('cx'); if (!groups.has(x)) groups.set(x, []); groups.get(x).push(c); });
+      const xs = [...groups.keys()].sort((a, b) => a - b);
+      const ys = circles.map(c => +c.getAttribute('cy'));
+      const cross = document.createElementNS(NS, 'line');
+      cross.setAttribute('y1', Math.min(...ys) - 20); cross.setAttribute('y2', Math.max(...ys) + 20);
+      Object.entries({stroke: 'currentColor', 'stroke-opacity': '.35', 'stroke-dasharray': '3 3'}).forEach(([k, v]) => cross.setAttribute(k, v));
+      cross.style.display = 'none'; cross.style.pointerEvents = 'none'; host.insertBefore(cross, host.firstChild);
+      let idx = -1;
+      const render = (i, cx, cy) => {
+        idx = i; const x = xs[i], pts = groups.get(x).slice().sort((a, b) => a.getAttribute('cy') - b.getAttribute('cy'));
+        circles.forEach(c => c.setAttribute('r', 5)); pts.forEach(c => c.setAttribute('r', 7));
+        cross.setAttribute('x1', x); cross.setAttribute('x2', x); cross.style.display = '';
+        const head = pts[0].dataset.tip.split(': ')[0].split(', ').slice(-1)[0];
+        const rows = pts.map(c => { const [lhs, val] = c.dataset.tip.split(': '); const name = lhs.split(', ').slice(0, -1).join(', ');
+          return `<div><span class="sw" style="background:${c.getAttribute('stroke')}"></span>${esc(name)}: <b>${esc(val)}</b></div>`; }).join('');
+        show(`<div class="hd">${esc(head)}</div>${rows}`, cx, cy);
+      };
+      const nearest = e => { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+        const p = pt.matrixTransform(host.getScreenCTM().inverse()); let best = 0;
+        xs.forEach((x, i) => { if (Math.abs(x - p.x) < Math.abs(xs[best] - p.x)) best = i; }); return best; };
+      svg.addEventListener('pointermove', e => render(nearest(e), e.clientX, e.clientY));
+      svg.addEventListener('pointerdown', e => render(nearest(e), e.clientX, e.clientY));
+      const reset = () => { hide(); cross.style.display = 'none'; circles.forEach(c => c.setAttribute('r', 5)); };
+      svg.addEventListener('pointerleave', reset);
+      svg.setAttribute('tabindex', '0');
+      svg.addEventListener('keydown', e => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return; e.preventDefault();
+        const i = Math.min(xs.length - 1, Math.max(0, idx + (e.key === 'ArrowRight' ? 1 : -1)));
+        const r = svg.getBoundingClientRect(); render(i, r.left + r.width / 2, r.top + 20); });
+      svg.addEventListener('blur', reset);
+    } else {
+      // Bars, segments, dots: a tooltip on the hovered mark, others fade. Small dots get a larger invisible target.
+      marks.forEach(m => {
+        let target = m;
+        if (m.tagName === 'circle') { target = document.createElementNS(NS, 'circle');
+          ['cx', 'cy'].forEach(a => target.setAttribute(a, m.getAttribute(a))); target.setAttribute('r', 12); target.setAttribute('fill', 'transparent');
+          m.after(target); }
+        const on = e => { svg.classList.add('dim'); m.classList.add('on'); show(esc(m.dataset.tip), e.clientX, e.clientY); };
+        target.addEventListener('pointerenter', on); target.addEventListener('pointerdown', on);
+        target.addEventListener('pointermove', e => place(e.clientX, e.clientY));
+        target.addEventListener('pointerleave', () => { svg.classList.remove('dim'); m.classList.remove('on'); hide(); });
+      });
+    }
+  });
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('figure svg')) hide(); });
+  addEventListener('scroll', hide, {passive: true});
+})();
+</script>"""
+
+html = f'<title>A Closet Full of Skills</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">\n<style>{css}</style>\n{body}\n{CHART_JS}'
 open(os.path.join(B, "skills-mcp-post.html"), "w").write(html)
 print("ok", len(html))
