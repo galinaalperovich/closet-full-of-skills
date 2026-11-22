@@ -14,6 +14,11 @@ css += """
 .matrix td{min-width:13rem} .matrix td b{display:block;font-weight:600;margin-top:.35rem} .matrix td b:first-child{margin-top:0}
 .note{font:.88rem/1.55 var(--sans);color:var(--muted)}
 .callout{border-left:3px solid var(--accent);padding:.2rem 0 .2rem .9rem;font-style:italic}
+.tldr{font-style:normal;font-weight:600}
+.toc{border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:.7rem 1rem;font:.9rem/1.5 var(--sans)}
+.toc summary{cursor:pointer;font-weight:600} .toc ol{margin:.4rem 0 0;padding-left:1.3rem} .toc ol ol{margin:.15rem 0 .25rem;padding-left:1.1rem;font-size:.95em}
+.toc li+li{margin-top:.12rem} .toc a{text-decoration:none} .toc a:hover{text-decoration:underline}
+h2[id],h3[id]{scroll-margin-top:1rem}
 .ci{color:var(--muted);font-size:.88em;white-space:nowrap}
 @media (max-width:760px){td.n .ci{display:block;margin-top:.1rem} td.n,th.n{white-space:normal} th,td{padding:.45rem .5rem}}
 .chart-tip{position:fixed;left:0;top:0;z-index:50;pointer-events:none;opacity:0;transition:opacity .12s;max-width:320px;padding:.45rem .65rem;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);font:.82rem/1.45 var(--sans);box-shadow:0 4px 14px rgba(0,0,0,.14)}
@@ -93,7 +98,10 @@ body = f"""
 
 <p>Here is what made me curious. The agent chooses a skill from its description, and the descriptions in that one collection add up to about 129K tokens. <em>The Great Gatsby</em> is about 72K. No harness sends two Gatsbys with every request: Claude Code and Codex both cap the listing. So what happens to the skills that do not fit, and to the ones that do?</p>
 
-<p>People run into this. {A(L["i81081"], "One Claude Code issue")} reports that 27 of 36 project skills reached the model with only a name, and {A(L["i11364"], "one user counted")} 67,300 tokens of tool definitions from seven MCP servers before the first message. More reports are in the references. What I did not find was the selection rate itself, measured for skills next to MCP tools.</p>
+<p>People run into this. {A(L["i81081"], "One Claude Code issue")} reports that 75% of project skills (27 of 36) reached the model with only a name, and {A(L["i11364"], "one user counted")} 67,300 tokens of tool definitions from seven MCP servers before the first message. More reports are in the references. What I did not find was the selection rate itself, measured for skills next to MCP tools.</p>
+
+<h2>Why this is a problem</h2>
+<p>A skipped skill or tool does not fail loudly. The agent still answers, with its built-in tools and what it already knows, and the result looks plausible. That is the dangerous case when the skill or tool carries something the model does not have: your release checklist, a house template, a compliance rule, or live data. Ask for Apple’s stock price without the finance tool being called, and you may get a confident number from the model’s memory. These are everyday setups, not edge cases: a few plugins and MCP servers are enough, as the reports above show. Nothing in the answer says the skill was never loaded. Only the trace does, and unless you log tool calls and check for the ones that should have happened, you will not know.</p>
 
 <h2>How an agent picks a skill or a tool</h2>
 <p>It helps to see this as a pipeline, because I measured only one stage of it:</p>
@@ -400,6 +408,36 @@ CHART_JS = """<script>
   addEventListener('scroll', hide, {passive: true});
 })();
 </script>"""
+
+import html as _html
+def add_toc(body):
+    used, items = set(re.findall(r'id="([^"]+)"', body)), []
+    def slug(t):
+        b = re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")[:60] or "section"; s_, k = b, 2
+        while s_ in used: s_, k = f"{b}-{k}", k + 1
+        used.add(s_); return s_
+    def fix(m):
+        tag, attrs, inner = m.group(1), m.group(2) or "", m.group(3)
+        text = _html.unescape(re.sub(r"<[^>]+>", "", inner)).strip()
+        hid = re.search(r'id="([^"]+)"', attrs)
+        hid = hid.group(1) if hid else slug(text)
+        items.append((tag, hid, text))
+        return f'<{tag} id="{hid}">{inner}</{tag}>' if 'id="' not in attrs else m.group(0)
+    body = re.sub(r"<(h[23])((?:\s+[^>]*)?)>(.*?)</\1>", fix, body, flags=re.S)
+    out, open_sub = ['<nav class="toc" aria-label="Contents"><details open><summary>Contents</summary><ol>'], False
+    for tag, hid, text in items:
+        a = f'<a href="#{hid}">{_html.escape(text)}</a>'
+        if tag == "h2":
+            if open_sub: out.append("</ol></li>"); open_sub = False
+            elif len(out) > 1: out.append("</li>")
+            out.append(f"<li>{a}")
+        else:
+            if not open_sub: out.append("<ol>"); open_sub = True
+            out.append(f"<li>{a}</li>")
+    out.append("</ol></li>" if open_sub else "</li>"); out.append("</ol></details></nav>")
+    i = body.index('class="tldr"'); j = body.index("</p>", i) + 4
+    return body[:j] + "\n\n" + "".join(out) + body[j:]
+body = add_toc(body)
 
 html = f'<title>A Closet Full of Skills</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">\n<style>{css}</style>\n{body}\n{CHART_JS}'
 open(os.path.join(B, "skills-mcp-post.html"), "w").write(html)
