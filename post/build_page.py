@@ -6,6 +6,11 @@ SITE = "https://galinaalperovich.github.io/in-context-forgetting/"
 frag = open(os.path.join(B, "skills-mcp-post.html")).read()
 css = frag[frag.index("<style>") + 7:frag.index("</style>")]
 body = frag[frag.index("</style>") + 8:].strip()
+HOME = "https://galinaalperovich.github.io/"
+nav = (f'<nav style="font:500 .9rem var(--sans);display:flex;gap:1.2rem">'
+       f'<a href="{HOME}">← Galina Alperovich</a><a href="{HOME}blog/">blog</a></nav>')
+assert body.startswith("<article>")
+body = body.replace("<article>", "<article>\n" + nav, 1)   # link back to the personal site
 fonts = re.search(r'<link rel="stylesheet" href="[^"]+">', frag).group(0)
 plain = lambda s: html.escape(re.sub(r"<[^>]+>", "", s).strip(), quote=True)
 title = plain(re.search(r"<h1>(.*?)</h1>", body, re.S).group(1))
