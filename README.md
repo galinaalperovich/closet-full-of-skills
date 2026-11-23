@@ -6,7 +6,7 @@ This repository has everything behind the blog post: the requests, the experimen
 
 **Read the post: https://galinaalperovich.github.io/closet-full-of-skills/**
 
-The page is `docs/index.html`, built from the sources in [`post/`](post/). The figures are also exported as PNGs in [`post/images2/`](post/images2/).
+The page is `docs/index.html`, built from the sources in [`post/`](post/). The figures are also exported as PNGs in [`post/images2/`](post/images2/). A readable Markdown copy of the post is in [`post/post.md`](post/post.md): to suggest a change to the text, edit that file in a pull request. Accepted changes are carried over into `post/build_post2.py`, which builds the page.
 
 ## What was measured
 
@@ -43,7 +43,8 @@ To rebuild the post and its figures:
 ```bash
 cd post
 python3 figs2.py && python3 build_post2.py    # -> skills-mcp-post.html (identical to the shipped one)
-python3 build_page.py                         # -> ../docs/index.html, the standalone page served by GitHub Pages
+python3 build_page.py                         # -> ../docs/index.html, the standalone page served by GitHub Pages,
+                                              #    and post.md, the Markdown copy (needs beautifulsoup4)
 python3 export_png2.py                        # -> images2/*.png (needs Google Chrome; set CHROME_BIN if it is elsewhere)
 ```
 
@@ -136,7 +137,7 @@ Most of a GPT run's cost is writing the prompt prefix (system prompt, skill list
 | `scan2.json`, `weight2.json`, `report2.txt`, `weight2.txt` | Survey outputs for the 42 repositories used in v2 (`scan.json` and `weight.json` are the earlier, smaller survey) |
 | `repos.txt`, `source_commits.tsv` | Source repositories and the exact commits used |
 | `scripts/fetch_sources.sh` | Clones every source at its pinned commit |
-| `post/` | The blog post's builder, figure code and PNG exports |
+| `post/` | The blog post's builder, figure code, PNG exports and a Markdown copy (`post.md`) |
 | `docs/` | The published post (GitHub Pages) |
 
 Run records use the setup names from the time the runs were made: `mixed_typical` and `mixed_heavy` are called “mixed, smaller” and “mixed, larger” in the methodology and the post.

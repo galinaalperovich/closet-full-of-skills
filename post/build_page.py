@@ -65,3 +65,5 @@ open(os.path.join(D, "index.html"), "w").write(page)
 open(os.path.join(D, ".nojekyll"), "w").write("")
 shutil.copy2(os.path.join(B, "images2", "fig_skills.png"), os.path.join(D, "card.png"))   # link-preview image
 print("wrote docs/index.html", len(page))
+import subprocess, sys   # and the readable Markdown copy, post/post.md
+subprocess.run([sys.executable, os.path.join(B, "build_md.py")], check=True)
