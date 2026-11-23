@@ -46,6 +46,15 @@ Matched run by run, requests flipped in both directions between versions (`deriv
 | “Built-in web tools were not disabled, so a run can fetch public web pages” | Claude Code refused web searches and most page fetches in headless mode; Codex's own web search worked (46 of 175 E2 runs) | Corrected |
 | Requests “written by me” | Written with an LLM | Corrected (wording) |
 
+## Two Codex setup notes (added 23 November 2026, no numbers changed)
+
+Found while checking a Codex detector against recorded `codex exec` runs, with the same Codex version (0.160.0) and model. The Codex runs were not repeated.
+
+| Note | Effect | Where |
+|---|---|---|
+| **Codex's 5 bundled skills were left on.** On first start Codex installs `imagegen`, `openai-docs`, `review-agent`, `skill-creator` and `skill-installer` into `$CODEX_HOME/skills/.system`, enabled by default. | Very likely listed in every Codex run, so Codex “alone” was the target plus 5 bundled skills, as Claude Code's was the target plus 23 built-in skills. The detector does not match `skills/.system/…` paths, so a read of a bundled skill would count as no skill. Hits are unaffected. | `METHODOLOGY.md` §2, §4.4, §12; post |
+| **Codex blocked every MCP call.** Under `approval_policy="never"`, a call to a server that is not pre-approved is recorded and then answered with an approval error. | The tool the model chose is measured correctly; what followed was a reaction to the error. A stub server that fails to start leaves no trace, so a GPT MCP miss can also be a server that never connected. | `METHODOLOGY.md` §5.5, §12; post |
+
 ## New findings (exploratory)
 1. **The memory target competes with Claude Code's own memory.** `memory.create_entities` was selected in 1 of 6 requests in every setup, alone included, in v2 and v3; in the other runs the agent saved the fact with its built-in memory.
 2. **Codex had web search, Claude Code did not.** One more way the configurations differ.

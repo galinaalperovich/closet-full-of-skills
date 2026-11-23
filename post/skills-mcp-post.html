@@ -194,7 +194,7 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 </table></div>
 <p>Each request ran in four setups:</p>
 <ol>
-<li><b>Alone:</b> only the target is installed. “Alone” still includes what the harness ships: Claude Code reported 23 built-in skills in every setup, plus its built-in tools.</li>
+<li><b>Alone:</b> only the target is installed. “Alone” still includes what the harness ships: Claude Code reported 23 built-in skills in every setup, plus its built-in tools. Codex installs 5 skills of its own on first start, such as <code>skill-creator</code> and <code>imagegen</code>. I did not turn them off, so they were very likely listed in every Codex run too.</li>
 <li><b>20:</b> all 20 targets together.</li>
 <li><b>~220:</b> the 20 plus 200 others, drawn at random.</li>
 <li><b>All:</b> the 20 plus 1,000 other skills, or all 771 other tools.</li>
@@ -263,7 +263,7 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 </table></div>
 <p class="note">“15 single-step”: the targets that need one call. “All 20”: including the five browser targets described below. CIs: request-cluster bootstrap.</p>
 <p><b>Five of the tools measured my setup, not the agent.</b> “Take a screenshot of example.com” needs two steps: open the page, then take the screenshot. In the larger setups the agent did the sensible thing. It loaded both tools, opened the page, got my stub reply (“reply with one short sentence”), and stopped. In all 120 browser runs of the two larger setups, the agent had already loaded the target tool’s definition with <code>ToolSearch</code>. So for these five targets I know the agent found the right tool, but not whether it would have used it. I report them separately and keep them out of the main curve.</p>
-<p><b>GPT is only partly measured.</b> With the target tool alone, GPT picked it 91% of the time. With 20 tools I ran only 24 of the 90 requests before I paused the GPT runs to save budget. On those 24, selection went from 100% to 92%. I have no GPT data for the larger tool setups.</p>
+<p><b>GPT is only partly measured.</b> With the target tool alone, GPT picked it 91% of the time. With 20 tools I ran only 24 of the 90 requests before I paused the GPT runs to save budget. On those 24, selection went from 100% to 92%. I have no GPT data for the larger tool setups. Codex blocked these MCP calls after the model had made them (more on that <a href="#check-your-own-agent">below</a>), so the choice of tool is measured, but not what the agent did with the result.</p>
 
 <h2 id="result-3-skills-and-tools-together">Result 3: Skills and tools together</h2>
 <p>Real setups have both. I built two: a smaller one with 100 skills and 437 tools, and a larger one with 400 skills and all 791 tools, including servers that overlap with skills (<code>xlsx</code> next to an Excel server). Then I sent the skill requests (the 20 targets plus five skills from repos trending this month, 150 in total) and the tool requests.</p>
@@ -333,10 +333,12 @@ claude -p "Audit the SEO of my site." --output-format stream-json --verbose --ma
 codex exec --json -s read-only "Audit the SEO of my site." \
   | grep -o 'skills/[a-z0-9-]*/SKILL.md' | sort -u</code></pre>
 <p>Then repeat with only that skill enabled. A handful of requests will not give you a reliable rate, but it will show whether the skill is ever selected. I would genuinely love to see your numbers.</p>
-<p>Two things I learned the hard way, both of which forced me to rerun part of this study:</p>
+<p>Four things I learned the hard way. The two about Claude Code forced me to rerun part of this study:</p>
 <ul>
 <li><b>In <code>-p</code> mode, Claude Code refuses MCP calls you have not allowed.</b> Nobody is there to approve them. The command above still prints the selection, but whatever the agent does next is a reaction to the refusal. Add <code>--allowedTools mcp__&lt;server&gt;</code> for the servers you are testing.</li>
 <li><b>Claude Code keeps a memory per folder.</b> A note saved in one test run is loaded at the start of the next run in the same folder. Use a fresh folder for every run, or check <code>~/.claude/projects/</code> between runs.</li>
+<li><b>Codex blocks MCP calls too.</b> With <code>approval_policy="never"</code>, which I used, Codex lets the model choose a tool on a server you have not approved, then blocks the call. The choice still shows, but the agent gets an approval error instead of the result. Approve the servers you are testing with <code>-c 'mcp_servers.&lt;name&gt;.default_tools_approval_mode="approve"'</code>.</li>
+<li><b>Codex ships skills of its own.</b> It installs 5 on first start. To test a skill truly alone, turn them off with <code>-c skills.bundled.enabled=false</code>.</li>
 </ul>
 
 <h2 id="what-this-cost">What this cost</h2>
@@ -359,7 +361,7 @@ codex exec --json -s read-only "Audit the SEO of my site." \
 <li><b>No captured listing, little response text.</b> I know what was called, not what the model saw. Full logs, including what the agent wrote, exist only for the rerun Claude Code MCP and mixed runs.</li>
 <li><b>Few samples.</b> One random sample of extra skills, and six LLM-written requests per target. The CIs cover variation across these requests and runs, not the draw of extra skills or the wording of the requests.</li>
 <li><b>Configurations, not models.</b> Claude Code and Codex differ in model, prompts, budgets and permissions. For example, Codex could search the web in these runs, and Claude Code could not.</li>
-<li><b>GPT data is thinner.</b> One run per request, and MCP only with 1 tool and, partly, with 20.</li>
+<li><b>GPT data is thinner.</b> One run per request, and MCP only with 1 tool and, partly, with 20. Codex also does not report an MCP server that failed to start, so a GPT tool miss could be a server that never connected.</li>
 <li><b>Things change.</b> Harness limits, commands and prices are as documented in November 2026. The issue reports I link are motivation, not evidence of current behaviour.</li>
 </ul>
 <p>The <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md">full methodology</a>, <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY_REVIEW.md">an external review of it</a>, <a href="https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/CHANGELOG.md">my response to that review</a>, and all data and scripts are in <a href="https://github.com/galinaalperovich/closet-full-of-skills">the GitHub repo</a>.</p>

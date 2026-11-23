@@ -72,7 +72,7 @@ For each target I used an LLM to write six realistic requests, phrased the way a
 
 Each request ran in four setups:
 
-1. **Alone:** only the target is installed. “Alone” still includes what the harness ships: Claude Code reported 23 built-in skills in every setup, plus its built-in tools.
+1. **Alone:** only the target is installed. “Alone” still includes what the harness ships: Claude Code reported 23 built-in skills in every setup, plus its built-in tools. Codex installs 5 skills of its own on first start, such as `skill-creator` and `imagegen`. I did not turn them off, so they were very likely listed in every Codex run too.
 2. **20:** all 20 targets together.
 3. **~220:** the 20 plus 200 others, drawn at random.
 4. **All:** the 20 plus 1,000 other skills, or all 771 other tools.
@@ -166,7 +166,7 @@ What loss there was came mostly at the first step, from one tool to twenty, wher
 
 **Five of the tools measured my setup, not the agent.** “Take a screenshot of example.com” needs two steps: open the page, then take the screenshot. In the larger setups the agent did the sensible thing. It loaded both tools, opened the page, got my stub reply (“reply with one short sentence”), and stopped. In all 120 browser runs of the two larger setups, the agent had already loaded the target tool’s definition with `ToolSearch`. So for these five targets I know the agent found the right tool, but not whether it would have used it. I report them separately and keep them out of the main curve.
 
-**GPT is only partly measured.** With the target tool alone, GPT picked it 91% of the time. With 20 tools I ran only 24 of the 90 requests before I paused the GPT runs to save budget. On those 24, selection went from 100% to 92%. I have no GPT data for the larger tool setups.
+**GPT is only partly measured.** With the target tool alone, GPT picked it 91% of the time. With 20 tools I ran only 24 of the 90 requests before I paused the GPT runs to save budget. On those 24, selection went from 100% to 92%. I have no GPT data for the larger tool setups. Codex blocked these MCP calls after the model had made them (more on that [below](#check-your-own-agent)), so the choice of tool is measured, but not what the agent did with the result.
 
 ## Result 3: Skills and tools together
 
@@ -262,10 +262,12 @@ codex exec --json -s read-only "Audit the SEO of my site." \
 
 Then repeat with only that skill enabled. A handful of requests will not give you a reliable rate, but it will show whether the skill is ever selected. I would genuinely love to see your numbers.
 
-Two things I learned the hard way, both of which forced me to rerun part of this study:
+Four things I learned the hard way. The two about Claude Code forced me to rerun part of this study:
 
 - **In `-p` mode, Claude Code refuses MCP calls you have not allowed.** Nobody is there to approve them. The command above still prints the selection, but whatever the agent does next is a reaction to the refusal. Add `--allowedTools mcp__<server>` for the servers you are testing.
 - **Claude Code keeps a memory per folder.** A note saved in one test run is loaded at the start of the next run in the same folder. Use a fresh folder for every run, or check `~/.claude/projects/` between runs.
+- **Codex blocks MCP calls too.** With `approval_policy="never"`, which I used, Codex lets the model choose a tool on a server you have not approved, then blocks the call. The choice still shows, but the agent gets an approval error instead of the result. Approve the servers you are testing with `-c 'mcp_servers.<name>.default_tools_approval_mode="approve"'`.
+- **Codex ships skills of its own.** It installs 5 on first start. To test a skill truly alone, turn them off with `-c skills.bundled.enabled=false`.
 
 ## What this cost
 
@@ -290,7 +292,7 @@ Running every remaining GPT cell at full size would cost about $1,400 by my esti
 - **No captured listing, little response text.** I know what was called, not what the model saw. Full logs, including what the agent wrote, exist only for the rerun Claude Code MCP and mixed runs.
 - **Few samples.** One random sample of extra skills, and six LLM-written requests per target. The CIs cover variation across these requests and runs, not the draw of extra skills or the wording of the requests.
 - **Configurations, not models.** Claude Code and Codex differ in model, prompts, budgets and permissions. For example, Codex could search the web in these runs, and Claude Code could not.
-- **GPT data is thinner.** One run per request, and MCP only with 1 tool and, partly, with 20.
+- **GPT data is thinner.** One run per request, and MCP only with 1 tool and, partly, with 20. Codex also does not report an MCP server that failed to start, so a GPT tool miss could be a server that never connected.
 - **Things change.** Harness limits, commands and prices are as documented in November 2026. The issue reports I link are motivation, not evidence of current behaviour.
 
 The [full methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md), [an external review of it](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY_REVIEW.md), [my response to that review](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/CHANGELOG.md), and all data and scripts are in [the GitHub repo](https://github.com/galinaalperovich/closet-full-of-skills).
