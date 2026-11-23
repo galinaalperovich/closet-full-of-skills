@@ -3,7 +3,7 @@ E1,claude,haiku,alone,subscription,main,120,120,120,0,13,5,"skills=24,tools=None
 E1,claude,haiku,crowd1000,subscription,main,120,120,120,0,60,56,"skills=1043,tools=None",0,0
 E1,claude,haiku,crowd200,subscription,main,120,120,120,0,53,47,"skills=243,tools=None",0,0
 E1,claude,haiku,pack20,subscription,main,120,120,120,0,32,26,"skills=43,tools=None",0,0
-E1,claude,sonnet,alone,subscription,main,360,360,360,0,2,0,"skills=24,tools=None",0,0
+E1,claude,sonnet,alone,subscription,main,360,360,360,0,2,0,"skills=24,tools=None",0,18
 E1,claude,sonnet,crowd1000,subscription,main,360,360,360,0,71,71,"skills=1043,tools=None",0,0
 E1,claude,sonnet,crowd200,subscription,main,360,360,360,0,55,55,"skills=243,tools=None",0,0
 E1,claude,sonnet,pack20,subscription,main,360,360,360,0,3,3,"skills=43,tools=None",0,0
@@ -15,20 +15,20 @@ E1,codex,gpt,crowd200,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E1,codex,gpt,crowd200,subscription,excluded_429_batch,120,120,0,120,0,0,not recorded,0,0
 E1,codex,gpt,pack20,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E1,codex,gpt,pack20,subscription,excluded_429_batch,120,120,0,120,0,0,not recorded,0,0
-E2,claude,haiku,mcp_alone,subscription,main,120,120,120,0,32,5,"skills=23,tools=28",0,0
-E2,claude,haiku,mcp_crowd200,subscription,main,120,120,120,0,45,12,"skills=23,tools=247",0,0
-E2,claude,haiku,mcp_crowdall,subscription,main,120,120,120,0,59,16,"skills=23,tools=818",0,0
-E2,claude,haiku,mcp_pack20,subscription,main,120,120,120,0,54,21,"skills=23,tools=47",0,0
-E2,claude,sonnet,mcp_alone,subscription,main,120,120,120,0,0,0,"skills=23,tools=28",0,0
-E2,claude,sonnet,mcp_crowd200,subscription,main,120,120,120,0,8,7,"skills=23,tools=247",0,0
-E2,claude,sonnet,mcp_crowdall,subscription,main,120,120,120,0,2,0,"skills=23,tools=818",0,0
-E2,claude,sonnet,mcp_pack20,subscription,main,120,120,120,0,7,5,"skills=23,tools=47",0,0
+E2,claude,haiku,mcp_alone,subscription,main,120,120,120,0,32,5,"skills=23,tools=28",0,120
+E2,claude,haiku,mcp_crowd200,subscription,main,120,120,120,0,45,12,"skills=23,tools=247",0,120
+E2,claude,haiku,mcp_crowdall,subscription,main,120,120,120,0,59,16,"skills=23,tools=818",0,120
+E2,claude,haiku,mcp_pack20,subscription,main,120,120,120,0,54,21,"skills=23,tools=47",0,120
+E2,claude,sonnet,mcp_alone,subscription,main,120,120,120,0,0,0,"skills=23,tools=28",0,120
+E2,claude,sonnet,mcp_crowd200,subscription,main,120,120,120,0,8,7,"skills=23,tools=247",0,120
+E2,claude,sonnet,mcp_crowdall,subscription,main,120,120,120,0,2,0,"skills=23,tools=818",0,120
+E2,claude,sonnet,mcp_pack20,subscription,main,120,120,120,0,7,5,"skills=23,tools=47",0,120
 E2,codex,gpt,mcp_alone,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E2,codex,gpt,mcp_pack20,api_key,main,50,50,50,0,0,0,not recorded,0,0
 E2,codex,gpt,mcp_pack20,subscription,main,5,5,4,1,0,0,not recorded,0,0
-E3,claude,haiku,mixed_larger,subscription,main,270,270,270,0,113,66,"skills=423,tools=818",0,0
-E3,claude,haiku,mixed_smaller,subscription,main,270,270,270,0,91,49,"skills=123,tools=464",0,0
-E3,claude,sonnet,mixed_larger,subscription,main,270,270,270,0,20,18,"skills=423,tools=818",0,0
-E3,claude,sonnet,mixed_smaller,subscription,main,270,270,270,0,9,9,"skills=123,tools=464",0,0
+E3,claude,haiku,mixed_larger,subscription,main,270,270,270,0,113,66,"skills=423,tools=818",0,270
+E3,claude,haiku,mixed_smaller,subscription,main,270,270,270,0,91,49,"skills=123,tools=464",0,270
+E3,claude,sonnet,mixed_larger,subscription,main,270,270,270,0,20,18,"skills=423,tools=818",0,270
+E3,claude,sonnet,mixed_smaller,subscription,main,270,270,270,0,9,9,"skills=123,tools=464",0,270
 E3b,claude,haiku,sk_alone,subscription,main,30,30,30,0,0,0,"skills=24,tools=27",0,0
 E3b,claude,sonnet,sk_alone,subscription,main,30,30,30,0,0,0,"skills=24,tools=27",0,0

@@ -166,7 +166,7 @@ out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "A
     f"Line chart for Claude Code. Skills, solid lines: Sonnet 94 to 34 percent, Haiku 78 to 16 percent. Single-step MCP tools, dashed: Sonnet {_tl('sonnet')} percent; Haiku {_tl('haiku')} percent, for the target alone, 20, about 220 and all installed.")
 
 # --- Fig: what happened on misses at 1,020 skills
-segs = [("Designated skill", "target"), ("Equivalent alternative", "eq"), ("Other alternative", "alt"), ("No skill, finished", "none"), ("No skill, hit turn limit", "cap")]
+segs = [("Designated skill", "target"), ("Equivalent alternative", "eq"), ("Other alternative", "alt"), ("No skill detected, finished", "none"), ("No skill detected, hit turn limit", "cap")]
 rows = []
 for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet"), ("gpt", "GPT")):
     r = e1[(m, "crowd1000")]; n = F(r["n"])
@@ -191,7 +191,7 @@ for j, (nm, vals, n) in enumerate(rows):
         if wv > 42: parts.append(f'<text x="{cx+wv/2:.1f}" y="{y+20}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--on-seg-{k})">{v:.0f}%</text>')
         cx += wv
     parts.append(f'<text x="{x1+6}" y="{y+20}" font-size="11" fill="currentColor" fill-opacity=".7">n={n}</text>')
-out["fig_misses"] = f'''<svg viewBox="0 0 740 216" role="img" aria-label="Stacked bars at 1,020 skills. Haiku: 16 percent designated skill, 1 equivalent alternative, 3 other alternative, 37 no skill and finished, 44 no skill and hit the turn limit. Sonnet: 34, 2, 0, 44, 19. GPT: 10, 10, 14, 66, 0.">
+out["fig_misses"] = f'''<svg viewBox="0 0 740 216" role="img" aria-label="Stacked bars at 1,020 skills. Haiku: 16 percent designated skill, 1 equivalent alternative, 3 other alternative, 37 no skill detected and finished, 44 no skill detected and hit the turn limit. Sonnet: 34, 2, 0, 44, 19. GPT: 10, 10, 14, 66, 0.">
 <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/></pattern></defs>
 <g {FONT}>{"".join(leg)}{"".join(parts)}</g></svg>'''
 
@@ -323,7 +323,7 @@ for j, (lab, n_other, n_look) in enumerate(toy):
         cx += wv
     pa.append(f'<text x="{x1+10}" y="{y+17}" font-size="12" fill="currentColor">target <tspan font-weight="600">{vals[0]:.1f}%</tspan></text>')
 pa.append(f'<text x="{x0}" y="{40 + 40*len(toy) + 8}" font-size="11.5" fill="currentColor" fill-opacity=".75">Illustrative arithmetic, not a measurement and not a model of these agents.</text>')
-out["fig_attn"] = (f'<svg viewBox="0 0 740 {62 + 40*len(toy)}" role="img" aria-label="Toy model, not data. If the target skill matches the request 20 times better than an unrelated skill, its share of attention is 100 percent alone, 51 percent with 20 skills, 8 percent with 220, 2 percent with 1,020, and 1.5 percent with 1,020 skills of which 16 look-alikes match as well as the target. The look-alikes then take 24 percent.">'
+out["fig_attn"] = (f'<svg viewBox="0 0 740 {62 + 40*len(toy)}" role="img" aria-label="Toy model, not data. If the target skill gets 20 times the weight of an unrelated skill before normalising, its share of attention is 100 percent alone, 51 percent with 20 skills, 8 percent with 220, 2 percent with 1,020, and 1.5 percent with 1,020 skills of which 16 look-alikes get the same weight as the target. The look-alikes then take 24 percent.">'
                    f'<g {FONT}>{"".join(pa)}</g></svg>')
 
 old = json.load(open(os.path.join(B, "figs.json")))

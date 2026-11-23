@@ -1,6 +1,6 @@
 # Skill and MCP tool selection under load: methodology (version 3)
 
-**Status:** version 3, 22 November 2026 (two Codex setup notes added on 23 November, §2, §4.4, §5.5; no numbers changed). The Claude Code runs of Experiments 2 and 3, and the 18 E1 runs of one folder, were repeated after two setup errors were found (§0). Version 2, revised after external review (`METHODOLOGY_REVIEW.md`) on 20 November, is preserved unchanged as `METHODOLOGY_v2.md`, and version 1 as `METHODOLOGY_v1.md`. Every change is listed in `analysis/CHANGELOG.md`. All numbers below are produced by `ANALYSIS_VERSION=3 python3 analysis/analyze.py`; the full generated tables are in `analysis/REPORT_v3.md` and the CSVs in `analysis/derived/v3/`. `python3 analysis/analyze.py` without the variable still reproduces version 2 byte for byte.
+**Status:** version 3, 22 November 2026. On 23 November, two Codex setup notes (§2, §4.4, §5.5) and corrections after a second external review (§5.3, and `analysis/CHANGELOG.md`) were added; no numbers changed. The Claude Code runs of Experiments 2 and 3, and the 18 E1 runs of one folder, were repeated after two setup errors were found (§0). Version 2, revised after external review (`METHODOLOGY_REVIEW.md`) on 20 November, is preserved unchanged as `METHODOLOGY_v2.md`, and version 1 as `METHODOLOGY_v1.md`. Every change is listed in `analysis/CHANGELOG.md`. All numbers below are produced by `ANALYSIS_VERSION=3 python3 analysis/analyze.py`; the full generated tables are in `analysis/REPORT_v3.md` and the CSVs in `analysis/derived/v3/`. `python3 analysis/analyze.py` without the variable still reproduces version 2 byte for byte.
 
 **Research question (exploratory):** in these model–harness configurations, how often is a designated skill, or an accepted MCP operation, selected within the observation window as the installed collection changes?
 
@@ -204,6 +204,8 @@ Each target has an accepted set of equivalent tool names. Two examples:
 The sets were written before the main runs, with one pilot-informed addition (`issue_write`). **Accepted sets are tool names. Arguments were not recorded**, so a multi-operation tool such as `issue_write` cannot be confirmed to have been called with a create operation.
 
 **Browser targets.** Five targets need a page to be open first. In `mcp_alone` only the target tool exists. In larger setups, navigation tools exist too.
+
+**Chronology of the 15-target subset.** The original design (v1) already treated these five as multi-step, but handled them with a lenient browser-family score (§7.3). Reporting the 15 single-step targets as the main MCP subset was decided in the version 2 re-analysis, after the v1 results had been seen and after the external review asked for strict operation scoring. It is therefore a retrospective restriction. Strict all-20 results are reported next to it for both Claude Code models (§9.2, and Table 3 of the post).
 
 ### 5.4 Setups
 | Setup | Tools |

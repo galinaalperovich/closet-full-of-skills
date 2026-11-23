@@ -55,6 +55,23 @@ Found while checking a Codex detector against recorded `codex exec` runs, with t
 | **Codex's 5 bundled skills were left on.** On first start Codex installs `imagegen`, `openai-docs`, `review-agent`, `skill-creator` and `skill-installer` into `$CODEX_HOME/skills/.system`, enabled by default. | Very likely listed in every Codex run, so Codex “alone” was the target plus 5 bundled skills, as Claude Code's was the target plus 23 built-in skills. The detector does not match `skills/.system/…` paths, so a read of a bundled skill would count as no skill. Hits are unaffected. | `METHODOLOGY.md` §2, §4.4, §12; post |
 | **Codex blocked every MCP call.** Under `approval_policy="never"`, a call to a server that is not pre-approved is recorded and then answered with an approval error. | The tool the model chose is measured correctly; what followed was a reaction to the error. A stub server that fails to start leaves no trace, so a GPT MCP miss can also be a server that never connected. | `METHODOLOGY.md` §5.5, §12; post |
 
+## Corrections after the second external review (23 November 2026, no numbers changed)
+
+The reviewer reproduced the v3 tables from the published hashes and counted the headline skill results independently. The corrections below make the claims and the generated files agree with the evidence; no model was rerun.
+
+| Finding | What changed | Where |
+|---|---|---|
+| “Right skill” wording implied correctness | Dek, summary and a heading now say the skill the request was written for (designated skill); the summary no longer says the limitations “don’t change the main point”. The title is unchanged. | Post |
+| Codex “no skill” labels | Figure 4 now says “no skill detected”, and its caption explains the Codex path-match detector and the `skills/.system` blind spot. The setup section says a Codex selection is a command naming `SKILL.md`, not a verified read; the copyable Codex command says the same. Hit counts unchanged. | Post |
+| Alternative-rating coverage | The post no longer says every alternative was rated: the ratings cover all E1 alternatives; 13 v3 E2/E3 misses (15 pairs, 5 of them skill misses in the mixed setups) chose unrated alternatives, counted as not equivalent. `METHODOLOGY.md` §7.4 already said this. | Post, `REPORT_v3.md` |
+| Sonnet drop at 20 skills | The post said 17 points; the corrected value is 18.6 (339/360 → 272/360), shown as 19. The skills table and this sentence are now read from `derived/v3` instead of typed in. | Post |
+| `REPORT_v3.md` called itself version 2 and said no run has a raw log | The generator now writes the right version and manifest path, and counts raw-log coverage from the records and the log files present: 2,058 of 4,674 retained runs (all 2,040 Claude Code E2/E3 runs and the 18 rerun E1 runs). `audit.csv` `raw_log_coverage` is filled in v3. Version 2 output is unchanged. | `analysis/analyze.py`, `REPORT_v3.md`, `derived/v3/audit.csv` |
+| Figure 5 used a Wilson interval over 18 runs | The caption now says the 18 runs are 3 repetitions of 6 requests and that small differences between skills are not a ranking; the Wilson example is gone. | Post |
+| “Skip the skill, and you skip every tool call it would have made” | Now says nothing makes sure those steps happen, that the agent may do some of them anyway, and that this was not measured. | Post |
+| Appendix C notation | “Scores 20 times higher” replaced by a 20-fold weight before normalising (a score gap of ln 20); look-alikes added to the formula. | Post |
+| “A stronger model helped” | Replaced by the observation that Sonnet selected the designated skill more often than Haiku at every size. | Post |
+| Retrospective 15-target MCP subset | The chronology is stated, and the post's MCP table now shows strict all-20 rates for Haiku as well as Sonnet. | `METHODOLOGY.md` §5.3, post |
+
 ## New findings (exploratory)
 1. **The memory target competes with Claude Code's own memory.** `memory.create_entities` was selected in 1 of 6 requests in every setup, alone included, in v2 and v3; in the other runs the agent saved the fact with its built-in memory.
 2. **Codex had web search, Claude Code did not.** One more way the configurations differ.
