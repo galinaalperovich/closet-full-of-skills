@@ -22,9 +22,19 @@ fonts = re.search(r'<link rel="stylesheet" href="[^"]+">', frag).group(0)
 plain = lambda s: html.escape(re.sub(r"<[^>]+>", "", s).strip(), quote=True)
 title = plain(re.search(r"<h1>(.*?)</h1>", body, re.S).group(1))
 desc = plain(re.search(r'<p class="dek">(.*?)</p>', body, re.S).group(1))
+# Google Tag Manager (Google Analytics runs inside the container); the same container as the personal site.
+GTM = "GTM-KJJKC6QJ"
+gtm_head = ("<!-- Google Tag Manager -->\n<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\n"
+            "new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\n"
+            "j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n"
+            "'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n"
+            f"}})(window,document,'script','dataLayer','{GTM}');</script>\n<!-- End Google Tag Manager -->")
+gtm_body = (f'<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={GTM}" height="0" width="0" '
+            'style="display:none;visibility:hidden"></iframe></noscript>')
 page = f"""<!doctype html>
 <html lang="en">
 <head>
+{gtm_head}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
@@ -45,6 +55,7 @@ html,body{{margin:0}}
 {css}</style>
 </head>
 <body>
+{gtm_body}
 {body}
 </body>
 </html>
