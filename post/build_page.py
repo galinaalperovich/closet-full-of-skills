@@ -21,7 +21,7 @@ i = body.rindex("</article>"); body = body[:i] + giscus + "\n" + body[i:]
 fonts = re.search(r'<link rel="stylesheet" href="[^"]+">', frag).group(0)
 plain = lambda s: html.escape(re.sub(r"<[^>]+>", "", s).strip(), quote=True)
 title = plain(re.search(r"<h1>(.*?)</h1>", body, re.S).group(1))
-desc = plain(re.search(r'<p class="dek">(.*?)</p>', body, re.S).group(1))
+desc = plain(re.search(r'<p class="dek" data-desc="(.*?)">', body, re.S).group(1))   # the link preview keeps the numbers; the page shows a short subtitle
 # Google Tag Manager (Google Analytics runs inside the container); the same container as the personal site.
 GTM = "GTM-KJJKC6QJ"
 gtm_head = ("<!-- Google Tag Manager -->\n<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\n"

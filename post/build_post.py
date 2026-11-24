@@ -221,7 +221,7 @@ body = f"""
 <figure class="hero">{fig["fig_hero"]}</figure>
 <div class="tags">AI Agents · Claude Code · Codex · Agent Skills · MCP</div>
 <h1>A Closet Full of Skills and Nothing to Wear: The More Skills You Install, the Less Often Your Agent Picks the Right One (MCP Tools Hold Up Better)</h1>
-<p class="dek">I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex. The skill each request was written for went from being picked 78–100% of the time to 10–34%. In Claude Code, single-step MCP tool selection fell much less, from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in CM)}% to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in CM)}%, and held steady from ~200 to ~800 tools.</p>
+<p class="dek" data-desc="I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex. The skill each request was written for went from being picked 78–100% of the time to 10–34%. In Claude Code, single-step MCP tool selection fell much less, from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in CM)}% to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in CM)}%, and held steady from ~200 to ~800 tools.">I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex, and measured how often the agent still picked the one each request was written for.</p>
 <div class="byline">Galina Alperovich · November 2026</div>
 
 <div class="repobox">
@@ -229,7 +229,16 @@ body = f"""
 <div><span class="lbl">A skill to check your own agent:</span> <span class="soon">coming soon</span></div>
 </div>
 
-<p class="tldr">tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill. With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%. Past a few hundred skills, both harnesses quietly cut the listing the model sees: Codex dropped most skills from it, and Claude Code kept little more than their names. MCP tools held up better: in Claude Code, single-step tool selection went from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in CM)}% with the tool alone to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in CM)}% with all 791 tools installed. The experiment has its limits (see below), and they limit how far the result generalizes. But in every configuration I tested, the more skills were installed, the less often the agent picked the one the request was written for. At the end I share <a href="#what-you-can-do-about-it">a few tricks for dealing with it</a>.</p>
+<p class="tldr">tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill, and kept installing more skills around it. What I found:</p>
+<ol>
+<li><b>Skills fade.</b> With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%.</li>
+<li><b>Twenty is enough.</b> With just 20 unrelated skills, and nothing cut from the listing, Haiku already lost {E1_DROP("haiku", "pack20")} points and Sonnet {E1_DROP("sonnet", "pack20")}.</li>
+<li><b>Past a few hundred skills, the harness quietly cuts the listing.</b> Codex listed only {CX1K["entries"]} skills, in alphabetical order, and dropped the rest. Claude Code kept every name but only {LS[("claude", "crowd1000")]["entries_with_description"]} descriptions, and your usage history decides which.</li>
+<li><b>Most misses are no skill at all, not a wrong one.</b> The agent carries on with its built-in tools, and nothing tells you.</li>
+<li><b>MCP tools held up better.</b> In Claude Code, single-step tool selection went from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in CM)}% with the tool alone to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in CM)}% with all 791 tools installed, and stayed flat from ~200 tools on.</li>
+</ol>
+<p>The experiment has <a href="#limitations-of-the-experiment">its limits</a>, and they limit how far the result generalizes. At the end I share <a href="#what-you-can-do-about-it">a few tricks for dealing with it</a>.</p>
+<!--toc-->
 
 <p>Agent skills became <b>the new npm</b>. A skill is a folder with a <code>SKILL.md</code> file: a name, a short description, and instructions the agent reads only when it needs them. The biggest community collection I found, {A(L["sickn33"], "sickn33/agentic-awesome-skills")}, has over 3,000 skills, and its README invites you to install all of them. MCP servers went the same way: one GitHub server alone exposes 149 tools.</p>
 
@@ -569,8 +578,7 @@ def add_toc(body):
             if not open_sub: out.append("<ol>"); open_sub = True
             out.append(f"<li>{a}</li>")
     out.append("</ol></li>" if open_sub else "</li>"); out.append("</ol></details></nav>")
-    i = body.index('class="tldr"'); j = body.index("</p>", i) + 4
-    return body[:j] + "\n\n" + "".join(out) + body[j:]
+    return body.replace("<!--toc-->", "".join(out), 1)
 body = add_toc(body)
 
 html = f'<title>A Closet Full of Skills</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">\n<style>{css}</style>\n{body}\n{CHART_JS}'

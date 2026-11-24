@@ -8,7 +8,7 @@ AI Agents · Claude Code · Codex · Agent Skills · MCP
 
 # A Closet Full of Skills and Nothing to Wear: The More Skills You Install, the Less Often Your Agent Picks the Right One (MCP Tools Hold Up Better)
 
-*I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex. The skill each request was written for went from being picked 78–100% of the time to 10–34%. In Claude Code, single-step MCP tool selection fell much less, from 84–88% to 77–80%, and held steady from ~200 to ~800 tools.*
+*I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex, and measured how often the agent still picked the one each request was written for.*
 
 Galina Alperovich · November 2026
 
@@ -16,7 +16,15 @@ The experiment, data and analysis: [github.com/galinaalperovich/closet-full-of-s
 
 A skill to check your own agent: coming soon
 
-tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill. With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%. Past a few hundred skills, both harnesses quietly cut the listing the model sees: Codex dropped most skills from it, and Claude Code kept little more than their names. MCP tools held up better: in Claude Code, single-step tool selection went from 84–88% with the tool alone to 77–80% with all 791 tools installed. The experiment has its limits (see below), and they limit how far the result generalizes. But in every configuration I tested, the more skills were installed, the less often the agent picked the one the request was written for. At the end I share [a few tricks for dealing with it](#what-you-can-do-about-it).
+tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill, and kept installing more skills around it. What I found:
+
+1. **Skills fade.** With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%.
+2. **Twenty is enough.** With just 20 unrelated skills, and nothing cut from the listing, Haiku already lost 31 points and Sonnet 19.
+3. **Past a few hundred skills, the harness quietly cuts the listing.** Codex listed only 321 skills, in alphabetical order, and dropped the rest. Claude Code kept every name but only 19 descriptions, and your usage history decides which.
+4. **Most misses are no skill at all, not a wrong one.** The agent carries on with its built-in tools, and nothing tells you.
+5. **MCP tools held up better.** In Claude Code, single-step tool selection went from 84–88% with the tool alone to 77–80% with all 791 tools installed, and stayed flat from ~200 tools on.
+
+The experiment has [its limits](#limitations-of-the-experiment), and they limit how far the result generalizes. At the end I share [a few tricks for dealing with it](#what-you-can-do-about-it).
 
 <!-- The table of contents is made from the headings. -->
 
