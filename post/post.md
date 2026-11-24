@@ -16,7 +16,9 @@ The experiment, data and analysis: [github.com/galinaalperovich/closet-full-of-s
 
 A skill to check your own agent: coming soon
 
-tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill, and kept installing more skills around it. What I found:
+## Summary
+
+Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill, and kept installing more skills around it. What I found:
 
 1. **Skills fade.** With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%.
 2. **Twenty is enough.** With just 20 unrelated skills, and nothing cut from the listing, Haiku already fell from 78% to 48% and Sonnet from 94% to 76%.
@@ -27,6 +29,8 @@ tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natur
 The experiment has [its limits](#limitations-of-the-experiment), and they limit how far the result generalizes. At the end I share [a few tricks for dealing with it](#what-you-can-do-about-it).
 
 <!-- The table of contents is made from the headings. -->
+
+## Problem statement
 
 Agent skills became **the new npm**. A skill is a folder with a `SKILL.md` file: a name, a short description, and instructions the agent reads only when it needs them. The biggest community collection I found, [sickn33/agentic-awesome-skills](https://github.com/sickn33/agentic-awesome-skills), has over 3,000 skills, and its README invites you to install all of them. MCP servers went the same way: one GitHub server alone exposes 149 tools.
 
@@ -40,7 +44,7 @@ If this sounds like the **needle-in-a-haystack test**, it is a harder version of
 - **Skills and MCP tools side by side, then mixed.**
 - **What the model actually received:** I captured the listing each harness sent, and it explains most of the drop.
 
-## Why this is a problem
+## Why it matters
 
 - **A skipped skill fails silently.** Nothing breaks, and until you read the traces and logs, you won’t know the skill or tool was never picked. The agent answers anyway, and LLMs are very good at answers that look as if the skill was used, while your instructions were never read and your data was never touched. Ask for Apple’s stock price without the finance tool being called, and you may get **a confident number from the model’s memory**.
 - **One skipped skill can skip a whole recipe.** A skill often says which tools to call and in which order: run the linter, then the tests, then open the pull request. Skip the skill, and nothing makes sure those steps happen.
