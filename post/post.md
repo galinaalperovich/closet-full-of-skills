@@ -19,7 +19,7 @@ A skill to check your own agent: coming soon
 tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill, and kept installing more skills around it. What I found:
 
 1. **Skills fade.** With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%.
-2. **Twenty is enough.** With just 20 unrelated skills, and nothing cut from the listing, Haiku already lost 31 points and Sonnet 19.
+2. **Twenty is enough.** With just 20 unrelated skills, and nothing cut from the listing, Haiku already fell from 78% to 48% and Sonnet from 94% to 76%.
 3. **Past a few hundred skills, the harness quietly cuts the listing.** Codex listed only 321 skills, in alphabetical order, and dropped the rest. Claude Code kept every name but only 19 descriptions, and your usage history decides which.
 4. **Most misses are no skill at all, not a wrong one.** The agent carries on with its built-in tools, and nothing tells you.
 5. **MCP tools held up better.** In Claude Code, single-step tool selection went from 84–88% with the tool alone to 77–80% with all 791 tools installed, and stayed flat from ~200 tools on.
@@ -118,7 +118,7 @@ Four details matter for reading the numbers:
 
 *Figure 3. The same numbers as a chart. Sonnet: 360 runs per point; Haiku and GPT-6 Astra: 120. The x axis is not to scale.*
 
-**The decline is already there at 20.** These are 20 skills about different things: PDFs, SEO, TDD, animation. On the same requests, Haiku lost 31 points and Sonnet 19, and almost no request got better. I expected trouble at a thousand skills. I did not expect it at twenty, but **twenty is enough**.
+**The decline is already there at 20.** These are 20 skills about different things: PDFs, SEO, TDD, animation. On the same requests, Haiku fell from 78% to 48% and Sonnet from 94% to 76%, and almost no request got better. I expected trouble at a thousand skills. I did not expect it at twenty, but **twenty is enough**.
 
 ### What the model actually saw
 

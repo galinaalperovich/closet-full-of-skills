@@ -232,7 +232,7 @@ body = f"""
 <p class="tldr">tldr; Installing a skill doesn’t mean your agent will use it. I sent 120 natural requests to Claude Code and Codex, each written for one particular skill, and kept installing more skills around it. What I found:</p>
 <ol>
 <li><b>Skills fade.</b> With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in only 10–34%.</li>
-<li><b>Twenty is enough.</b> With just 20 unrelated skills, and nothing cut from the listing, Haiku already lost {E1_DROP("haiku", "pack20")} points and Sonnet {E1_DROP("sonnet", "pack20")}.</li>
+<li><b>Twenty is enough.</b> With just 20 unrelated skills, and nothing cut from the listing, Haiku already fell from {P(E1[("haiku", "alone")]["rate"])}% to {P(E1[("haiku", "pack20")]["rate"])}% and Sonnet from {P(E1[("sonnet", "alone")]["rate"])}% to {P(E1[("sonnet", "pack20")]["rate"])}%.</li>
 <li><b>Past a few hundred skills, the harness quietly cuts the listing.</b> Codex listed only {CX1K["entries"]} skills, in alphabetical order, and dropped the rest. Claude Code kept every name but only {LS[("claude", "crowd1000")]["entries_with_description"]} descriptions, and your usage history decides which.</li>
 <li><b>Most misses are no skill at all, not a wrong one.</b> The agent carries on with its built-in tools, and nothing tells you.</li>
 <li><b>MCP tools held up better.</b> In Claude Code, single-step tool selection went from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in CM)}% with the tool alone to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in CM)}% with all 791 tools installed, and stayed flat from ~200 tools on.</li>
@@ -299,7 +299,7 @@ body = f"""
 <h2>Result 1: Skills fade</h2>
 {tab_("Share of requests where the agent picked the designated skill, with 95% CIs.", T_SKILLS)}
 {fig_("fig_skills", "The same numbers as a chart. Sonnet: 360 runs per point; Haiku and GPT-6 Astra: 120. The x axis is not to scale.")}
-<p><b>The decline is already there at 20.</b> These are 20 skills about different things: PDFs, SEO, TDD, animation. On the same requests, Haiku lost {E1_DROP("haiku", "pack20")} points and Sonnet {E1_DROP("sonnet", "pack20")}, and almost no request got better. I expected trouble at a thousand skills. I did not expect it at twenty, but <b>twenty is enough</b>.</p>
+<p><b>The decline is already there at 20.</b> These are 20 skills about different things: PDFs, SEO, TDD, animation. On the same requests, Haiku fell from {P(E1[("haiku", "alone")]["rate"])}% to {P(E1[("haiku", "pack20")]["rate"])}% and Sonnet from {P(E1[("sonnet", "alone")]["rate"])}% to {P(E1[("sonnet", "pack20")]["rate"])}%, and almost no request got better. I expected trouble at a thousand skills. I did not expect it at twenty, but <b>twenty is enough</b>.</p>
 
 <h3>What the model actually saw</h3>
 <p>Was the listing cut, or did the model choose badly from a full one? I re-ran every skills setup against a stand-in server that records what each harness sends to the model: same versions, commands and folders, no model called, no cost ({A(L["r_listing"], "scripts and results")}).</p>
