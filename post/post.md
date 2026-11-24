@@ -6,11 +6,11 @@
 
 AI Agents · Claude Code · Codex · Agent Skills · MCP
 
+Galina Alperovich · November 2026
+
 # A Closet Full of Skills and Nothing to Wear: The More Skills You Install, the Less Often Your Agent Picks the Right One (MCP Tools Hold Up Better)
 
 *I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex, and measured how often the agent still picked the one each request was written for.*
-
-Galina Alperovich · November 2026
 
 The experiment, data and analysis: [github.com/galinaalperovich/closet-full-of-skills](https://github.com/galinaalperovich/closet-full-of-skills). Every request, every result record and every script, so you can reproduce all the numbers for free.
 

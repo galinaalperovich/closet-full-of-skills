@@ -220,9 +220,9 @@ body = f"""
 <article>
 <figure class="hero">{fig["fig_hero"]}</figure>
 <div class="tags">AI Agents · Claude Code · Codex · Agent Skills · MCP</div>
+<div class="byline">Galina Alperovich · November 2026</div>
 <h1>A Closet Full of Skills and Nothing to Wear: The More Skills You Install, the Less Often Your Agent Picks the Right One (MCP Tools Hold Up Better)</h1>
 <p class="dek" data-desc="I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex. The skill each request was written for went from being picked 78–100% of the time to 10–34%. In Claude Code, single-step MCP tool selection fell much less, from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in CM)}% to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in CM)}%, and held steady from ~200 to ~800 tools.">I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex, and measured how often the agent still picked the one each request was written for.</p>
-<div class="byline">Galina Alperovich · November 2026</div>
 
 <div class="repobox">
 <div><span class="lbl">The experiment, data and analysis:</span> {A(L["repo"], "github.com/galinaalperovich/closet-full-of-skills")}. Every request, every result record and every script, so you can reproduce all the numbers for free.</div>
