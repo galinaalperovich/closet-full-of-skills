@@ -4,7 +4,7 @@ D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "analysis", "
 B = os.path.dirname(os.path.abspath(__file__))
 rd = lambda f: list(csv.DictReader(open(os.path.join(D, f))))
 FONT = 'font-family="IBM Plex Sans, system-ui, sans-serif"'; MONO = 'font-family="IBM Plex Mono, ui-monospace, monospace"'
-COL = {"Haiku": "var(--s-haiku)", "Sonnet": "var(--s-sonnet)", "GPT": "var(--s-gpt)"}
+COL = {"Haiku": "var(--s-haiku)", "Sonnet": "var(--s-sonnet)", "GPT": "var(--s-gpt)", "GPT-6 Astra": "var(--s-gpt)"}
 F = lambda x: float(x)
 out = {}
 
@@ -46,56 +46,69 @@ def line_chart(series, xlabels, aria, w=720, h=330, legend_note="", title=""):
     ttl = f'<text x="{L}" y="15" font-size="13" font-weight="600" fill="currentColor">{title}</text>' if title else ""
     return f'<svg viewBox="0 0 {w} {h+dy}" role="img" aria-label="{aria}"><g {FONT}>{ttl}<g transform="translate(0,{dy})">{"".join(g)}{"".join(lg)}{"".join(lines)}</g></g></svg>'
 
+# --- Hero image (top of the post, also the link-preview card): the same skill among more and more others
+import math, random
+def hero_dots(x, y, s, n, r):
+    # n-1 grey dots on a jittered grid inside an s-by-s square, plus the target at a fixed spot (same spot in every square)
+    if n == 1: return []
+    cols = math.ceil(math.sqrt(n)); rows_ = math.ceil(n / cols); d = s / cols
+    cells = [(i, j) for j in range(rows_) for i in range(cols)]
+    ti, tj = round(.62 * (cols - 1)), round(.42 * (rows_ - 1))
+    cells.remove((ti, tj)); rnd = random.Random(n); rnd.shuffle(cells)
+    o = []
+    for i, j in cells[:n - 1]:
+        jx, jy = (rnd.random() - .5) * d * .45, (rnd.random() - .5) * d * .45
+        o.append(f'<circle cx="{x + d * (i + .5) + jx:.1f}" cy="{y + (s - rows_ * d) / 2 + d * (j + .5) + jy:.1f}" r="{r}"/>')
+    return o, (x + d * (ti + .5), y + (s - rows_ * d) / 2 + d * (tj + .5))
+e1h = {(r["model"], r["setup"]): r for r in rd("e1_rates.csv")}
+_rng = lambda s: (lambda v: f"{min(v)}–{max(v)}%")([round(100 * F(e1h[(m, s)]["rate"])) for m in ("haiku", "sonnet", "gpt")])
+HS, HG, HX0, HY0 = 240, 44, 60, 108
+hero = []
+for k, (n, lab, s, r, col) in enumerate([(1, "1 skill", "alone", 0, "var(--band-hi)"), (20, "20 skills", "pack20", 6.5, "currentColor"),
+                                         (220, "220 skills", "crowd200", 3.6, "currentColor"), (1020, "1,020 skills", "crowd1000", 2.2, "var(--band-lo)")]):
+    x = HX0 + k * (HS + HG); cx = x + HS / 2
+    hero.append(f'<rect x="{x}" y="{HY0}" width="{HS}" height="{HS}" rx="10" fill="var(--surface)" stroke="currentColor" stroke-opacity=".35" stroke-width="1.5"/>')
+    if n == 1: tx, ty = cx, HY0 + HS / 2
+    else:
+        dl, (tx, ty) = hero_dots(x + 12, HY0 + 12, HS - 24, n, r)
+        hero.append(f'<g fill="currentColor" fill-opacity=".30">{"".join(dl)}</g>')
+    hero.append(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="17" fill="var(--accent)" fill-opacity=".22"/>'
+                f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="9" fill="var(--accent)" stroke="var(--surface)" stroke-width="3"/>')
+    hero.append(f'<text x="{cx}" y="{HY0 + HS + 44}" text-anchor="middle" font-size="25" font-weight="600" fill="currentColor">{lab}</text>'
+                f'<text x="{cx}" y="{HY0 + HS + 100}" text-anchor="middle" font-size="46" font-weight="700" fill="{col}">{_rng(s)}</text>')
+out["fig_hero"] = (f'<svg viewBox="0 0 1200 520" role="img" aria-label="Headline image. One skill, shown as a highlighted dot, installed alone and then among 20, 220 and 1,020 skills. '
+                   f'How often the agent picked it: {_rng("alone")}, {_rng("pack20")}, {_rng("crowd200")} and {_rng("crowd1000")} of requests, across Claude Code (Haiku, Sonnet) and Codex (GPT-6 Astra).">'
+                   f'<g {FONT}><text x="{HX0}" y="56" font-size="30" font-weight="600" fill="currentColor">How often the agent picks the skill <tspan fill="var(--accent)">●</tspan> a request was written for</text>'
+                   f'{"".join(hero)}'
+                   f'<text x="{HX0}" y="{HY0 + HS + 146}" font-size="21" fill="currentColor" fill-opacity=".65">Range across Claude Code (Haiku, Sonnet) and Codex (GPT-6 Astra), 120 requests each</text>'
+                   f'</g></svg>')
+
 # --- Fig: how selection works (skills vs MCP tools)
-out["fig_how"] = f'''<svg viewBox="0 0 980 330" role="img" aria-label="Diagram. Every request is sent with the skill listing (all names and descriptions, capped at a share of the context) and with MCP tool definitions. Claude Code sends tool names and fetches schemas on demand with ToolSearch; for Codex, reported tokens grew when 20 tool definitions were added. The model loads a skill, calls a tool, or uses only built-in actions. Loading a skill is itself a tool call (the Skill tool in Claude Code, a shell read of SKILL.md in Codex) that returns the skill instructions; the work then happens in more tool calls.">
+DASH = ' stroke-dasharray="5 4"'
+_box = lambda x, y, w, h, col, dash=False, strong=False: (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="7" stroke="{col}" fill="{col}" '
+                                                         f'fill-opacity="{.14 if strong else .07}" stroke-width="{2 if strong else 1.5}"{DASH if dash else ""}/>')
+_t2 = lambda x, y, a, b, anchor="middle": (f'<text x="{x}" y="{y}" text-anchor="{anchor}" font-size="14" font-weight="600">{a}</text>'
+                                          f'<text x="{x}" y="{y + 19}" text-anchor="{anchor}" font-size="12" fill-opacity=".72">{b}</text>')
+out["fig_how"] = f'''<svg viewBox="0 0 900 250" role="img" aria-label="Diagram. The model gets the request together with the skill listing, which holds every skill's name and description within a capped budget, and the MCP tools, which Claude Code lists by name and loads in full on demand. The model then loads a skill, which is a tool call that returns instructions, calls an MCP tool, or uses only built-in tools such as search, read and shell.">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-<g stroke-width="1.6">
-<rect x="2" y="135" width="164" height="60" rx="6" stroke="var(--accent)" fill="var(--accent)" fill-opacity=".10" stroke-width="2"/>
-<rect x="200" y="14" width="300" height="128" rx="6" stroke="var(--s-sonnet)" fill="var(--s-sonnet)" fill-opacity=".08"/>
-<rect x="200" y="182" width="300" height="134" rx="6" stroke="var(--s-haiku)" fill="var(--s-haiku)" fill-opacity=".08"/>
-<rect x="550" y="14" width="200" height="50" rx="6" stroke="var(--s-sonnet)" fill="var(--s-sonnet)" fill-opacity=".16" stroke-width="2"/>
-<rect x="550" y="86" width="200" height="50" rx="6" stroke="var(--band-mid)" fill="var(--band-mid)" fill-opacity=".08" stroke-dasharray="5 4"/>
-<rect x="550" y="182" width="200" height="50" rx="6" stroke="var(--s-haiku)" fill="var(--s-haiku)" fill-opacity=".16" stroke-width="2"/>
-<rect x="550" y="254" width="200" height="50" rx="6" stroke="var(--band-mid)" fill="var(--band-mid)" fill-opacity=".08" stroke-dasharray="5 4"/>
-<rect x="790" y="6" width="180" height="66" rx="6" stroke="var(--s-sonnet)" fill="var(--s-sonnet)" fill-opacity=".08"/>
-<rect x="790" y="96" width="180" height="50" rx="6" stroke="var(--s-sonnet)" fill="var(--s-sonnet)" fill-opacity=".08"/>
-</g>
-<g {FONT} font-size="13" fill="currentColor">
-<text x="84" y="161" text-anchor="middle" font-weight="600">Your request</text>
-<text x="84" y="180" text-anchor="middle" font-size="11.5" fill-opacity=".75">“Audit the SEO of my site.”</text>
-<text x="214" y="36" font-weight="600">Skill listing, sent every time</text>
-<text x="214" y="58" {MONO} font-size="11">seo-audit: When the user wants to…</text>
-<text x="214" y="76" {MONO} font-size="11">pdf: Use this skill whenever…</text>
-<text x="214" y="94" {MONO} font-size="11">tdd: Test-driven development…</text>
-<text x="214" y="112" {MONO} font-size="11">… 1,000 more</text>
-<text x="214" y="132" font-size="11" fill-opacity=".75">capped: 1% (Claude Code), 2% / 10K tokens (Codex)</text>
-<text x="214" y="204" font-weight="600">MCP tool definitions</text>
-<text x="214" y="226" font-size="11.5">Claude Code: tool names listed,</text>
-<text x="214" y="243" font-size="11.5">schemas fetched with ToolSearch</text>
-<text x="214" y="267" font-size="11.5">Codex: reported tokens grew when</text>
-<text x="214" y="284" font-size="11.5">I added 20 tool definitions</text>
-<text x="214" y="306" font-size="11" fill-opacity=".75">plus built-ins: Glob, Read, shell…</text>
-<text x="650" y="44" text-anchor="middle" font-weight="600">Load a skill</text>
-<text x="650" y="116" text-anchor="middle" font-weight="600">No skill selected</text>
-<text x="650" y="212" text-anchor="middle" font-weight="600">Call an MCP tool</text>
-<text x="650" y="284" text-anchor="middle" font-weight="600">Built-in actions only</text>
-<text x="880" y="28" text-anchor="middle" font-weight="600">Called as a tool</text>
-<text x="880" y="46" text-anchor="middle" font-size="11">Skill tool (Claude Code)</text>
-<text x="880" y="62" text-anchor="middle" font-size="11">shell read of SKILL.md (Codex)</text>
-<text x="880" y="118" text-anchor="middle" font-weight="600">Instructions come back</text>
-<text x="880" y="135" text-anchor="middle" font-size="11">the work is more tool calls</text>
+{_box(8, 96, 150, 58, "var(--accent)", strong=True)}
+{_box(200, 12, 232, 64, "var(--s-sonnet)")}{_box(200, 174, 232, 64, "var(--s-haiku)")}
+{_box(476, 96, 118, 58, "currentColor", strong=True)}
+{_box(640, 14, 252, 60, "var(--s-sonnet)", strong=True)}{_box(640, 95, 252, 60, "var(--s-haiku)", strong=True)}{_box(640, 176, 252, 60, "var(--band-mid)", dash=True)}
+<g {FONT} fill="currentColor">
+<text x="83" y="130" text-anchor="middle" font-size="14" font-weight="600">Your request</text>
+{_t2(316, 39, "Skill listing", "every name + description, capped")}
+{_t2(316, 201, "MCP tools", "names only, details on demand")}
+<text x="535" y="122" text-anchor="middle" font-size="14" font-weight="600">Model</text><text x="535" y="140" text-anchor="middle" font-size="12" fill-opacity=".72">decides</text>
+{_t2(766, 39, "Load a skill", "a tool call that returns instructions")}
+{_t2(766, 120, "Call an MCP tool", "does the job, returns a result")}
+{_t2(766, 201, "Neither", "built-in tools: search, read, shell")}
 </g>
 <g stroke="currentColor" stroke-width="1.5" fill="none" marker-end="url(#ah)">
-<line x1="166" y1="152" x2="196" y2="96"/>
-<line x1="166" y1="178" x2="196" y2="234"/>
-<line x1="500" y1="62" x2="546" y2="42"/>
-<line x1="500" y1="94" x2="546" y2="110"/>
-<line x1="500" y1="230" x2="546" y2="210"/>
-<line x1="500" y1="262" x2="546" y2="278"/>
-<line x1="750" y1="39" x2="786" y2="39"/>
-<line x1="880" y1="72" x2="880" y2="92"/>
+<line x1="158" y1="125" x2="472" y2="125"/>
+<path d="M432,52 C460,52 470,70 500,92"/><path d="M432,198 C460,198 470,180 500,158"/>
+<line x1="594" y1="110" x2="636" y2="50"/><line x1="594" y1="125" x2="636" y2="125"/><line x1="594" y1="140" x2="636" y2="200"/>
 </g>
-<g {FONT} font-size="11" fill="currentColor" fill-opacity=".75"><text x="505" y="160">model</text><text x="505" y="174">decides</text></g>
 </svg>'''
 
 # --- Fig: the experiment in one picture
@@ -117,7 +130,7 @@ for k, (lab, sub, n, r) in enumerate(boxes):
     bx.append(f'<circle cx="{x + BW/2:.1f}" cy="114" r="7" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>')
     bx.append(f'<text x="{x + BW/2:.1f}" y="192" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">{k+1}. {lab}</text>')
     bx.append(f'<text x="{x + BW/2:.1f}" y="209" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{sub}</text>')
-out["fig_setup"] = f'''<svg viewBox="0 0 980 250" role="img" aria-label="Diagram of the experiment. One request, written for one target skill or tool, is sent in four setups: the target alone, the 20 targets together, about 220 installed, and all of them (1,020 skills or 791 tools). Each run goes to Claude Code with Haiku or Sonnet, or to Codex with GPT. The score is the share of requests where the agent picked the target.">
+out["fig_setup"] = f'''<svg viewBox="0 0 980 250" role="img" aria-label="Diagram of the experiment. One request, written for one target skill or tool, is sent in four setups: the target alone, the 20 targets together, about 220 installed, and all of them (1,020 skills or 791 tools). Each run goes to Claude Code with Haiku or Sonnet, or to Codex with GPT-6 Astra. The score is the share of requests where the agent picked the target.">
 <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 <g {FONT}>
 <rect x="2" y="70" width="210" height="88" rx="6" fill="var(--accent)" fill-opacity=".10" stroke="var(--accent)" stroke-width="2"/>
@@ -131,7 +144,7 @@ out["fig_setup"] = f'''<svg viewBox="0 0 980 250" role="img" aria-label="Diagram
 <text x="900" y="96" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Picked the target?</text>
 <text x="900" y="118" text-anchor="middle" font-size="12" fill="currentColor"><tspan fill="var(--band-hi)" font-weight="600">yes</tspan> / <tspan fill="var(--band-lo)" font-weight="600">no</tspan></text>
 <text x="900" y="142" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".75">score = share of yes</text>
-<text x="{X0 + 2*(BW+GAP) - GAP/2:.0f}" y="236" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity=".75">each run: Claude Code (Haiku, Sonnet) or Codex (GPT)</text>
+<text x="{X0 + 2*(BW+GAP) - GAP/2:.0f}" y="236" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity=".75">each run: Claude Code (Haiku, Sonnet) or Codex (GPT-6 Astra)</text>
 </g>
 <g stroke="currentColor" stroke-width="1.5" fill="none" marker-end="url(#ah2)">
 <line x1="212" y1="114" x2="246" y2="114"/>
@@ -143,13 +156,13 @@ out["fig_setup"] = f'''<svg viewBox="0 0 980 250" role="img" aria-label="Diagram
 e1 = {(r["model"], r["setup"]): r for r in rd("e1_rates.csv")}
 S = ["alone", "pack20", "crowd200", "crowd1000"]
 ser = []
-for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku"), ("gpt", "GPT")):
+for m, nm in (("sonnet", "Sonnet"), ("haiku", "Haiku"), ("gpt", "GPT-6 Astra")):
     vals = [100 * F(e1[(m, s)]["rate"]) for s in S]
     ci = [(100 * F(e1[(m, s)]["req_boot_lo"]), 100 * F(e1[(m, s)]["req_boot_hi"])) for s in S]
     if m == "gpt": ci[0] = (96.9, 100)
     ser.append(dict(name=f"{nm} ({'Codex' if m=='gpt' else 'Claude Code'})", short=nm, color=COL[nm], values=vals, ci=ci))
 out["fig_skills"] = line_chart(ser, ["Target alone", "20 skills", "220 skills", "1,020 skills"],
-    "Line chart: share of requests where the designated skill was selected. Sonnet 94, 76, 56, 34 percent; Haiku 78, 48, 25, 16; GPT 100, 99, 83, 10, for the target alone, 20, 220 and 1,020 skills installed.")
+    "Line chart: share of requests where the designated skill was selected. Sonnet 94, 76, 56, 34 percent; Haiku 78, 48, 25, 16; GPT-6 Astra 100, 99, 83, 10, for the target alone, 20, 220 and 1,020 skills installed.")
 
 # --- Fig: skills fade, tools bend (Claude, non-browser tools)
 e2 = {(r["model"], r["setup"]): r for r in rd("e2_mcp_rates.csv")}
@@ -168,12 +181,12 @@ out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "A
 # --- Fig: what happened on misses at 1,020 skills
 segs = [("Designated skill", "target"), ("Equivalent alternative", "eq"), ("Other alternative", "alt"), ("No skill detected, finished", "none"), ("No skill detected, hit turn limit", "cap")]
 rows = []
-for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet"), ("gpt", "GPT")):
+for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet"), ("gpt", "GPT-6 Astra")):
     r = e1[(m, "crowd1000")]; n = F(r["n"])
     vals = [F(r["target_selected"]), F(r["miss_alt_equivalent"]), F(r["miss_alt_related"]) + F(r["miss_alt_inappropriate"]) + F(r["miss_alt_unassessable"]),
             F(r["miss_no_skill_completed"]), F(r["miss_no_skill_turn_limit"])]
     rows.append((nm, [100 * v / n for v in vals], int(n)))
-x0, x1 = 90, 690; bw = x1 - x0; parts = []
+x0, x1 = 112, 690; bw = x1 - x0; parts = []
 leg = []; lx = x0
 for n_, (lab, k) in enumerate(segs):
     if n_ == 3: lx = x0
@@ -191,7 +204,7 @@ for j, (nm, vals, n) in enumerate(rows):
         if wv > 42: parts.append(f'<text x="{cx+wv/2:.1f}" y="{y+20}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--on-seg-{k})">{v:.0f}%</text>')
         cx += wv
     parts.append(f'<text x="{x1+6}" y="{y+20}" font-size="11" fill="currentColor" fill-opacity=".7">n={n}</text>')
-out["fig_misses"] = f'''<svg viewBox="0 0 740 216" role="img" aria-label="Stacked bars at 1,020 skills. Haiku: 16 percent designated skill, 1 equivalent alternative, 3 other alternative, 37 no skill detected and finished, 44 no skill detected and hit the turn limit. Sonnet: 34, 2, 0, 44, 19. GPT: 10, 10, 14, 66, 0.">
+out["fig_misses"] = f'''<svg viewBox="0 0 740 216" role="img" aria-label="Stacked bars at 1,020 skills. Haiku: 16 percent designated skill, 1 equivalent alternative, 3 other alternative, 37 no skill detected and finished, 44 no skill detected and hit the turn limit. Sonnet: 34, 2, 0, 44, 19. GPT-6 Astra: 10, 10, 14, 66, 0.">
 <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/></pattern></defs>
 <g {FONT}>{"".join(leg)}{"".join(parts)}</g></svg>'''
 
@@ -226,9 +239,9 @@ out["fig_mix"] = f'<svg viewBox="0 0 {W} {Hh}" role="img" aria-label="Grouped ba
 # --- Fig: forest plot, paired change versus "alone" (percentage points, 95% CI by request-cluster bootstrap)
 pv = rd("paired_vs_alone.csv")
 SIZE = {"pack20": "20", "crowd200": "~220", "crowd1000": "1,020", "mcp_pack20": "20", "mcp_crowd200": "~220", "mcp_crowdall": "791"}
-NM = {"haiku": "Haiku", "sonnet": "Sonnet", "gpt": "GPT"}
+NM = {"haiku": "Haiku", "sonnet": "Sonnet", "gpt": "GPT-6 Astra"}
 sections = [("Skills: change vs target skill alone", "E1 skills", "skills"), ("Single-step MCP tools: change vs target tool alone", "E2 MCP single-step tools", "tools")]
-W = 720; x0, x1 = 210, 580; X = lambda d: x0 + (x1 - x0) * (d + 100) / 110
+W = 740; x0, x1 = 250, 600; X = lambda d: x0 + (x1 - x0) * (d + 100) / 110
 rows_svg = []; y = 44
 for v in (-100, -75, -50, -25, 0):
     rows_svg.append(f'<text x="{X(v):.1f}" y="30" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{v:+d}</text>'.replace("+0", "0"))
@@ -250,8 +263,8 @@ grid = "".join(f'<line x1="{X(v):.1f}" y1="{grid_top}" x2="{X(v):.1f}" y2="{y-6}
 rows_svg.append(f'<text x="{(x0+x1)/2:.1f}" y="{y+10}" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity=".75">change in percentage points (same requests in both setups)</text>')
 _fl = lambda exp, m: ", ".join(f"{100 * F(r['diff']):+.0f}" for r in pv if r["experiment"] == exp and r["model"] == m)
 _aria = ("Forest plot of paired changes versus the target alone, in percentage points, with 95% confidence intervals. "
-         f"Skills at 20, 220 and 1,020: Haiku {_fl('E1 skills', 'haiku')}; Sonnet {_fl('E1 skills', 'sonnet')}; GPT {_fl('E1 skills', 'gpt')}. "
-         f"Single-step MCP tools at 20, 220 and 791: Haiku {_fl('E2 MCP single-step tools', 'haiku')}; Sonnet {_fl('E2 MCP single-step tools', 'sonnet')}; GPT {_fl('E2 MCP single-step tools', 'gpt')} at 20 tools on 24 requests.")
+         f"Skills at 20, 220 and 1,020: Haiku {_fl('E1 skills', 'haiku')}; Sonnet {_fl('E1 skills', 'sonnet')}; GPT-6 Astra {_fl('E1 skills', 'gpt')}. "
+         f"Single-step MCP tools at 20, 220 and 791: Haiku {_fl('E2 MCP single-step tools', 'haiku')}; Sonnet {_fl('E2 MCP single-step tools', 'sonnet')}; GPT-6 Astra {_fl('E2 MCP single-step tools', 'gpt')} at 20 tools on 24 requests.")
 out["fig_forest"] = (f'<svg viewBox="0 0 {W} {y+22}" role="img" aria-label="{_aria}">'
                      f'<g {FONT}>{grid}{"".join(rows_svg)}</g></svg>')
 

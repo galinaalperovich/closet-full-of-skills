@@ -72,6 +72,21 @@ The reviewer reproduced the v3 tables from the published hashes and counted the 
 | “A stronger model helped” | Replaced by the observation that Sonnet selected the designated skill more often than Haiku at every size. | Post |
 | Retrospective 15-target MCP subset | The chronology is stated, and the post's MCP table now shows strict all-20 rates for Haiku as well as Sonnet. | `METHODOLOGY.md` §5.3, post |
 
+## Post rewrite for length and clarity (24 November 2026, no numbers changed)
+
+The post is about 17% shorter. No model was rerun, and every number still comes from `derived/v3` or the files named below.
+
+- **Added:** a headline image (also the link-preview card); the needle-in-a-haystack comparison and related benchmarks (MetaTool, LongFuncEval, Liu et al. 2026); a list-form “Why this is a problem” section that includes regulated work; reasons for the skill groups in Figure 5; and research behind the four explanations for skills versus tools (LongFuncEval, RAG-MCP, Lost in the Middle, RULER, NoLiMa, Context Rot, SkillRouter, MetaTool). The section “What else might explain the skill decline?” and its table were merged into that section.
+- **New counts, from existing files:**
+  - Other skills in the 1,020-skill setup whose name contains “seo”: 16; “security”: 16; “copy”: 1; “human”: 2 (`envs/crowd1000`).
+  - Sonnet's 18 `seo-audit` runs at 1,020 skills: 15 picked no skill and 3 picked another one (`sonnet.jsonl`).
+- **Clarified:**
+  - Stub skills and the empty, fresh folders, including the memory carry-over that forced the rerun.
+  - Why Codex runs have no turn cap.
+  - The scoring rules.
+  - The missing listing capture, now called the biggest gap.
+- **Renamed:** GPT is now named GPT-6 Astra throughout. The 791-tool row of the MCP table is highlighted, because tools still declined.
+
 ## New findings (exploratory)
 1. **The memory target competes with Claude Code's own memory.** `memory.create_entities` was selected in 1 of 6 requests in every setup, alone included, in v2 and v3; in the other runs the agent saved the fact with its built-in memory.
 2. **Codex had web search, Claude Code did not.** One more way the configurations differ.

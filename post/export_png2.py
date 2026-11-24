@@ -14,3 +14,16 @@ for k, svg in fig.items():
     subprocess.run([CH, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--user-data-dir={tmp}/prof", "--force-device-scale-factor=2",
                     f"--window-size={W},{h}", "--virtual-time-budget=4000", f"--screenshot={out}", "file://" + hp], capture_output=True, timeout=90)
     print(k, os.path.exists(out), h)
+# link-preview card (1200x630, rendered at 2x): the hero image on white, used as og:image and as the website thumbnail
+card = f'<!doctype html><html data-theme="light"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"><style>{css} html,body{{margin:0;background:#ffffff;overflow:hidden}} .c{{width:1200px;height:630px;box-sizing:border-box;padding:0 30px;display:flex;align-items:center}} .c svg{{flex:1}} .c svg{{width:100%;height:auto;display:block;color:var(--fg)}}</style></head><body><div class="c">{fig["fig_hero"]}</div></body></html>'
+hp = os.path.join(tmp, "card.html"); open(hp, "w").write(card)
+out = os.path.join(B, "images2", "card.png")
+subprocess.run([CH, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--user-data-dir={tmp}/prof", "--force-device-scale-factor=2",
+                "--window-size=1200,630", "--virtual-time-budget=4000", f"--screenshot={out}", "file://" + hp], capture_output=True, timeout=90)
+print("card", os.path.exists(out))
+# the same image as a 3:2 thumbnail (the personal site crops post thumbnails to 3:2)
+hp = os.path.join(tmp, "thumb.html"); open(hp, "w").write(card.replace("height:630px", "height:800px"))
+out = os.path.join(B, "images2", "thumb_3x2.png")
+subprocess.run([CH, "--headless=new", "--disable-gpu", "--hide-scrollbars", f"--user-data-dir={tmp}/prof", "--force-device-scale-factor=1",
+                "--window-size=1200,800", "--virtual-time-budget=4000", f"--screenshot={out}", "file://" + hp], capture_output=True, timeout=90)
+print("thumb", os.path.exists(out))

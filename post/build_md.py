@@ -78,9 +78,9 @@ for el in art.children:
     elif el.name in ("ul", "ol"):
         blocks.append("\n".join(lst(el)))
     elif el.name == "figure":
-        cap = inline(el.find("figcaption")).strip()
+        cap = inline(el.find("figcaption")).strip() if el.find("figcaption") else ""   # the hero image has no caption
         alt = (el.find("svg") or {}).get("aria-label", "") if el.find("svg") else ""
-        blocks.append(f"![{alt.replace('[', '(').replace(']', ')')}](images2/{fig_name(el.find('svg'))}.png)\n\n*{cap}*")
+        blocks.append(f"![{alt.replace('[', '(').replace(']', ')')}](images2/{fig_name(el.find('svg'))}.png)" + (f"\n\n*{cap}*" if cap else ""))
     elif el.name == "pre":
         blocks.append("```\n" + el.get_text().rstrip("\n") + "\n```")
     elif el.name == "div" and el.find("table"):

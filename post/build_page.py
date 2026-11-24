@@ -46,6 +46,8 @@ page = f"""<!doctype html>
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{SITE}">
 <meta property="og:image" content="{SITE}card.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +65,7 @@ html,body{{margin:0}}
 D = os.path.join(R, "docs"); os.makedirs(D, exist_ok=True)
 open(os.path.join(D, "index.html"), "w").write(page)
 open(os.path.join(D, ".nojekyll"), "w").write("")
-shutil.copy2(os.path.join(B, "images2", "fig_skills.png"), os.path.join(D, "card.png"))   # link-preview image
+shutil.copy2(os.path.join(B, "images2", "card.png"), os.path.join(D, "card.png"))   # link-preview image (the hero, 1200x630 at 2x)
 print("wrote docs/index.html", len(page))
 import subprocess, sys   # and the readable Markdown copy, post/post.md
 subprocess.run([sys.executable, os.path.join(B, "build_md.py")], check=True)
