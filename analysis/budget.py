@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Cost model for the follow-up plan. Reads derived/v2 usage tables; prints and writes derived/v2/followup_budget.csv.
+"""Cost model for the follow-up plan. Reads the derived usage tables; prints and writes derived/followup_budget.csv.
 GPT per-run cost: measured where the setup was run on the API key; otherwise modelled as
   P = base_prompt + alpha * tool_definition_tokens + min(skill_listing, 10K cap)
   cost = P * (12.50 + (k-1) * 1.00) / 1e6 + output * 50 / 1e6
 with base_prompt, k (model requests per run) and alpha fitted from mcp_alone -> mcp_pack20 (API runs).
 Claude: list-price equivalent from Claude Code's total_cost_usd per run (billed $0 on the Claude plan)."""
 import csv, json, os
-H = os.path.dirname(os.path.abspath(__file__)); D = os.path.join(H, "derived", "v2")
+H = os.path.dirname(os.path.abspath(__file__)); D = os.path.join(H, "derived")
 gu = {(r["exp"], r["setup"], r["access"]): r for r in csv.DictReader(open(os.path.join(D, "gpt_usage_per_run.csv")))}
 cu = {(r["exp"], r["model"], r["setup"]): float(r["mean_cost_usd"]) for r in csv.DictReader(open(os.path.join(D, "claude_usage_per_run.csv")))}
 a, p = gu[("E2", "mcp_alone", "api_key")], gu[("E2", "mcp_pack20", "api_key")]

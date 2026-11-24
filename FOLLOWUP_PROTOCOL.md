@@ -1,8 +1,8 @@
 # Follow-up protocol: finishing the study for at most $100 billed
 
-**Status:** proposal, 20 November 2026. Nothing here has been run, and none of it is a result. It closes the gaps listed under “Unresolved” in `analysis/CHANGELOG.md`.
+**Status:** proposal. Nothing here has been run, and none of it is a result. It addresses the open limitations listed in `METHODOLOGY.md` §13.
 
-**Budget rule.** At most **$100 billed**. Billed means OpenAI API usage priced from the reported usage fields at the [gpt-6-astra list price](https://developers.openai.com/api/docs/models/gpt-6-astra.md). Claude Code runs go through the existing Claude plan and are not billed per token; their list-price equivalent is shown for transparency. The cost model is `analysis/budget.py`, and the per-item estimates are in `analysis/derived/v2/followup_budget.csv`.
+**Budget rule.** At most **$100 billed**. Billed means OpenAI API usage priced from the reported usage fields at the [gpt-6-astra list price](https://developers.openai.com/api/docs/models/gpt-6-astra.md). Claude Code runs go through the existing Claude plan and are not billed per token; their list-price equivalent is shown for transparency. The cost model is `analysis/budget.py`, and the per-item estimates are in `analysis/derived/followup_budget.csv`.
 
 ## 1. What “complete” means here
 When this is done, every cell of the final matrix will have a defensible value or an explicit, costed reason it was not run:
@@ -13,25 +13,25 @@ When this is done, every cell of the final matrix will have a defensible value o
 | Claude Sonnet | done + 2 more filler samples | done + browser rerun | done | **new** (half the requests) | **new** | **new** |
 | GPT (Codex) | done + cliff replication | 4 points (20 requests each at the large points) | not run: ~$1.5–2.2 per run (see §4) | not run | **new** | raw-logged subset |
 
-## 2. Pipeline changes before any run (review P1)
-A new runner, `run3.py`, keeps `run.py`/`run2.py` unchanged for provenance.
+## 2. Pipeline changes before any run
+A new runner, `run_followup.py`, leaves the study's runners (`run.py`, `run_codex.py`, `mcp/run.py`) unchanged.
 1. **Raw logs:** save the full ordered event stream from process start, including partial output on timeout, plus the exact command. Configuration manifests contain no credentials.
-2. **Run metadata:** record the resolved model ID if the CLI reports one, the access route, the runner version, the scoring version, and a catalogue manifest (installed names and hashes) per setup.
+2. **Run metadata:** record the resolved model ID if the CLI reports one, the access route, the commit of the runner and the scoring code, and a catalogue manifest (installed names and hashes) per setup.
 3. **First selection batch:** score the first selection batch before any stub result, denial or synthetic instruction is delivered. Parallel calls in that batch all count as “first”.
 4. **Codex evidence:** keep command exit status and output.
 5. **Arguments:** keep tool arguments, so multi-operation tools such as `issue_write` can be scored by operation.
 6. **Pre-flight check per setup:** verify that the expected skills and MCP tools are exposed and that every server connected. A setup that fails is an infrastructure failure, not a routing miss.
 7. **Detector tests:** run the detectors on known cases before use: a skill read, a failed read (missing file), alternative path forms, a variable path, and parallel tool calls.
-8. **Schema repair:** add the missing `items` to the 85 reconstructed array parameters. This is versioned as inventory v3; old runs used v2.
+8. **Schema repair:** add the missing `items` to the 85 reconstructed array parameters. The repaired inventory gets a new file name and hash; the study's runs used the current `mcp/tools_inventory.json`.
 9. **Hard cap:** after each GPT run, add its list-price cost from the reported usage to a ledger file. Stop before starting a run that the projected cost would push past $100.
 10. **Execution order:** randomise across setups within each item, with a seed. Do not run setups in sequence.
 
 ## 3. Frozen before running
 - **Request subsamples.** GPT items use request `i = 0` for every target, which is fixed now, before any new run. C1 uses 40 requests drawn with seed 20261121 (2 per target).
 - **Accepted sets.**
-  - For each skill and tool target, retrieve candidate alternatives from the installed inventory: the top 15 by text similarity, plus every alternative that occurred in v1/v2.
+  - For each skill and tool target, retrieve candidate alternatives from the installed inventory: the top 15 by text similarity, plus every alternative that occurred in the study.
   - Rate them blind with the same rubric as `analysis/alt_judgments.json`.
-  - Freeze `accepted_sets_v3.json`.
+  - Freeze `accepted_sets.json`.
   - Scores against these sets are confirmatory only for new runs.
 - **Controls.**
   - 20 explicit-invocation positives, one per E1 target, for example “Use the pdf skill to merge a.pdf and b.pdf.”
@@ -66,13 +66,13 @@ The full remaining GPT design (876 runs) would cost about **$1,380** on the API,
 ## 5. Claude items (Claude plan; $0 billed)
 | Item | Design | Runs | List-price equivalent |
 |---|---|---|---|
-| **C1** Observation window | 40 seeded requests × {`pack20`, `crowd1000`} × {3, 10 turns} × {Haiku, Sonnet}, paired. The 3-turn arm doubles as the raw-logged reproduction of v1 rates on the same requests. | 320 | $16.92 |
-| **C2** Fixtures | The 31 file-referencing E1 requests, with small valid files (PDF, XLSX, PPTX, DOCX, a minimal repo) identical across setups, × {`alone`, `crowd1000`} × 2 models | 124 | $3.98 |
+| **C1** Observation window | 40 seeded requests × {`pack20`, `crowd1000`} × {3, 10 turns} × {Haiku, Sonnet}, paired. The 3-turn arm doubles as a raw-logged reproduction of the study's E1 rates on the same requests. | 320 | $16.92 |
+| **C2** Fixtures | The 31 file-referencing E1 requests, with small valid files (PDF, XLSX, PPTX, DOCX, a minimal repo) identical across setups, × {`alone`, `crowd1000`} × 2 models | 124 | $4.00 |
 | **C3** Filler samples | `crowd1000` rebuilt with seeds 8 and 9, all 120 requests × 2 models | 480 | $22.42 |
-| **C4** Controls | As G2, × {`alone`, `crowd1000`} × 2 models | 160 | $5.14 |
-| **C5** Crossed design | Nested pools. Skills {100, 400} × tools {20 targets only, all 791}, all four cells rerun in one randomised batch. Haiku: all 270 requests per cell. Sonnet: `i ∈ {0, 2, 4}`. The interaction is the difference between the tool-load effects at the two skill levels, with a paired bootstrap. | 1,620 | $85.10 |
-| **C6** Browser targets | Non-terminal stubs: navigation returns a small page snapshot, the other tools return plausible results, and nothing says “stop”. 30 browser requests × {`alone`, `pack20`, `crowdall`} × 2 models, 8 turns | 180 | $19.40 |
-| | **Total** | 2,884 | **$152.97** (high ≈ $230) |
+| **C4** Controls | As G2, × {`alone`, `crowd1000`} × 2 models | 160 | $5.16 |
+| **C5** Crossed design | Nested pools. Skills {100, 400} × tools {20 targets only, all 791}, all four cells rerun in one randomised batch. Haiku: all 270 requests per cell. Sonnet: `i ∈ {0, 2, 4}`. The interaction is the difference between the tool-load effects at the two skill levels, with a paired bootstrap. | 1,620 | $89.26 |
+| **C6** Browser targets | Non-terminal stubs: navigation returns a small page snapshot, the other tools return plausible results, and nothing says “stop”. 30 browser requests × {`alone`, `pack20`, `crowdall`} × 2 models, 8 turns | 180 | $19.84 |
+| | **Total** | 2,884 | **$157.60** (high ≈ $240) |
 
 **If the Claude plan's usage limits are tight,** drop Sonnet from C5. That cuts about $65 of list-price equivalent and loses only the Sonnet interaction estimate.
 
@@ -86,6 +86,6 @@ The full remaining GPT design (876 runs) would cost about **$1,380** on the API,
 
 ## 7. Decision rules, fixed now
 - **G1 probe:** if the first `mcp_crowdall` run costs more than $3, drop `mcp_crowdall` to 10 targets (even target indices) and report it as such.
-- **C1 observation window:** if 10 turns raise selection by 10 pp or more in any cell, the v1/v2 rates for that model are reported mainly as “within 3 turns” and the 10-turn rates become the headline.
+- **C1 observation window:** if 10 turns raise selection by 10 pp or more in any cell, the study's E1 rates for that model are reported mainly as “within 3 turns” and the 10-turn rates become the headline.
 - **C3 filler samples:** the result is reported as the across-sample range. If the range at `crowd1000` exceeds 20 pp, generalisation claims about collection size are withdrawn.
 - **C4 controls:** if positive controls are selected less than 90% of the time at `crowd1000`, the explicit-invocation path is itself degraded, and the paper says so.

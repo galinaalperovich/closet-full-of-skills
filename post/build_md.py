@@ -1,22 +1,22 @@
 """Write post/post.md: a readable Markdown copy of the post, made from skills-mcp-post.html.
 
 post.md is for reading and proposing edits (edit it in a pull request). It is not the source: the page is built by
-build_post2.py, so accepted edits are carried over into build_post2.py and post.md is then regenerated.
-Charts appear as the PNGs in images2/. Needs beautifulsoup4. Run after build_post2.py (build_page.py runs it)."""
+build_post.py, so accepted edits are carried over into build_post.py and post.md is then regenerated.
+Charts appear as the PNGs in images/. Needs beautifulsoup4. Run after build_post.py (build_page.py runs it)."""
 import html, json, os, re
 from bs4 import BeautifulSoup, NavigableString, Tag
 
 B = os.path.dirname(os.path.abspath(__file__))
 frag = open(os.path.join(B, "skills-mcp-post.html")).read()
-figs = json.load(open(os.path.join(B, "figs2.json")))
+figs = json.load(open(os.path.join(B, "figs.json")))
 art = BeautifulSoup(frag, "html.parser").find("article")
 
-def fig_name(svg):   # which images2/<name>.png shows this chart: match its aria-label against figs2.json
+def fig_name(svg):   # which images/<name>.png shows this chart: match its aria-label against figs.json
     for k, v in figs.items():
         m = re.search(r'aria-label="([^"]*)"', v)
         if m and html.unescape(m.group(1)) == svg.get("aria-label"):
             return k
-    raise SystemExit("no PNG matches a figure; rerun figs2.py and export_png2.py")
+    raise SystemExit("no PNG matches a figure; rerun figs.py and export_png.py")
 
 def inline(node):
     out = []
@@ -62,9 +62,14 @@ def table(t):
     return "\n".join(["| " + " | ".join(rows[0]) + " |", "|" + "---|" * w] + ["| " + " | ".join(r) + " |" for r in rows[1:]])
 
 blocks = []
-for el in art.children:
-    if not isinstance(el, Tag):
-        continue
+def flat(node):   # folded sections (<details class="fold">): their summary heading and body, in order
+    for el in node.children:
+        if isinstance(el, Tag) and el.name == "details":
+            for c in el.children:
+                if isinstance(c, Tag) and c.name == "summary": yield from (x for x in c.children if isinstance(x, Tag))
+                elif isinstance(c, Tag): yield c
+        elif isinstance(el, Tag): yield el
+for el in flat(art):
     cls = el.get("class") or []
     if el.name == "nav":
         blocks.append("<!-- The table of contents is made from the headings. -->")
@@ -80,7 +85,7 @@ for el in art.children:
     elif el.name == "figure":
         cap = inline(el.find("figcaption")).strip() if el.find("figcaption") else ""   # the hero image has no caption
         alt = (el.find("svg") or {}).get("aria-label", "") if el.find("svg") else ""
-        blocks.append(f"![{alt.replace('[', '(').replace(']', ')')}](images2/{fig_name(el.find('svg'))}.png)" + (f"\n\n*{cap}*" if cap else ""))
+        blocks.append(f"![{alt.replace('[', '(').replace(']', ')')}](images/{fig_name(el.find('svg'))}.png)" + (f"\n\n*{cap}*" if cap else ""))
     elif el.name == "pre":
         blocks.append("```\n" + el.get_text().rstrip("\n") + "\n```")
     elif el.name == "div" and el.find("table"):
@@ -93,7 +98,7 @@ for el in art.children:
         raise SystemExit(f"build_md.py does not know how to write <{el.name}>; add it")
 
 head = ("<!-- A readable copy of the post, made by post/build_md.py. To suggest changes, edit this file in a pull request;\n"
-        "     they are carried over into post/build_post2.py, which builds the page. Numbers, tables and charts come from\n"
+        "     they are carried over into post/build_post.py, which builds the page. Numbers, tables and charts come from\n"
         "     the data, so if you think one is wrong, say so in the PR rather than changing the number. -->")
 md = head + "\n\n" + "\n\n".join(b for b in blocks if b) + "\n"
 open(os.path.join(B, "post.md"), "w").write(md)

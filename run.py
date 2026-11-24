@@ -12,10 +12,9 @@ jobs=[(c,k.split(":")[1],i,p,r) for c in conds for k,ps in prompts.items() for i
 if os.environ.get("ONLY_TARGET"): jobs=[j for j in jobs if j[1]==os.environ["ONLY_TARGET"]]
 jobs=[j for j in jobs if (j[0],j[1],j[2],j[4]) not in done]
 lock=threading.Lock(); f=open(out,"a")
-# ISOLATE=1 (version 3): run each job in a fresh copy of its test folder, at a new path with the same folder name, and
-# keep the raw output. Claude Code keeps auto-memory per folder path (~/.claude/projects/<path>/memory); in the original
-# E1 runs one folder (Sonnet, caveman, alone) picked up a note saved by an earlier run. Default off, so this file still
-# reproduces the original runs.
+# ISOLATE=1: run each job in a fresh copy of its test folder, at a new path with the same folder name, and keep the raw
+# output. Claude Code keeps auto-memory per folder path (~/.claude/projects/<path>/memory); in the original E1 runs one
+# folder (Sonnet, caveman, alone) picked up a note saved by an earlier run, and its 18 runs were rerun with ISOLATE=1.
 ISO=os.environ.get("ISOLATE")
 PROJ=os.path.join(os.path.expanduser("~"),".claude","projects")
 RAW=os.path.join(S,"raw_e1")

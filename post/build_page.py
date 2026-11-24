@@ -1,5 +1,5 @@
 """Wrap post/skills-mcp-post.html (a page fragment) into a standalone page for GitHub Pages: docs/index.html.
-Run after build_post2.py."""
+Run after build_post.py."""
 import html, os, re, shutil
 B = os.path.dirname(os.path.abspath(__file__)); R = os.path.dirname(B)
 SITE = "https://galinaalperovich.github.io/closet-full-of-skills/"
@@ -65,7 +65,7 @@ html,body{{margin:0}}
 D = os.path.join(R, "docs"); os.makedirs(D, exist_ok=True)
 open(os.path.join(D, "index.html"), "w").write(page)
 open(os.path.join(D, ".nojekyll"), "w").write("")
-shutil.copy2(os.path.join(B, "images2", "card.png"), os.path.join(D, "card.png"))   # link-preview image (the hero, 1200x630 at 2x)
+shutil.copy2(os.path.join(B, "images", "card.png"), os.path.join(D, "card.png"))   # link-preview image (the hero, 1200x630 at 2x)
 print("wrote docs/index.html", len(page))
 import subprocess, sys   # and the readable Markdown copy, post/post.md
 subprocess.run([sys.executable, os.path.join(B, "build_md.py")], check=True)

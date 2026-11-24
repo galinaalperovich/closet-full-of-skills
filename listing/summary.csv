@@ -1,0 +1,15 @@
+harness,setup,entries,entries_with_description,listing_chars,targets_listed,targets_with_description,targets_with_description_names,targets_listed_names
+claude,alone (20 folders),,,,20,20,,
+claude,pack20,37,37,14860,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+claude,crowd200,237,100,29023,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+claude,crowd1000,1037,19,29993,20,3,grill-me json-canvas tdd,all 20
+claude-fresh,pack20,35,35,13343,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+claude-fresh,crowd200,235,133,28799,20,8,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer,all 20
+claude-fresh,crowd1000,1035,26,29965,20,0,,all 20
+claude-seeded,crowd1000,1035,24,29979,20,2,pdf seo-audit,all 20
+claude-sonnet,crowd200,237,100,29023,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+claude-sonnet,crowd1000,1037,19,29993,20,3,grill-me json-canvas tdd,all 20
+codex,alone (20 folders),,,,20,20,,
+codex,pack20,24,24,9173,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+codex,crowd200,224,224,11681,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+codex,crowd1000,321,0,7435,3,0,,animate caveman copywriting

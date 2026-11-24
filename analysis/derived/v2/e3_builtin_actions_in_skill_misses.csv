@@ -1,8 +1,0 @@
-action,runs
-builtin:Glob,288
-builtin:Grep,134
-builtin:Bash,43
-builtin:Read,35
-builtin:Write,34
-builtin:Artifact,14
-builtin:Edit,2

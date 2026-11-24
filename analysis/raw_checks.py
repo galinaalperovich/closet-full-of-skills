@@ -1,20 +1,20 @@
-"""Checks that need the raw event logs, which exist only for the v3 Claude Code E2/E3 rerun.
+"""Checks that need the raw event logs, which exist for the second-round Claude Code E2/E3 runs.
 
-For every v3 run it reads mcp/raw/... and records:
+For every second-round run it reads mcp/raw/... and records:
   - whether each MCP call reached the stub server (result = stub text) or was refused or failed,
   - whether each Skill call returned without an error,
   - which built-in calls were refused by Claude Code's permission system,
   - which tool definitions ToolSearch loaded (used for the browser targets: was the target loaded
     before the stub reply ended the run?),
-  - whether the run left notes in Claude Code's own auto-memory (each v3 run starts with an empty one).
-Writes derived/v3/raw_checks.csv (per model x setup x request kind) and derived/v3/raw_browser.csv.
+  - whether the run left notes in Claude Code's own auto-memory (each run starts with an empty one).
+Writes derived/raw_checks.csv (per model x setup x request kind) and derived/raw_browser.csv.
 """
 import csv, gzip, json, os
 from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MCP = os.path.join(os.path.dirname(HERE), "mcp")
-OUT = os.path.join(HERE, "derived", "v3")
+OUT = os.path.join(HERE, "derived")
 STUB = "Stub result: this tool is disabled in a test"
 DENIED = "requested permissions to use"
 BROWSER = {"playwright-mcp.browser_take_screenshot", "playwright-mcp.browser_fill_form", "chrome-devtools.performance_start_trace",
@@ -50,7 +50,7 @@ def parse(path):
 rows = defaultdict(Counter); browser = defaultdict(Counter)
 for m in ("haiku", "sonnet"):
     seen = set()
-    for line in open(os.path.join(MCP, f"{m}_v3.jsonl")):
+    for line in open(os.path.join(MCP, f"{m}_round2.jsonl")):
         r = json.loads(line)
         key = (r["env"], r["target"], r["i"])
         if r.get("error") or key in seen or not r.get("raw"): continue   # first attempt without an infrastructure error

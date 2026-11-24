@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Single reproducible entry point for the skill/MCP selection study (analysis versions 2 and 3).
+"""Single reproducible entry point for the skill/MCP selection study.
 
-Reads the historical result files UNCHANGED, applies documented retry/filter rules, and writes
-versioned derived tables to analysis/derived/v<N>/ plus a report (REPORT.md for v2, REPORT_v<N>.md otherwise).
+Reads the result files UNCHANGED, applies documented retry/filter rules, and writes the derived tables to
+analysis/derived/ plus a report, analysis/REPORT.md.
 
-    python3 analysis/analyze.py                        # version 2: derived/v2/, REPORT.md
-    ANALYSIS_VERSION=3 python3 analysis/analyze.py     # version 3: derived/v3/, REPORT_v3.md
+    python3 analysis/analyze.py
 
 Rules (fixed before computing any corrected metric):
   * Logical run key: E1 = (model, setup, target, request i, rep); E2/E3 = (model, setup, target, request i).
@@ -21,12 +20,11 @@ import csv, gzip, hashlib, json, math, os, random, re, sys
 from collections import Counter, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
-# ANALYSIS_VERSION=3: Claude Code E2/E3 come from the v3 rerun, in which the stub MCP servers were allowed
-# (in v2, headless Claude Code denied every MCP call). The 18 E1 runs of Sonnet / caveman / alone come from an isolated
-# rerun, because a memory note saved by one original run reached later runs in that folder. Everything else in E1, E3b
-# and all Codex records are unchanged. Default: 2.
-VERSION = int(os.environ.get("ANALYSIS_VERSION", "2"))
-OUT = os.path.join(HERE, "derived", f"v{VERSION}"); os.makedirs(OUT, exist_ok=True)
+# Claude Code E2/E3 come from the second collection round (mcp/*_round2.jsonl), in which the stub MCP servers were
+# allowed and every run had a fresh folder; the first round's Claude Code E2/E3 records are skipped (headless Claude Code
+# had denied every MCP call). The 18 E1 runs of Sonnet / caveman / alone come from an isolated rerun, because a memory
+# note saved by one original run reached later runs in that folder. E3b and all Codex records come from the first round.
+OUT = os.path.join(HERE, "derived"); os.makedirs(OUT, exist_ok=True)
 SEED = 20261120; B = 2000
 P = lambda *a: os.path.join(ROOT, *a)
 
@@ -35,16 +33,15 @@ INPUTS = {
     "E1": [("haiku.jsonl", "claude", "haiku", "subscription"), ("sonnet.jsonl", "claude", "sonnet", "subscription"),
            ("gpt.jsonl", "codex", "gpt", "api_key")],
     "E1_excluded": [("gpt_subscription_failed.jsonl", "codex", "gpt", "subscription")],
-    "V2": [("mcp/haiku_v2.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_v2.jsonl", "claude", "sonnet", "subscription"),
-           ("mcp/gpt_v2.jsonl", "codex", "gpt", "by_line")],
+    "R1": [("mcp/haiku_round1.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round1.jsonl", "claude", "sonnet", "subscription"),
+           ("mcp/gpt.jsonl", "codex", "gpt", "by_line")],
+    "R2": [("mcp/haiku_round2.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round2.jsonl", "claude", "sonnet", "subscription")],
+    "E1_rerun": [("sonnet_e1_caveman_rerun.jsonl", "claude", "sonnet", "subscription")],
 }
-if VERSION >= 3:
-    INPUTS["V3"] = [("mcp/haiku_v3.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_v3.jsonl", "claude", "sonnet", "subscription")]
-    INPUTS["E1_v3"] = [("sonnet_e1_caveman_v3.jsonl", "claude", "sonnet", "subscription")]
 E1_RERUN = lambda r: r["model"] == "sonnet" and r["setup"] == "alone" and r["target"] == "caveman"
 OTHER = ["prompts.json", "mcp/mcp_targets.json", "mcp/trending_skill_prompts.json", "mcp/tools_inventory.json",
-         "build.py", "run.py", "run_codex.py", "mcp/build_v2.py", "mcp/run2.py", "mcp/stub_server.py",
-         "scan.py", "weight.py", "report.py", "scan2.json", "weight2.json", "source_commits.tsv",
+         "build.py", "run.py", "run_codex.py", "mcp/build.py", "mcp/run.py", "mcp/stub_server.py",
+         "scan.py", "weight.py", "report.py", "scan.json", "weight.json", "source_commits.tsv",
          "analysis/alt_judge_input.json", "analysis/alt_judgments.json", "analysis/analyze.py"]
 def sha(p):
     h = hashlib.sha256(); h.update(open(p, "rb").read()); return h.hexdigest()
@@ -54,7 +51,7 @@ for grp in INPUTS.values():
         manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f)))})
 for f in OTHER:
     if os.path.exists(P(f)): manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f), errors="replace"))})
-json.dump({"analysis_version": VERSION, "collection_date": "2026-11-20" if VERSION == 2 else "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude E2/E3 rerun, Sonnet caveman alone E1 rerun)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
+json.dump({"collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
           open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 
 # ---------------------------------------------------------------- normalise records
@@ -76,7 +73,7 @@ def termination(rec, harness):
     return "harness_error" if err else "unknown"
 
 rows, attempts, SUPERSEDED = [], [], []
-def has_raw(rec, f):   # raw event log kept for this run (v3 records name it, relative to the result file's folder)
+def has_raw(rec, f):   # raw event log kept for this run (second-round records name it, relative to the result file's folder)
     p = rec.get("raw")
     return bool(p) and os.path.exists(os.path.join(os.path.dirname(P(f)), p))
 def norm_e1(rec, harness, model, access, f, ln):
@@ -87,11 +84,11 @@ def norm_e1(rec, harness, model, access, f, ln):
                 target_sel=bool(rec["hit"]), capable_server=None, overlap_family=None, toolsearch=None,
                 n_skills=rec.get("n_skills"), n_tools=None, mcp_failed=[], cost=rec.get("cost"), usage=rec.get("usage"),
                 in_tok=rec.get("in_tok"), first_tool=rec.get("first_tool"), has_raw=has_raw(rec, f))
-def norm_v2(rec, harness, model, access, f, ln):
+def norm_mcp(rec, harness, model, access, f, ln):
     env = rec["env"].split("/")[0]; exp = {"mcp": "E2", "sk": "E3b", "mixed": "E3"}[env.split("_")[0]]
     used = rec.get("used", [])
     # Codex's own MCP discovery tools (list_mcp_resources etc., server "codex" or the queried server) are harness
-    # built-ins, not experimental components (analysis v2 reclassification; historical `outcome` field untouched).
+    # built-ins, not experimental components (the recorded `outcome` field is left untouched).
     used = ["builtin:" + u[4:] if u.startswith("mcp:") and (u.split(".")[0] == "mcp:codex" or u.split(".", 1)[1] in HARNESS_MCP) else u for u in used]
     return dict(exp=exp, harness=harness, model=model, access=access, file=f, line=ln, setup=SETUP_NAME.get(env, env), kind=rec["kind"],
                 target=rec["target"], i=rec["i"], rep=0, turn_cap=4 if harness == "claude" else None, term=termination(rec, harness),
@@ -105,9 +102,9 @@ for grp, items in INPUTS.items():
         for ln, l in enumerate(open(P(f))):
             rec = json.loads(l)
             acc = access if access != "by_line" else ("api_key" if "ts" not in rec else "subscription")
-            r = (norm_e1 if grp.startswith("E1") else norm_v2)(rec, harness, model, acc, f, ln)
-            if VERSION >= 3 and grp == "V2" and harness == "claude" and r["exp"] in ("E2", "E3"): continue   # superseded by the v3 rerun
-            if VERSION >= 3 and grp == "E1" and E1_RERUN(r): SUPERSEDED.append(r); continue   # replaced by the isolated v3 rerun
+            r = (norm_e1 if grp.startswith("E1") else norm_mcp)(rec, harness, model, acc, f, ln)
+            if grp == "R1" and harness == "claude" and r["exp"] in ("E2", "E3"): continue   # replaced by the second round
+            if grp == "E1" and E1_RERUN(r): SUPERSEDED.append(r); continue   # replaced by the isolated rerun
             r["batch"] = "excluded_429_batch" if grp == "E1_excluded" else "main"
             r["infra_fail"] = r["term"] in ("api_error", "timeout", "harness_error", "unknown")
             attempts.append(r)
@@ -217,18 +214,6 @@ for (exp, h, m, s, acc, b), rs in sorted(groups.items()):
                       mcp_connect_failures=sum(1 for x in ret if x["mcp_failed"]), raw_log_coverage=sum(1 for x in ret if x["has_raw"])))
 write_csv("audit.csv", audit)
 
-# ---------------------------------------------------------------- 2. reproduce original numbers
-ORIG = {("haiku", "alone"): 94, ("haiku", "pack20"): 57, ("haiku", "crowd200"): 30, ("haiku", "crowd1000"): 19,
-        ("sonnet", "alone"): 334, ("sonnet", "pack20"): 272, ("sonnet", "crowd200"): 202, ("sonnet", "crowd1000"): 121,
-        ("gpt", "alone"): 120, ("gpt", "pack20"): 119, ("gpt", "crowd200"): 100, ("gpt", "crowd1000"): 12}
-repro = []
-for (m, s), k in ORIG.items():
-    rs = sel(exp="E1", model=m, setup=s)
-    if VERSION >= 3:   # the reproduction check uses the original records, not the isolated rerun
-        rs = [r for r in rs if r["file"] != "sonnet_e1_caveman_v3.jsonl"] + [r for r in SUPERSEDED if r["model"] == m and r["setup"] == s]
-    got = sum(1 for r in rs if r["target_sel"])
-    repro.append(dict(exp="E1", model=m, setup=s, methodology_v1_hits=k, reproduced_hits=got, n=len(rs), match=got == k))
-write_csv("reproduction_e1.csv", repro)
 
 # ---------------------------------------------------------------- 3. E1 rates, termination, first selection, acceptable
 e1 = []
@@ -329,7 +314,7 @@ for m in ["haiku", "sonnet"]:
             [r for r in sel(model=m, setup=s, kind="tool") if r["target"] not in BROWSER], "target_sel")))
 write_csv("e3_paired.csv", e3p)
 
-# ---------------------------------------------------------------- 5b. extra tables for the post's charts (added for post v3; additive)
+# ---------------------------------------------------------------- 5b. extra tables for the post's charts (used by the post)
 def req_rate_row(rs, metric):
     """Request-weighted rate: each request counts once, whatever its number of repetitions."""
     m = req_means(rs, metric); keys = sorted(m)
@@ -368,7 +353,7 @@ for r in retained:
 write_csv("e3_builtin_actions_in_skill_misses.csv", [dict(action=k, runs=v) for k, v in bi.most_common()])
 
 # ---------------------------------------------------------------- 7. survey (expanded corpus, frozen)
-S = json.load(open(P("scan2.json"))); W = json.load(open(P("weight2.json")))
+S = json.load(open(P("scan.json"))); W = json.load(open(P("weight.json")))
 uniq = {}
 for r in S: uniq.setdefault(r["sha"], r)
 repos_with = {r["repo"] for r in S}
@@ -474,35 +459,29 @@ json.dump({"tools_by_source": sa, "structural_problems": len(problems), "example
 # ---------------------------------------------------------------- 10. report
 L = []
 w = L.append
-w(f"# Derived results, analysis version {VERSION}\n")
-w(f"Generated by `analysis/analyze.py` from unchanged result files (hashes in `derived/v{VERSION}/manifest.json`). Seed {SEED}, {B} bootstrap resamples.\n")
+w("# Derived results\n")
+w(f"Generated by `analysis/analyze.py` from unchanged result files (hashes in `derived/manifest.json`). Seed {SEED}, {B} bootstrap resamples.\n")
 w("All rates are **designated-target selection within the observation window** (Claude Code: 3 turns in E1, 4 in E2/E3; Codex: one `exec` turn, no turn cap). Turn-limited runs stay in every denominator.\n")
-w("## Reproduction of methodology v1 (E1)\n")
-w("| Model | Setup | v1 hits | Reproduced | n |\n|---|---|---|---|---|")
-for r in repro: w(f'| {r["model"]} | {r["setup"]} | {r["methodology_v1_hits"]} | {r["reproduced_hits"]} | {r["n"]} |')
-w(f'\nAll match: {all(r["match"] for r in repro)}.\n')
-if VERSION >= 3: w("This check uses the original E1 records. All later E1 tables use the isolated rerun for Sonnet / caveman / alone (18 runs).\n")
+w("E1 uses the isolated rerun for Sonnet / caveman / alone (18 runs) in place of the original 18 runs of that folder.\n")
 w("## Audit\n")
 w("| Exp | Model | Setup | Access | Attempts | Retained | Infra failures | Turn-limited | ...without target | Exposure (init counts) |\n|---|---|---|---|---|---|---|---|---|---|")
 for a in audit: w(f'| {a["exp"]} | {a["model"]} | {a["setup"]} | {a["access"]}{"" if a["batch"]=="main" else " (excluded batch)"} | {a["attempts"]} | {a["retained"]} | {a["infra_failures"]} | {a["turn_limit"]} | {a["turn_limit_no_target"]} | {a["exposure_counts"]} |')
-if VERSION == 2:
-    w("\nRaw event logs: none of the retained runs has one (see methodology §7).\n")
-else:   # counted from the retained records and the log files present, per experiment and model
-    rl = defaultdict(lambda: [0, 0])
-    for x in retained:
-        if x["batch"] != "main": continue
-        rl[(x["exp"], x["model"])][0] += 1; rl[(x["exp"], x["model"])][1] += x["has_raw"]
-    tot = sum(v[0] for v in rl.values()); got = sum(v[1] for v in rl.values())
-    w(f"\nRaw event logs (retained runs, main batches): {got:,} of {tot:,} have one. The `raw_log_coverage` column in `audit.csv` gives the count per setup.\n")
-    w("| Experiment | Model | Retained | With raw log |\n|---|---|---|---|")
-    for (e, m), (n, k) in sorted(rl.items()): w(f"| {e} | {m} | {n} | {k} |")
-    w("\nRuns without a raw log have only their result record: the selection fields were extracted when the run finished, and the event stream was not kept (methodology §7.5).\n")
-    nj = [x for x in retained if x["batch"] == "main" and x["miss_class"] == "alt_not_judged"]
-    njp = {(x["kind"], x["target"], x["i"], c) for x in nj for c in x["components"]}
-    njc = Counter((x["exp"], x["model"], x["setup"]) for x in nj)
-    w(f"Alternative ratings (`alt_judgments.json`) cover the alternatives selected in the version 2 runs. In version 3, {len(nj)} misses selected only alternatives that were never rated "
-      f"({len(njp)} distinct request–alternative pairs): " + ", ".join(f"{e} {m} {s} {k}" for (e, m, s), k in sorted(njc.items())) +
-      ". They are counted with the unassessable alternatives, never as equivalent, so rates that add equivalent alternatives are lower bounds for these setups.\n")
+# raw event logs, counted from the retained records and the log files present, per experiment and model
+rl = defaultdict(lambda: [0, 0])
+for x in retained:
+    if x["batch"] != "main": continue
+    rl[(x["exp"], x["model"])][0] += 1; rl[(x["exp"], x["model"])][1] += x["has_raw"]
+tot = sum(v[0] for v in rl.values()); got = sum(v[1] for v in rl.values())
+w(f"\nRaw event logs (retained runs, main batches): {got:,} of {tot:,} have one. The `raw_log_coverage` column in `audit.csv` gives the count per setup.\n")
+w("| Experiment | Model | Retained | With raw log |\n|---|---|---|---|")
+for (e, m), (n, k) in sorted(rl.items()): w(f"| {e} | {m} | {n} | {k} |")
+w("\nRuns without a raw log have only their result record: the selection fields were extracted when the run finished, and the event stream was not kept (methodology §7.5).\n")
+nj = [x for x in retained if x["batch"] == "main" and x["miss_class"] == "alt_not_judged"]
+njp = {(x["kind"], x["target"], x["i"], c) for x in nj for c in x["components"]}
+njc = Counter((x["exp"], x["model"], x["setup"]) for x in nj)
+w(f"Alternative ratings (`alt_judgments.json`) cover the alternatives selected in the first collection round. In the second round, {len(nj)} misses selected only alternatives that were never rated "
+  f"({len(njp)} distinct request–alternative pairs): " + ", ".join(f"{e} {m} {s} {k}" for (e, m, s), k in sorted(njc.items())) +
+  ". They are counted with the unassessable alternatives, never as equivalent, so rates that add equivalent alternatives are lower bounds for these setups.\n")
 w("## E1: designated-target skill selection\n")
 w("| Model | Setup | Selected | Rate | Request-cluster 95% | Two-stage (skill) 95% | First skill = target | Turn-limited (of which target) | Acceptable incl. equivalent alternatives |\n|---|---|---|---|---|---|---|---|---|")
 for r in e1: w(f'| {r["model"]} | {r["setup"]} | {r["target_selected"]}/{r["n"]} | {pc(r["rate"])}% | {pc(r["req_boot_lo"])}–{pc(r["req_boot_hi"])} | {pc(r["skill_boot_lo"])}–{pc(r["skill_boot_hi"])} | {r["first_selection_is_target"]} | {r["turn_limit"]} ({r["turn_limit_target"]}) | {r["acceptable_selected"]} ({pc(r["acceptable_rate"])}%) |')
@@ -533,7 +512,7 @@ w(f"{len(pa)} skill requests. Explicit invocation syntax (slash command, the wor
 w("## Cost\n")
 tb = sum(r["billed_usd"] for r in cost); tl = sum(r["list_price_usd"] for r in cost)
 w(f"Billed per token (API key, GPT): ${tb:.2f}. List-price equivalent of everything, including subscription runs: ${tl:.2f}. Details: `cost_by_batch.csv`.\n")
-RPT = os.path.join(HERE, "REPORT.md" if VERSION == 2 else f"REPORT_v{VERSION}.md")
+RPT = os.path.join(HERE, "REPORT.md")
 open(RPT, "w").write("\n".join(L))
 print("wrote", RPT)
 print("billed", round(tb, 2), "list", round(tl, 2), "judgments", len(JUD))
