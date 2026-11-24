@@ -215,8 +215,7 @@ _eq = sorted(round(100 * (int(r["acceptable"]) - int(r["strict"])) / int(r["n"])
 EQ_GAIN = f"{_eq[0]}–{_eq[-1]}" if _eq[0] != _eq[-1] else f"{_eq[0]}"
 _bk, _bn = sum(int(r["miss_builtin_only"]) for r in _e3s), sum(int(r["n"]) - int(r["strict"]) for r in _e3s)
 BUILTIN_SHARE, BUILTIN_COUNT = f"{round(100 * _bk / _bn)}%", f"({_bk} of {_bn})"
-R3_EXAMPLES = """<li>“Merge invoice-jan.pdf and invoice-feb.pdf in this folder into a single file.” → searched the folder twice with <code>Glob</code>, then answered: “I couldn’t find invoice-jan.pdf or invoice-feb.pdf.” No <code>pdf</code> skill. (The folder is empty by design.)</li>
-<li>“What should we fix to rank better on Google?” → four <code>Glob</code> searches and a <code>Grep</code>, then: “I can’t tell what to fix yet, because there’s no website in this working directory.” No <code>seo</code> skill.</li>"""
+R3_EXAMPLES = """<li>“Merge invoice-jan.pdf and invoice-feb.pdf in this folder into a single file.” → searched the folder twice with <code>Glob</code>, then answered: “I couldn’t find invoice-jan.pdf or invoice-feb.pdf.” No <code>pdf</code> skill. (The folder is empty by design.)</li>"""
 body = f"""
 <article>
 <figure class="hero">{fig["fig_hero"]}</figure>
@@ -256,12 +255,12 @@ body = f"""
 <h2>How an agent picks a skill or a tool</h2>
 <p>A <b>skill</b> is a folder of instructions that teaches the agent <em>how</em> to do something. An <b>MCP tool</b> is a function on a server that <em>does</em> one thing, such as creating an issue, and returns a result.</p>
 <p><b>Loading a skill is itself a tool call.</b> Claude Code calls its <code>Skill</code> tool; Codex reads the file with a shell command such as <code>cat .agents/skills/pdf/SKILL.md</code>. The call returns the instructions, and the work happens in the calls that follow. That first call is what I count as “selected” (for Codex, a command naming the skill’s <code>SKILL.md</code>; I did not check that the read succeeded).</p>
-<p>The two also reach the model differently. Skills sit in one listing of names and descriptions, sent with every request. Claude Code lists MCP tools by name only and fetches a full definition on demand, with a <code>ToolSearch</code> call. In your own agent built on a model API, every tool definition is sent in full unless you build search yourself (see <a href="#trick-search">[Trick #3]</a>).</p>
+<p>The two also reach the model differently. Skills sit in one listing of names and descriptions, sent with every request. Claude Code lists MCP tools by name only and fetches a full definition on demand, with a <code>ToolSearch</code> call.</p>
 {fig_("fig_how", "How a request reaches a skill or a tool, with MCP tools handled the way Claude Code does it.")}
-<p>Between installing a skill and the skill doing its job there are four stages. I measured the third, whether the model picks it, and afterwards checked the second, what made it into the listing. Whether the work then got done (stage 4), I did not see.</p>
+<p>Between installing a skill and the skill doing its job there are four stages:</p>
 <ol>
 <li><b>Installed.</b> The skill folder or MCP server is on disk and enabled.</li>
-<li><b>Listed.</b> The harness fits names and descriptions into a budget: {A(L["cc_skills"], "1% of the context window in Claude Code, which drops descriptions when it overflows")}, and {A(L["codex_skills"], "2%, at most 10,000 tokens, in Codex, which shortens them first")}.</li>
+<li><b>Listed.</b> The harness fits names and descriptions into a budget: {A(L["cc_skills"], "1% of the context window in Claude Code, which drops descriptions when it overflows")}, and {A(L["codex_skills"], "2%, at most 10,000 tokens, in Codex, which shortens them first")}. <b>Checked afterwards.</b></li>
 <li><b>Selected.</b> The model loads the skill or calls the tool. <b>Measured here.</b></li>
 <li><b>Used.</b> The instructions are followed and the task gets done. Not measured.</li>
 </ol>
@@ -269,7 +268,7 @@ body = f"""
 <h2>The experiment setup</h2>
 {fig_("fig_setup", "The same request in four setups, from the target alone to 1,000 other skills (or 791 tools).")}
 <p>I picked 20 well-known skills ({A(L["anth_skills"], "Anthropic’s")} pdf, xlsx, pptx and docx, {A(L["mattpocock"], "Matt Pocock’s")} tdd and grill-me, and others; full list in <a href="#appendix-a">Appendix A</a>) and 20 everyday MCP tools out of 791 real tool definitions from 73 servers ({A(L["ghmcp"], "GitHub")}, {A(L["cdt"], "Chrome DevTools")}, {A(L["pwmcp"], "Playwright")}, and 70 servers from {A(L["livemcp_gh"], "LiveMCPBench")}).</p>
-<p>For each target an LLM wrote six realistic requests with no explicit invocation: no <code>/pdf</code>, no “use the pdf skill”. Still, 63 of the 150 skill requests share a word with the skill’s name, such as “pdf”. {A(L["r_prompts"], "All requests are in the repo.")}</p>
+<p>For each target an LLM wrote six realistic requests with no explicit invocation: no <code>/pdf</code>, no “use the pdf skill”. {A(L["r_prompts"], "All requests are in the repo.")}</p>
 {tab_("Example requests. Every target had six like these.", T_EXAMPLES)}
 <p>Each request ran in four setups:</p>
 <ol>
@@ -282,27 +281,26 @@ body = f"""
 <p>Four details matter for reading the numbers:</p>
 <ol>
 <li><b>Fake skill bodies.</b> Each skill keeps its real name and description, which is all the agent sees when it chooses, but its instructions are one line: “reply with one short sentence”. MCP tools likewise have real definitions and a canned reply. This kept thousands of runs cheap and identical: the choice is realistic, and everything after it is not.</li>
-<li><b>Fresh, empty folders.</b> Empty, so every setup sees exactly the same thing, though a request about <code>report.pdf</code> then finds no such file (Result 3 shows what agents did about it). Fresh, because Claude Code keeps a memory per folder: in my first pass, runs shared a folder, and notes saved in one run were loaded by the next. In one folder, five runs started with such a note, and all five missed the skill. I reran every affected run.</li>
+<li><b>Fresh, empty folders.</b> Empty, so every setup sees exactly the same thing, though a request about <code>report.pdf</code> then finds no such file (Result 3 shows what agents did about it). Fresh, because Claude Code keeps a memory per folder: in my first pass, runs shared a folder, and notes saved in one run were loaded by the next. In one folder, five runs started with such a note, and all five missed the skill. I reran every affected run, with a little less enthusiasm than the first time.</li>
 <li><b>Short observation window.</b> Claude Code was capped at 3 turns (4 with MCP). Picking a skill is the agent’s first decision, almost always made in the first turn or two, and the cap kept thousands of runs fast, at the price of missing later picks. Codex has no turn cap: a run is one user message, within which the model takes as many steps as it wants.</li>
 <li><b>Scoring.</b> A skill request is a hit only if the agent picks exactly the skill the request was written for; a tool request also counts an equivalent tool on another server. When the agent picked something else, a separate Claude session later judged from the two descriptions whether it was just as good: a model’s judgment, not a human’s ({A(L["r_judge"], "prompt and rules")}). 13 alternatives in the Claude Code MCP and mixed runs were never judged and count as misses.</li>
 </ol>
-<p><b>How to read the numbers.</b> Each configuration got 120 skill requests and 90 single-step tool requests, each counted once (Sonnet’s three runs per request are averaged). Brackets are 95% confidence intervals from resampling requests; changes are paired on the same requests, in percentage points. The intervals do not cover the random draw of extra skills or the request wording, but a stricter bootstrap that also resamples the skills still excludes zero for every skill drop to 1,020 ({A(L["r_meth"], "methodology")}). {ROBUST_MCP_SHORT}</p>
+<p><b>How to read the numbers.</b> Each configuration got 120 skill requests and 90 single-step tool requests. Brackets are 95% confidence intervals from resampling requests, and changes compare the same requests, in percentage points. They do not cover the random draw of extra skills or the request wording; the details are in the {A(L["r_meth"], "methodology")}.</p>
 
 <h2>Result 1: Skills fade</h2>
 {tab_("Share of requests where the agent picked the designated skill, with 95% CIs.", T_SKILLS)}
 {fig_("fig_skills", "The same numbers as a chart. Sonnet: 360 runs per point; Haiku and GPT-6 Astra: 120. The x axis is not to scale.")}
-<p><b>The decline is already there at 20.</b> These are 20 skills about different things: PDFs, SEO, TDD, animation. On the same requests, Haiku lost {E1_DROP("haiku", "pack20")} points and Sonnet {E1_DROP("sonnet", "pack20")}, and almost no request got better. You don’t need 1,000 skills: <b>twenty is enough</b>.</p>
-<p><b>Sonnet picked the designated skill more often than Haiku at every size</b>, and both declined.</p>
+<p><b>The decline is already there at 20.</b> These are 20 skills about different things: PDFs, SEO, TDD, animation. On the same requests, Haiku lost {E1_DROP("haiku", "pack20")} points and Sonnet {E1_DROP("sonnet", "pack20")}, and almost no request got better. I expected trouble at a thousand skills. I did not expect it at twenty, but <b>twenty is enough</b>.</p>
 
 <h3>What the model actually saw</h3>
 <p>Was the listing cut, or did the model choose badly from a full one? I re-ran every skills setup against a stand-in server that records what each harness sends to the model: same versions, commands and folders, no model called, no cost ({A(L["r_listing"], "scripts and results")}).</p>
 {tab_("What the skill listing contained in each setup. Haiku and Sonnet received the same listing.", T_LISTING)}
 <ul>
 <li><b>At 20 skills, nothing was cut.</b> Both harnesses showed every description in full, so the drop at 20 is the model’s own choice.</li>
-<li><b>GPT-6 Astra’s cliff is the alphabet.</b> At 1,020 skills, Codex listed only {CX1K["entries"]} entries: its own 4 skills, then the installed ones in alphabetical order up to “developer-listening”, with no descriptions at all. Of the 20 targets, only {", ".join(f"<code>{t}</code>" for t in CX1K_NAMES[:-1])} and <code>{CX1K_NAMES[-1]}</code> made it in, and they account for {GPT1K_LISTED_HITS} of GPT-6 Astra’s {GPT1K_HITS} hits. Every other skill it picked starts early in the alphabet.</li>
+<li><b>GPT-6 Astra’s cliff is the alphabet.</b> At 1,020 skills, Codex listed only {CX1K["entries"]} entries: its own 4 skills, then the installed ones in alphabetical order up to “developer-listening”, with no descriptions at all. Of the 20 targets, only {", ".join(f"<code>{t}</code>" for t in CX1K_NAMES[:-1])} and <code>{CX1K_NAMES[-1]}</code> made it in, and they account for {GPT1K_LISTED_HITS} of GPT-6 Astra’s {GPT1K_HITS} hits. Every other skill it picked starts early in the alphabet. If your skill is called <code>zebra-something</code>, I have bad news.</li>
 <li><b>Claude Code keeps the names, drops the descriptions, and your history decides which survive.</b> Its listing stops growing at about {CC_CAP:,} characters, so at 1,020 skills only {LS[("claude", "crowd1000")]["entries_with_description"]} entries kept a description. Claude Code records how often and how recently you used each skill, across all your projects, and the most-used keep their descriptions. With a clean record, {("none" if LS[("claude-fresh", "crowd1000")]["targets_with_description"] == "0" else LS[("claude-fresh", "crowd1000")]["targets_with_description"])} of the 20 targets had a description at 1,020; after I seeded the record with uses of <code>seo-audit</code> and <code>pdf</code>, exactly those two got theirs back.</li>
 </ul>
-<p>That last point has a twist: my own runs fed that record, so a skill picked in one run was more likely to keep its description in the next. I captured the listings after the study, so I cannot say exactly which targets had a description in each run, only that at 1,020 skills almost none did. <b>A new skill in a big collection starts life as a bare name.</b></p>
+<p>That last point has a twist, and this one is on me: my own runs fed that record, so a skill picked in one run was more likely to keep its description in the next. I captured the listings after the study, so I cannot say exactly which targets had a description in each run, only that at 1,020 skills almost none did. <b>A new skill in a big collection starts life as a bare name.</b></p>
 
 <h3>When the designated skill was not picked, what did the agent do instead?</h3>
 <p>A miss can mean three different things:</p>
@@ -316,9 +314,8 @@ body = f"""
 <ul>
 <li><b>Haiku:</b> more than half of its no-skill runs (53 of 97) hit the 3-turn limit, so a longer window might have caught later picks.</li>
 <li><b>Sonnet:</b> two thirds of its misses (160 of 239) ended normally, with no skill.</li>
-<li><b>GPT-6 Astra:</b> a quarter of its misses (29 of 108) picked a different skill, 12 of them rated equivalent. Counting those, its rate at 1,020 skills is 20%, not 10%.</li>
+<li><b>GPT-6 Astra:</b> a quarter of its misses (29 of 108) picked a different skill, 12 of them rated equivalent, which would make its rate 20%, not 10%.</li>
 </ul>
-<p>Strict scoring has a price. “Interview me about my plan for the onboarding redesign” was written for <code>grill-me</code>, and with 220 skills installed, all three configurations picked <code>interview-me</code>. Three misses on paper; the rater called it equivalent, and I agree.</p>
 
 <h3>Which skills kept being selected</h3>
 {fig_("fig_dumbbell", "Sonnet: each skill alone (hollow dot) and among 1,020 others (filled dot), 18 runs each, grouped by where it ends up. Each dot rests on 6 requests, so a difference of a few runs is not a ranking.")}
@@ -326,7 +323,7 @@ body = f"""
 <ol>
 <li><b>Did the description survive?</b> In my capture, <code>grill-me</code> and <code>json-canvas</code>, the two that held best, were two of the three targets that kept a description at 1,020 skills.</li>
 <li><b>If not, does the name say it all?</b> <code>xlsx</code>, <code>pptx</code>, <code>docx</code> and <code>mcp-builder</code> held up fairly well as bare names, because the request mentions the file type or an MCP server. <code>humanizer</code> or <code>caveman</code> say little on their own, and <code>seo-audit</code> sat among 16 other bare names with “seo” in them.</li>
-<li><b>Could the model do the job without help?</b> The skills that vanished cover things models believe they already do well: write copy, find a bug, review security, audit SEO, design a page. There the agent did not pick a wrong skill; it picked none (15 of <code>seo-audit</code>’s 18 Sonnet runs).</li>
+<li><b>Could the model do the job without help?</b> The skills that vanished cover things models believe they already do well (rightly or not): write copy, find a bug, review security, audit SEO, design a page. There the agent did not pick a wrong skill; it picked none (15 of <code>seo-audit</code>’s 18 Sonnet runs).</li>
 </ol>
 
 <h2>Result 2: MCP tools hold up better</h2>
@@ -336,25 +333,24 @@ body = f"""
 <p>Most of the loss came at the first step, from one tool to twenty, where near neighbours appear: four GitHub tools, two browser servers. After that the curve is flat. Adding 571 more tools, from ~220 to 791, changed <b>nothing measurable</b> ({P(E2[("haiku", "mcp_crowd200")]["nonbrowser_rate"])}% → {P(E2[("haiku", "mcp_crowdall")]["nonbrowser_rate"])}% for Haiku, {P(E2[("sonnet", "mcp_crowd200")]["nonbrowser_rate"])}% → {P(E2[("sonnet", "mcp_crowdall")]["nonbrowser_rate"])}% for Sonnet). Not proof of no effect, but a very different picture from the skills.</p>
 {tab_("Share of tool requests where Claude Code called the designated tool (or an equivalent one), with 95% CIs. Highlighted: tools still lost ground, only much less than skills.", T_MCP)}
 <p class="note">“15 single-step”: the targets that need one call. “All 20” adds the five browser targets below. I made this split after seeing the first results, which is why both are shown.</p>
-<p><b>Five tools measured my setup, not the agent.</b> “Take a screenshot of example.com” needs two steps, and in the larger setups the agent opened the page, got my canned reply, and stopped. {BROWSER_LOADED} I keep these five out of the main curve.</p>
-<p><b>GPT-6 Astra is only partly measured:</b> 91% with the tool alone, and 100% → 92% on the 24 of 90 requests I ran with 20 tools before pausing to save budget. Codex also blocked these MCP calls after the model chose them (see {A("#check-your-own-agent", "below")}), so the choice is measured, but not what came after.</p>
+<p><b>Five tools measured my setup, not the agent.</b> “Take a screenshot of example.com” needs two steps, and in the larger setups the agent opened the page, got my canned reply, and stopped. Perfectly sensible; the flaw was in my design. {BROWSER_LOADED} I keep these five out of the main curve.</p>
+<p><b>GPT-6 Astra is only partly measured:</b> 91% with the tool alone, and 100% → 92% on the 24 of 90 requests I ran with 20 tools before my API bill politely suggested a pause. Codex also blocked these MCP calls after the model chose them (see {A("#check-your-own-agent", "below")}), so the choice is measured, but not what came after.</p>
 
 <h2>Result 3: Skills and tools together</h2>
 <p>Real setups have both. I built two: a smaller one with 100 skills and 437 tools, and a larger one with 400 skills and all 791 tools, including overlaps such as <code>xlsx</code> next to an Excel server. Then I sent the skill requests (the 20 targets plus five trending skills, 150 in total) and the tool requests.</p>
 {fig_("fig_mix", "Claude Code. “Single component”: the target installed alone. Tool requests: the 15 single-step targets. Whiskers: 95% CI.")}
-<p><b>The same pattern, only stronger:</b> compared with the component alone, skill requests lost {SK_LOSS} points and single-step tool requests {TOOL_LOSS}. Read the gap with care. A skill must be the exact one, while a tool may be an equivalent one; counting equivalent skills adds {EQ_GAIN} points, possibly a little more, since 5 skill misses here were never judged. And the tasks differ.</p>
-<p>When the agent skipped the skill, in {BUILTIN_SHARE} of those requests {BUILTIN_COUNT} it <b>only used built-in tools</b>, mostly <code>Glob</code> and <code>Grep</code>: it went looking in the empty folder for the files the request mentioned. Two examples from Sonnet in the larger setup:</p>
+<p><b>The same pattern, only stronger:</b> compared with the component alone, skill requests lost {SK_LOSS} points and single-step tool requests {TOOL_LOSS}. Read the gap with care: a skill must be the exact one, while a tool may be an equivalent one (counting equivalent skills adds about {EQ_GAIN} points), and the tasks differ.</p>
+<p>When the agent skipped the skill, in {BUILTIN_SHARE} of those requests {BUILTIN_COUNT} it <b>only used built-in tools</b>, mostly <code>Glob</code> and <code>Grep</code>: it went looking in the empty folder for the files the request mentioned. One example from Sonnet in the larger setup:</p>
 <ul>
 {R3_EXAMPLES}
 </ul>
 
 <h2>Why do skills fade while tools hold up?</h2>
-<p>Put both experiments on one scale and the difference is hard to miss: the skill rows slide left as the collection grows, and the tool rows stay close to zero.</p>
 {fig_("fig_forest", "Paired change from the target alone, in percentage points, with 95% CIs. Filled dots: skills, 120 requests per row. Hollow dots: single-step MCP tools, 90 per row (GPT-6 Astra at 20 tools: 24 requests).")}
 <p>The listing capture explains a large part of it. Three explanations fit what I saw, the first now measured, and each has research behind it:</p>
 <ol>
 <li><b>Skills lose their descriptions; tools can be searched.</b> A skill listing is like <b>a restaurant menu printed on one page</b>: the more dishes, the smaller the print, and past a point the descriptions get dropped, which is exactly what I captured. Claude Code’s MCP tools are also listed by name only, but that is more like asking the waiter: the model searches and gets the full definition back (it called <code>ToolSearch</code> in {TOOLSEARCH_SHARE} of the MCP runs). A skill that is only a name has no waiter. Research agrees. {A(L["longfunc"], "LongFuncEval")} saw function-calling accuracy fall by 7–85% as the tool catalog grew, and retrieving a few tools instead of listing them all raised selection from 13.6% to 43.1% in {A(L["ragmcp"], "RAG-MCP")} and from 49% to 74% in {A(L["advtool"], "an internal Anthropic evaluation")}.</li>
-<li><b>Tools match the words of a request; skills match its meaning.</b> A tool name is a verb the request nearly repeats (<code>create_issue</code>), while a skill describes a whole workflow in broad words its neighbours share. Without shared words, accuracy drops: in {A(L["nolima"], "NoLiMa")}, one of the stronger models fell from 99.3% to 69.7% at 32K tokens, and Chroma’s {A(L["rot"], "Context Rot")} found on-topic distractors hurt most. Among 80,000 skills, {A(L["skillrouter"], "SkillRouter")}’s retrievers routed 37–44 points worse from names and descriptions alone, which is all a harness lists, than with the skill body.</li>
+<li><b>Tools match the words of a request; skills match its meaning.</b> A tool name is a verb the request nearly repeats (<code>create_issue</code>), while a skill describes a whole workflow in broad words its neighbours share. Without shared words, accuracy drops: in {A(L["nolima"], "NoLiMa")}, one of the stronger models fell from 99.3% to 69.7% at 32K tokens, and Chroma’s {A(L["rot"], "Context Rot")} found on-topic distractors hurt most.</li>
 <li><b>An action needs a tool; a goal does not.</b> “Open an issue in acme/webapp” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can, so the model may decide it needs no help. {A(L["metatool"], "MetaTool")} found that most models struggle to decide whether they need a tool at all, and most of my skill misses had no skill rather than a wrong one.</li>
 </ol>
 <p>The first is measured; treat the other two as hypotheses. The cited studies use other tasks and models, and my two experiments differ in tasks and scoring. A toy calculation of the dilution idea is in <a href="#appendix-c">Appendix C</a>.</p>
@@ -362,20 +358,20 @@ body = f"""
 <h2>What you can do about it</h2>
 {tab_("What I observed, how sure I am, and what to do about it.", T_TODO)}
 <h3>[Trick #1] Check what is actually exposed</h3>
-<p>In Claude Code, <code>/context</code> shows the size of your skill listing and {A(L["cc_skills"], "<code>/doctor</code> tells you whether descriptions are being dropped")}. Codex prints a warning when it goes over its budget ({A(L["c19679"], "codex#19679")}). Blake Crosley wrote a good account of {A(L["crosley"], "the skills his agent could not see")}. And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. This is the first thing I would check.</p>
+<p>In Claude Code, <code>/context</code> shows the size of your skill listing and {A(L["cc_skills"], "<code>/doctor</code> tells you whether descriptions are being dropped")}. Codex prints a warning when it goes over its budget ({A(L["c19679"], "codex#19679")}). And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. This is the first thing I would check.</p>
 <h3>[Trick #2] Enable less, per project</h3>
 <p>This is the one thing I tested: with fewer skills installed, the designated one was picked more often (answer quality not measured). Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>.</p>
 <h3 id="trick-search">[Trick #3] Try other ways to discover and invoke (untested here)</h3>
 <ul>
 <li><b>Invoke required skills by name</b> (<code>/skill-name</code>) instead of hoping for a match.</li>
 <li><b>Give a skill a trigger nobody else has.</b> In my sample, skills with concrete nouns and file types held up.</li>
-<li><b>Raise the listing budget</b> ({A(L["cc_skills"], "<code>skillListingBudgetFraction</code> in Claude Code")}, {A(L["codex_skills"], "<code>skills.max_context_tokens</code> in Codex")}). You pay for it on every request.</li>
-<li><b>Use a router skill or a hook.</b> {A(L["spence"], "A hook that makes Claude evaluate skills before answering")} reached 84% activation in Scott Spence’s test, against 20% for a keyword hook; Ivan Seleznov ran {A(L["seleznov"], "650 activation trials")} on similar ideas.</li>
+<li><b>Use a router skill or a hook.</b> {A(L["spence"], "A hook that makes Claude evaluate skills before answering")} reached 84% activation in Scott Spence’s test, against 20% for a keyword hook.</li>
 <li><b>Search instead of listing.</b> Claude Code already defers MCP tools behind {A(L["toolsearch"], "tool search")}. In your own agent, use the Claude API’s tool search tool, or embed the descriptions and retrieve the closest few.</li>
 </ul>
 
 <h2>Check your own agent</h2>
-<p>Pick a skill you rely on, go to a real project folder where its files exist, and send a few requests the way you would really ask:</p>
+<p>The easy way is on its way: I am packaging this whole check as a skill you can run on your own setup (<span class="soon">coming soon</span>). Yes, a skill that checks whether your skills get picked. I see the irony too.</p>
+<p>Until then, the manual version: go to a real project folder and send a few requests the way you would really ask.</p>
 <pre><code># Claude Code: prints the skill or MCP tool it selected
 claude -p "Audit the SEO of my site." --output-format stream-json --verbose --max-turns 3 \\
   | jq -r 'select(.type=="assistant") | .message.content[]?
@@ -386,33 +382,27 @@ claude -p "Audit the SEO of my site." --output-format stream-json --verbose --ma
 # the read succeeded, and Codex's own skills under skills/.system are not matched)
 codex exec --json -s read-only "Audit the SEO of my site." \\
   | grep -o 'skills/[a-z0-9-]*/SKILL.md' | sort -u</code></pre>
-<p>Then repeat with only that skill enabled. A handful of requests won’t give you a reliable rate, but it will show whether the skill is ever picked. I would genuinely love to see your numbers.</p>
-<p>Four things I learned the hard way (the first two forced me to rerun part of this study):</p>
+<p>Then repeat with only that skill enabled. A handful of requests won’t give you a reliable rate, but it shows whether the skill is ever picked.</p>
+<p>Three things I learned the hard way (the first two forced me to rerun part of this study):</p>
 <ul>
 <li><b>In <code>-p</code> mode, Claude Code refuses MCP calls you have not allowed</b>, since nobody is there to approve them. The selection still prints, but what follows is a reaction to the refusal. Add <code>--allowedTools mcp__&lt;server&gt;</code>.</li>
 <li><b>Claude Code keeps a memory per folder.</b> A note saved in one test run is loaded in the next. Use a fresh folder for every run.</li>
-<li><b>Codex blocks MCP calls too.</b> With <code>approval_policy="never"</code>, the model can choose a tool on an unapproved server, and the call is then blocked. Approve the servers you test with <code>-c 'mcp_servers.&lt;name&gt;.default_tools_approval_mode="approve"'</code>.</li>
-<li><b>Codex ships 5 skills of its own.</b> To test a skill truly alone, add <code>-c skills.bundled.enabled=false</code>.</li>
+<li><b>Codex has both problems in its own flavour.</b> It blocks MCP calls on servers you have not approved (<code>-c 'mcp_servers.&lt;name&gt;.default_tools_approval_mode="approve"'</code>), and it ships 5 skills of its own (<code>-c skills.bundled.enabled=false</code> to test a skill truly alone).</li>
 </ul>
 
-<h2>What this cost</h2>
-{tab_("What the runs cost.", T_COST)}
-<p>The GPT-6 Astra figures are calculated from the token usage Codex reported, at {A(L["price"], "OpenAI’s list prices")}, and not reconciled against the invoice ({A(L["r_cost"], "per-batch breakdown")}). Running every remaining GPT-6 Astra cell would cost about $1,400 by my estimate, assuming Codex loads every tool definition; {A(L["contextbolt"], "another measured post")} reports that it defers MCP tools, so that may be too high.</p>
-
 <h2>Limitations of the experiment</h2>
+<p>This is one person’s experiment, not a benchmark, and I would rather list the weak spots myself than have you find them:</p>
 <ul>
 <li><b>Selection, not quality.</b> A run without the skill can still produce a fine answer.</li>
-<li><b>Minimal setup.</b> Empty folders, fake skill bodies, and 3–4 turns in Claude Code.</li>
 <li><b>Listing captured afterwards.</b> I captured what the model saw after the study, with the same versions and folders. For Claude Code it depends on a usage record that my own runs kept updating, so the exact listing of each run is unknown.</li>
 <li><b>Few samples.</b> One random draw of extra skills and six LLM-written requests per target.</li>
 <li><b>Configurations, not models.</b> Claude Code and Codex differ in model, prompts, budgets and permissions; Codex could search the web in these runs, and Claude Code could not.</li>
 <li><b>Thinner GPT-6 Astra data.</b> One run per request, and MCP only alone and, partly, with 20 tools. Codex does not report an MCP server that failed to start, so a tool miss could be a server that never connected.</li>
-<li><b>Things change.</b> Harness limits, commands and prices are as documented in November 2026.</li>
 </ul>
 <p>The {A(L["r_meth"], "full methodology")}, all data and all scripts are in {A(L["repo"], "the GitHub repo")}.</p>
 
 <h2>What’s next</h2>
-<p>Three takeaways: <b>installing a skill is not the same as having it available</b> when a request needs it; the decline starts early, already at 20 skills; and tools that the agent finds by search held up better than skills that sit in one long listing. What I would check next:</p>
+<p>What I would check next:</p>
 <ol>
 <li><b>Validation.</b> Put real files in the folders, give Claude 10 turns instead of 3, and fix Claude Code’s usage record so every run sees the same listing.</li>
 <li><b>Search for skills.</b> Does a <code>ToolSearch</code>-style step help skills the way it seems to help tools? Keep the visible listing constant, vary only the look-alikes, with search on and off.</li>
@@ -421,8 +411,8 @@ codex exec --json -s read-only "Audit the SEO of my site." \\
 <p>The full plan with costs is in {A(L["r_follow"], "the follow-up protocol")}. {A(L["repo"], "The repo")} is open, and reruns on newer versions, other models or other harnesses are very welcome. The skill for checking your own setup is coming soon.</p>
 
 <h2>Conclusion</h2>
-<p>I started with a simple question: if I install a thousand skills, does my agent get more capable? What changed my view is the gap between installing a capability and having it reliably picked when a request needs it. Before adding another big collection, I would check what the agent can actually see, and I would measure answer quality separately before deciding that more activation is always better.</p>
-<p>Thanks for reading! If you run the check on your own setup, tell me what you got.</p>
+<p>I started with a simple question: if I install a thousand skills, does my agent get more capable? Mostly, it gets a bigger closet. What changed my view is the gap between installing a capability and having it reliably picked when a request needs it. Before adding another big collection, I would check what the agent can actually see, and I would measure answer quality separately before deciding that more activation is always better.</p>
+<p>Thanks for reading! If you run the check on your own setup, tell me what you got. And if you spot a mistake, tell me too: I have already redone half of this study once, I can take it.</p>
 
 <details class="fold"><summary><h2 id="appendix-a">Appendix A: The 20 target skills</h2></summary>
 {tab_("The 20 target skills, where they come from, and one of their six requests.", SK_TABLE)}
@@ -449,6 +439,11 @@ codex exec --json -s read-only "Audit the SEO of my site." \\
 <p>Nakanishi’s {A(L["ssmax"], "Scalable-Softmax")} paper describes a related effect, attention weights flattening as inputs grow, and proposes a fix. That is background research, not evidence about my runs.</p>
 </details>
 
+<details class="fold"><summary><h2 id="appendix-d">Appendix D: What this cost</h2></summary>
+{tab_("What the runs cost.", T_COST)}
+<p>The GPT-6 Astra figures are calculated from the token usage Codex reported, at {A(L["price"], "OpenAI’s list prices")}, and not reconciled against the invoice ({A(L["r_cost"], "per-batch breakdown")}). Running every remaining GPT-6 Astra cell would cost about $1,400 by my estimate, assuming Codex loads every tool definition; {A(L["contextbolt"], "another measured post")} reports that it defers MCP tools, so that may be too high.</p>
+</details>
+
 <details class="fold"><summary><h2 id="references">References</h2></summary>
 <ol class="refs">
 <li>Code, data and methodology for this post: {A(L["repo"], "galinaalperovich/closet-full-of-skills")}</li>
@@ -462,7 +457,6 @@ codex exec --json -s read-only "Audit the SEO of my site." \\
 <li>Huang et al. {A(L["metatool"], "MetaTool Benchmark for Large Language Models: Deciding Whether to Use Tools and Which to Use")} (ICLR 2024)</li>
 <li>Kate et al. {A(L["longfunc"], "LongFuncEval: Measuring the effectiveness of long context models for function calling")} (2025)</li>
 <li>Liu et al. {A(L["wild"], "How Well Do Agentic Skills Work in the Wild: Benchmarking LLM Skill Usage in Realistic Settings")} (2026)</li>
-<li>Zheng et al. {A(L["skillrouter"], "SkillRouter: Skill Routing for LLM Agents at Scale")} (2026)</li>
 <li>Gan &amp; Sun. {A(L["ragmcp"], "RAG-MCP: Mitigating Prompt Bloat in LLM Tool Selection via Retrieval-Augmented Generation")} (2025)</li>
 <li>Anthropic: {A(L["toolsearch"], "Tool search tool")} · {A(L["advtool"], "Advanced tool use")}</li>
 <li>Reports about skills: {A(L["i81081"], "claude-code#81081")} · {A(L["i56710"], "#56710")} · {A(L["i64606"], "#64606")} · {A(L["i10768"], "#10768")} · {A(L["c19679"], "codex#19679")} · {A(L["r_cc"], "r/ClaudeCode")} · {A(L["r_hell"], "r/claudeskills")} · {A(L["fsck"], "Jesse Vincent")}</li>
