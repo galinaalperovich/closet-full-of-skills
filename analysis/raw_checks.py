@@ -1,6 +1,6 @@
-"""Checks that need the raw event logs, which exist for the second-round Claude Code E2/E3 runs.
+"""Checks that need the raw event logs, which exist for the second-round Claude Code E2/E3 runs and the Fable E2 runs.
 
-For every second-round run it reads mcp/raw/... and records:
+For every such run it reads mcp/raw/... and records:
   - whether each MCP call reached the stub server (result = stub text) or was refused or failed,
   - whether each Skill call returned without an error,
   - which built-in calls were refused by Claude Code's permission system,
@@ -48,9 +48,9 @@ def parse(path):
 
 
 rows = defaultdict(Counter); browser = defaultdict(Counter)
-for m in ("haiku", "sonnet"):
+for m, fn in (("haiku", "haiku_round2.jsonl"), ("sonnet", "sonnet_round2.jsonl"), ("fable", "fable.jsonl")):
     seen = set()
-    for line in open(os.path.join(MCP, f"{m}_round2.jsonl")):
+    for line in open(os.path.join(MCP, fn)):
         r = json.loads(line)
         key = (r["env"], r["target"], r["i"])
         if r.get("error") or key in seen or not r.get("raw"): continue   # first attempt without an infrastructure error

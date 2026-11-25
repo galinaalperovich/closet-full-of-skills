@@ -18,6 +18,8 @@ def load(repo):
     return out
 def write(base,name,d,w):
     p=os.path.join(base,".claude","skills",name); os.makedirs(p,exist_ok=True)
+    ag=os.path.join(base,".agents"); os.makedirs(ag,exist_ok=True)   # Codex reads skills from .agents/skills: link it to the same folder
+    if not os.path.lexists(os.path.join(ag,"skills")): os.symlink("../.claude/skills",os.path.join(ag,"skills"))
     fm={"name":name,"description":d}
     if w: fm["when_to_use"]=w
     open(os.path.join(p,"SKILL.md"),"w").write("---\n"+yaml.safe_dump(fm,allow_unicode=True,width=10**6,sort_keys=False)+"---\n\nThe instructions for this skill are omitted in this test. Reply with one short sentence.\n")

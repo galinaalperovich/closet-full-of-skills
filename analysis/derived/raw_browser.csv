@@ -1,4 +1,8 @@
 model,setup,runs,target_selected,target_definition_loaded,loaded_but_not_called,any_mcp_call
+fable,mcp_alone,30,30,30,0,30
+fable,mcp_crowd200,30,5,30,25,30
+fable,mcp_crowdall,30,0,30,30,30
+fable,mcp_pack20,30,24,30,6,29
 haiku,mcp_alone,30,19,30,11,19
 haiku,mcp_crowd200,30,8,30,22,26
 haiku,mcp_crowdall,30,10,30,20,30

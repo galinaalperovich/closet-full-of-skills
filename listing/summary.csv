@@ -3,6 +3,9 @@ claude,alone (20 folders),,,,20,20,,
 claude,pack20,37,37,14860,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
 claude,crowd200,237,100,29023,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
 claude,crowd1000,1037,19,29993,20,3,grill-me json-canvas tdd,all 20
+claude-fable,pack20,37,37,14860,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+claude-fable,crowd200,237,100,29023,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
+claude-fable,crowd1000,1037,19,29993,20,3,grill-me json-canvas tdd,all 20
 claude-fresh,pack20,35,35,13343,20,20,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer json-canvas mcp-builder obsidian-markdown pdf pptx security-and-hardening seo-audit tdd vercel-react-best-practices web-design-guidelines webapp-testing xlsx,all 20
 claude-fresh,crowd200,235,133,28799,20,8,animate caveman copywriting diagnosing-bugs docx frontend-design grill-me humanizer,all 20
 claude-fresh,crowd1000,1035,26,29965,20,0,,all 20

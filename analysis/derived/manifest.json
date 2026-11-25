@@ -1,5 +1,5 @@
 {
- "collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun)",
+ "collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun); 2026-11-25 (Claude Fable 5.2 and GPT-6 Sol, E1 and E2)",
  "seed": 20261120,
  "bootstrap_resamples": 2000,
  "files": [
@@ -16,6 +16,16 @@
   {
    "file": "gpt.jsonl",
    "sha256": "21619a31994c90e3f4c728dc24ed688e0628530c40309b0b837b1c6fa860cbf4",
+   "lines": 480
+  },
+  {
+   "file": "fable.jsonl",
+   "sha256": "75c13e1afa27eaa7360b74c2f4280a2abf05dd77f9dffa93012c827f55bdd99f",
+   "lines": 480
+  },
+  {
+   "file": "gpt_sol.jsonl",
+   "sha256": "d6320e38401078781fba6bc3eeeca3ea06dc2d9ad6ace101be44a404168f4c2f",
    "lines": 480
   },
   {
@@ -49,6 +59,16 @@
    "lines": 1020
   },
   {
+   "file": "mcp/fable.jsonl",
+   "sha256": "ba719b89a3e4eba6f03f434e80653c482874d0f574976ab00b7d6045dc0874ff",
+   "lines": 480
+  },
+  {
+   "file": "mcp/gpt_sol.jsonl",
+   "sha256": "07e4860e9e26f2048b8ae113247a8a882cb125cacb4f05a546c2885d52ee3417",
+   "lines": 480
+  },
+  {
    "file": "sonnet_e1_caveman_rerun.jsonl",
    "sha256": "56c0e143fb209e2a2494e9c0d9570c0ca1da23485171a3e61baa665454d48962",
    "lines": 18
@@ -75,18 +95,18 @@
   },
   {
    "file": "build.py",
-   "sha256": "6188b2ee508bcdb6fdb7c8ee0b89030e5ee80cb6b3527ea557cc94d0f5a69806",
-   "lines": 39
+   "sha256": "288f6ccc62c29f8e99c35eeb493af6597c645a1efab4fe53df01936264fef87c",
+   "lines": 41
   },
   {
    "file": "run.py",
-   "sha256": "53d9f443b2843a279f19693d2ff67d2b35af577fd2653c520fcd18943310ffc6",
+   "sha256": "3825e624e490c70c2ca1738aaaed04f1623850e78f3e6de35fbfdae74930f910",
    "lines": 71
   },
   {
    "file": "run_codex.py",
-   "sha256": "3d1bc29b77ae14afea23c46a7409715f151b329ec2f164b4cfe03853ff2d486b",
-   "lines": 38
+   "sha256": "b63374597646479f3119b1abdc248495cd657d17776da70dade5dafb478068c1",
+   "lines": 40
   },
   {
    "file": "mcp/build.py",
@@ -95,7 +115,7 @@
   },
   {
    "file": "mcp/run.py",
-   "sha256": "cd62f67829062adcd864db689d9764bc395d63a9fa7c63a325dc8c276f4059b8",
+   "sha256": "d9007a9eadfc5d456429980a0b7974888d79afc4cf2623bd122d955f25754dc9",
    "lines": 153
   },
   {
@@ -145,8 +165,8 @@
   },
   {
    "file": "analysis/analyze.py",
-   "sha256": "ef98cd9514737b7a60f229316bae771a944eea154e0075fbe290251253cde14f",
-   "lines": 518
+   "sha256": "cd3e5fa73727e36a714185fefde4cc5c27566c4d11dc8503cbf5b2a5d902a889",
+   "lines": 525
   }
  ]
 }

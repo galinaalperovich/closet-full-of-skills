@@ -7,7 +7,7 @@ with base_prompt, k (model requests per run) and alpha fitted from mcp_alone -> 
 Claude: list-price equivalent from Claude Code's total_cost_usd per run (billed $0 on the Claude plan)."""
 import csv, json, os
 H = os.path.dirname(os.path.abspath(__file__)); D = os.path.join(H, "derived")
-gu = {(r["exp"], r["setup"], r["access"]): r for r in csv.DictReader(open(os.path.join(D, "gpt_usage_per_run.csv")))}
+gu = {(r["exp"], r["setup"], r["access"]): r for r in csv.DictReader(open(os.path.join(D, "gpt_usage_per_run.csv"))) if r["model"] == "gpt"}
 cu = {(r["exp"], r["model"], r["setup"]): float(r["mean_cost_usd"]) for r in csv.DictReader(open(os.path.join(D, "claude_usage_per_run.csv")))}
 a, p = gu[("E2", "mcp_alone", "api_key")], gu[("E2", "mcp_pack20", "api_key")]
 base = float(a["mean_cache_write"]); k = float(p["mean_input"]) / float(p["mean_cache_write"]); out = float(p["mean_output"])

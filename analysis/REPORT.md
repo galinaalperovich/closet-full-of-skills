@@ -10,6 +10,10 @@ E1 uses the isolated rerun for Sonnet / caveman / alone (18 runs) in place of th
 
 | Exp | Model | Setup | Access | Attempts | Retained | Infra failures | Turn-limited | ...without target | Exposure (init counts) |
 |---|---|---|---|---|---|---|---|---|---|
+| E1 | fable | alone | subscription | 120 | 120 | 0 | 0 | 0 | skills=24,tools=None |
+| E1 | fable | crowd1000 | subscription | 120 | 120 | 0 | 6 | 6 | skills=1043,tools=None |
+| E1 | fable | crowd200 | subscription | 120 | 120 | 0 | 0 | 0 | skills=243,tools=None |
+| E1 | fable | pack20 | subscription | 120 | 120 | 0 | 0 | 0 | skills=43,tools=None |
 | E1 | haiku | alone | subscription | 120 | 120 | 0 | 13 | 5 | skills=24,tools=None |
 | E1 | haiku | crowd1000 | subscription | 120 | 120 | 0 | 60 | 56 | skills=1043,tools=None |
 | E1 | haiku | crowd200 | subscription | 120 | 120 | 0 | 53 | 47 | skills=243,tools=None |
@@ -26,6 +30,14 @@ E1 uses the isolated rerun for Sonnet / caveman / alone (18 runs) in place of th
 | E1 | gpt | crowd200 | subscription (excluded batch) | 120 | 0 | 120 | 0 | 0 | not recorded |
 | E1 | gpt | pack20 | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
 | E1 | gpt | pack20 | subscription (excluded batch) | 120 | 0 | 120 | 0 | 0 | not recorded |
+| E1 | gpt_sol | alone | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
+| E1 | gpt_sol | crowd1000 | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
+| E1 | gpt_sol | crowd200 | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
+| E1 | gpt_sol | pack20 | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
+| E2 | fable | mcp_alone | subscription | 120 | 120 | 0 | 4 | 0 | skills=23,tools=28 |
+| E2 | fable | mcp_crowd200 | subscription | 120 | 120 | 0 | 9 | 1 | skills=23,tools=247 |
+| E2 | fable | mcp_crowdall | subscription | 120 | 120 | 0 | 15 | 5 | skills=23,tools=818 |
+| E2 | fable | mcp_pack20 | subscription | 120 | 120 | 0 | 7 | 0 | skills=23,tools=47 |
 | E2 | haiku | mcp_alone | subscription | 120 | 120 | 0 | 32 | 5 | skills=23,tools=28 |
 | E2 | haiku | mcp_crowd200 | subscription | 120 | 120 | 0 | 45 | 12 | skills=23,tools=247 |
 | E2 | haiku | mcp_crowdall | subscription | 120 | 120 | 0 | 59 | 16 | skills=23,tools=818 |
@@ -37,6 +49,10 @@ E1 uses the isolated rerun for Sonnet / caveman / alone (18 runs) in place of th
 | E2 | gpt | mcp_alone | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
 | E2 | gpt | mcp_pack20 | api_key | 50 | 50 | 0 | 0 | 0 | not recorded |
 | E2 | gpt | mcp_pack20 | subscription | 5 | 4 | 1 | 0 | 0 | not recorded |
+| E2 | gpt_sol | mcp_alone | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
+| E2 | gpt_sol | mcp_crowd200 | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
+| E2 | gpt_sol | mcp_crowdall | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
+| E2 | gpt_sol | mcp_pack20 | api_key | 120 | 120 | 0 | 0 | 0 | not recorded |
 | E3 | haiku | mixed_larger | subscription | 270 | 270 | 0 | 113 | 66 | skills=423,tools=818 |
 | E3 | haiku | mixed_smaller | subscription | 270 | 270 | 0 | 91 | 49 | skills=123,tools=464 |
 | E3 | sonnet | mixed_larger | subscription | 270 | 270 | 0 | 20 | 18 | skills=423,tools=818 |
@@ -44,14 +60,18 @@ E1 uses the isolated rerun for Sonnet / caveman / alone (18 runs) in place of th
 | E3b | haiku | sk_alone | subscription | 30 | 30 | 0 | 0 | 0 | skills=24,tools=27 |
 | E3b | sonnet | sk_alone | subscription | 30 | 30 | 0 | 0 | 0 | skills=24,tools=27 |
 
-Raw event logs (retained runs, main batches): 2,058 of 4,674 have one. The `raw_log_coverage` column in `audit.csv` gives the count per setup.
+Raw event logs (retained runs, main batches): 3,018 of 6,594 have one. The `raw_log_coverage` column in `audit.csv` gives the count per setup.
 
 | Experiment | Model | Retained | With raw log |
 |---|---|---|---|
+| E1 | fable | 480 | 480 |
 | E1 | gpt | 480 | 0 |
+| E1 | gpt_sol | 480 | 0 |
 | E1 | haiku | 480 | 0 |
 | E1 | sonnet | 1440 | 18 |
+| E2 | fable | 480 | 480 |
 | E2 | gpt | 174 | 0 |
+| E2 | gpt_sol | 480 | 0 |
 | E2 | haiku | 480 | 480 |
 | E2 | sonnet | 480 | 480 |
 | E3 | haiku | 540 | 540 |
@@ -61,7 +81,7 @@ Raw event logs (retained runs, main batches): 2,058 of 4,674 have one. The `raw_
 
 Runs without a raw log have only their result record: the selection fields were extracted when the run finished, and the event stream was not kept (methodology §7.5).
 
-Alternative ratings (`alt_judgments.json`) cover the alternatives selected in the first collection round. In the second round, 13 misses selected only alternatives that were never rated (15 distinct request–alternative pairs): E2 haiku mcp_crowd200 1, E2 sonnet mcp_crowd200 1, E2 sonnet mcp_crowdall 1, E2 sonnet mcp_pack20 3, E3 haiku mixed_larger 4, E3 sonnet mixed_larger 1, E3 sonnet mixed_smaller 2. They are counted with the unassessable alternatives, never as equivalent, so rates that add equivalent alternatives are lower bounds for these setups.
+Alternative ratings (`alt_judgments.json`) cover the alternatives selected in the first collection round. In the later rounds, 50 misses selected only alternatives that were never rated (60 distinct request–alternative pairs): E1 fable crowd1000 7, E1 gpt_sol crowd1000 8, E2 fable mcp_crowd200 5, E2 gpt_sol mcp_crowd200 8, E2 gpt_sol mcp_crowdall 9, E2 haiku mcp_crowd200 1, E2 sonnet mcp_crowd200 1, E2 sonnet mcp_crowdall 1, E2 sonnet mcp_pack20 3, E3 haiku mixed_larger 4, E3 sonnet mixed_larger 1, E3 sonnet mixed_smaller 2. They are counted with the unassessable alternatives, never as equivalent, so rates that add equivalent alternatives are lower bounds for these setups.
 
 ## E1: designated-target skill selection
 
@@ -75,10 +95,18 @@ Alternative ratings (`alt_judgments.json`) cover the alternatives selected in th
 | sonnet | pack20 | 272/360 | 75.6% | 68.0–82.5 | 62.8–87.5 | 272 | 3 (0) | 272 (75.6%) |
 | sonnet | crowd200 | 202/360 | 56.1% | 47.8–64.4 | 41.4–70.6 | 202 | 55 (0) | 208 (57.8%) |
 | sonnet | crowd1000 | 121/360 | 33.6% | 26.1–41.7 | 18.3–49.2 | 121 | 71 (0) | 129 (35.8%) |
+| fable | alone | 119/120 | 99.2% | 97.5–100.0 | 96.7–100.0 | 119 | 0 (0) | 119 (99.2%) |
+| fable | pack20 | 119/120 | 99.2% | 97.5–100.0 | 95.8–100.0 | 119 | 0 (0) | 119 (99.2%) |
+| fable | crowd200 | 118/120 | 98.3% | 95.8–100.0 | 95.0–100.0 | 118 | 0 (0) | 119 (99.2%) |
+| fable | crowd1000 | 87/120 | 72.5% | 64.2–80.0 | 58.3–85.8 | 87 | 6 (0) | 92 (76.7%) |
 | gpt | alone | 120/120 | 100.0% | 100.0–100.0 | 100.0–100.0 | 120 | 0 (0) | 120 (100.0%) |
 | gpt | pack20 | 119/120 | 99.2% | 97.5–100.0 | 96.7–100.0 | 113 | 0 (0) | 119 (99.2%) |
 | gpt | crowd200 | 100/120 | 83.3% | 76.7–89.2 | 70.8–93.3 | 99 | 0 (0) | 106 (88.3%) |
 | gpt | crowd1000 | 12/120 | 10.0% | 5.0–15.8 | 0.8–21.7 | 12 | 0 (0) | 24 (20.0%) |
+| gpt_sol | alone | 120/120 | 100.0% | 100.0–100.0 | 100.0–100.0 | 120 | 0 (0) | 120 (100.0%) |
+| gpt_sol | pack20 | 120/120 | 100.0% | 100.0–100.0 | 100.0–100.0 | 115 | 0 (0) | 120 (100.0%) |
+| gpt_sol | crowd200 | 99/120 | 82.5% | 75.8–89.2 | 70.0–93.3 | 95 | 0 (0) | 104 (86.7%) |
+| gpt_sol | crowd1000 | 14/120 | 11.7% | 5.8–18.3 | 2.5–23.3 | 12 | 0 (0) | 23 (19.2%) |
 
 Miss breakdown:
 
@@ -92,10 +120,18 @@ Miss breakdown:
 | sonnet | pack20 | 0 | 0 | 0 | 0 | 85 | 3 |
 | sonnet | crowd200 | 6 | 0 | 0 | 0 | 97 | 55 |
 | sonnet | crowd1000 | 8 | 0 | 0 | 1 | 160 | 70 |
+| fable | alone | 0 | 0 | 0 | 0 | 1 | 0 |
+| fable | pack20 | 0 | 0 | 0 | 0 | 1 | 0 |
+| fable | crowd200 | 1 | 0 | 0 | 0 | 1 | 0 |
+| fable | crowd1000 | 5 | 1 | 0 | 9 | 14 | 4 |
 | gpt | alone | 0 | 0 | 0 | 0 | 0 | 0 |
 | gpt | pack20 | 0 | 0 | 0 | 0 | 1 | 0 |
 | gpt | crowd200 | 6 | 2 | 0 | 0 | 12 | 0 |
 | gpt | crowd1000 | 12 | 11 | 6 | 0 | 79 | 0 |
+| gpt_sol | alone | 0 | 0 | 0 | 0 | 0 | 0 |
+| gpt_sol | pack20 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gpt_sol | crowd200 | 5 | 2 | 0 | 0 | 14 | 0 |
+| gpt_sol | crowd1000 | 9 | 8 | 4 | 8 | 77 | 0 |
 
 Paired changes (percentage points; same requests in both conditions):
 
@@ -109,12 +145,22 @@ Paired changes (percentage points; same requests in both conditions):
 | sonnet | pack20 → crowd200 | -19.4 | -26.1 to -13.3 | -28.9 to -11.4 | 35 / 2 |
 | sonnet | crowd200 → crowd1000 | -22.5 | -30.3 to -15.0 | -35.8 to -10.0 | 40 / 6 |
 | sonnet | alone → crowd1000 | -60.6 | -68.6 to -52.5 | -76.4 to -44.7 | 82 / 0 |
+| fable | alone → pack20 | +0.0 | -2.5 to +2.5 | -3.3 to +3.3 | 1 / 1 |
+| fable | pack20 → crowd200 | -0.8 | -2.5 to +0.0 | -3.3 to +0.0 | 1 / 0 |
+| fable | crowd200 → crowd1000 | -25.8 | -34.2 to -18.3 | -40.8 to -12.5 | 31 / 0 |
+| fable | alone → crowd1000 | -26.7 | -35.0 to -19.1 | -41.7 to -12.5 | 33 / 1 |
 | gpt | alone → pack20 | -0.8 | -2.5 to +0.0 | -3.3 to +0.0 | 1 / 0 |
 | gpt | pack20 → crowd200 | -15.8 | -22.5 to -10.0 | -28.3 to -5.8 | 19 / 0 |
 | gpt | crowd200 → crowd1000 | -73.3 | -80.8 to -65.0 | -87.5 to -56.7 | 88 / 0 |
 | gpt | alone → crowd1000 | -90.0 | -95.0 to -84.2 | -99.2 to -78.3 | 108 / 0 |
+| gpt_sol | alone → pack20 | +0.0 | +0.0 to +0.0 | +0.0 to +0.0 | 0 / 0 |
+| gpt_sol | pack20 → crowd200 | -17.5 | -24.2 to -10.8 | -30.0 to -6.7 | 21 / 0 |
+| gpt_sol | crowd200 → crowd1000 | -70.8 | -79.2 to -61.7 | -86.7 to -52.5 | 86 / 1 |
+| gpt_sol | alone → crowd1000 | -88.3 | -94.2 to -81.7 | -97.5 to -76.7 | 106 / 0 |
 
-GPT `alone` selected the target in 120/120 runs. Resampling cannot produce a failure from all-success data, so its bootstrap interval is degenerate; the Wilson interval (96.9–100%) is the one to quote.
+GPT `alone` selected the target in 120/120 runs, and so did GPT-6 Sol in `alone` and `pack20`. Resampling cannot produce a failure from all-success data, so those bootstrap intervals are degenerate; the Wilson interval (96.9–100%) is the one to quote.
+
+Haiku and Sonnet ran each request three times per setup (360 runs); Fable, GPT and GPT-6 Sol ran it once (120 runs). Fable ran every request in a fresh copy of its folder.
 
 ## E2: MCP tools only
 
@@ -128,8 +174,16 @@ GPT `alone` selected the target in 120/120 runs. Resampling cannot produce a fai
 | sonnet | mcp_pack20 | 74/120 | 61.7% | 52.5–70.0 | 68/90 (75.6%) | 6 / 6 of 30 | 61.7% | 7 (7) | 102 |
 | sonnet | mcp_crowd200 | 71/120 | 59.2% | 50.8–67.5 | 70/90 (77.8%) | 1 / 27 of 30 | 80.8% | 8 (8) | 94 |
 | sonnet | mcp_crowdall | 70/120 | 58.3% | 49.2–66.7 | 69/90 (76.7%) | 1 / 30 of 30 | 82.5% | 2 (0) | 75 |
+| fable | mcp_alone | 110/120 | 91.7% | 86.7–95.8 | 80/90 (88.9%) | 30 / 30 of 30 | 91.7% | 4 (0) | 111 |
+| fable | mcp_pack20 | 100/120 | 83.3% | 75.8–89.2 | 76/90 (84.4%) | 24 / 29 of 30 | 87.5% | 7 (0) | 108 |
+| fable | mcp_crowd200 | 79/120 | 65.8% | 56.7–74.2 | 74/90 (82.2%) | 5 / 30 of 30 | 86.7% | 9 (1) | 107 |
+| fable | mcp_crowdall | 74/120 | 61.7% | 52.5–70.0 | 74/90 (82.2%) | 0 / 30 of 30 | 86.7% | 15 (5) | 106 |
 | gpt | mcp_alone | 104/120 | 86.7% | 80.0–92.5 | 82/90 (91.1%) | 22 / 22 of 30 | 86.7% | 0 (0) | 0 |
 | gpt | mcp_pack20 | 33/54 | 61.1% | 48.1–74.1 | 22/24 (91.7%) | 11 / 18 of 30 | 74.1% | 0 (0) | 0 |
+| gpt_sol | mcp_alone | 100/120 | 83.3% | 76.7–90.0 | 70/90 (77.8%) | 30 / 30 of 30 | 83.3% | 0 (0) | 0 |
+| gpt_sol | mcp_pack20 | 71/120 | 59.2% | 50.0–67.5 | 45/90 (50.0%) | 26 / 29 of 30 | 61.7% | 0 (0) | 0 |
+| gpt_sol | mcp_crowd200 | 41/120 | 34.2% | 25.8–43.3 | 36/90 (40.0%) | 5 / 30 of 30 | 55.0% | 0 (0) | 0 |
+| gpt_sol | mcp_crowdall | 31/120 | 25.8% | 18.3–34.2 | 29/90 (32.2%) | 2 / 30 of 30 | 49.2% | 0 (0) | 0 |
 
 Paired changes:
 
@@ -151,8 +205,24 @@ Paired changes:
 | sonnet | mcp_crowd200 → mcp_crowdall | nonbrowser15 | -1.1 | -6.7 to +4.4 | -8.9 to +6.7 |
 | sonnet | mcp_alone → mcp_crowdall | all20 | -20.0 | -27.5 to -12.5 | -34.2 to -7.5 |
 | sonnet | mcp_alone → mcp_crowdall | nonbrowser15 | -11.1 | -17.8 to -4.4 | -24.4 to -1.1 |
+| fable | mcp_alone → mcp_pack20 | all20 | -8.3 | -13.3 to -4.2 | -18.3 to -0.8 |
+| fable | mcp_alone → mcp_pack20 | nonbrowser15 | -4.4 | -8.9 to -1.1 | -10.0 to +0.0 |
+| fable | mcp_pack20 → mcp_crowd200 | all20 | -17.5 | -25.0 to -10.8 | -32.5 to -4.2 |
+| fable | mcp_pack20 → mcp_crowd200 | nonbrowser15 | -2.2 | -5.6 to +0.0 | -6.7 to +0.0 |
+| fable | mcp_crowd200 → mcp_crowdall | all20 | -4.2 | -9.2 to +0.0 | -11.7 to +2.5 |
+| fable | mcp_crowd200 → mcp_crowdall | nonbrowser15 | +0.0 | -4.4 to +4.4 | -5.6 to +6.7 |
+| fable | mcp_alone → mcp_crowdall | all20 | -30.0 | -38.3 to -21.7 | -49.2 to -11.7 |
+| fable | mcp_alone → mcp_crowdall | nonbrowser15 | -6.7 | -13.3 to -1.1 | -15.6 to +2.2 |
 | gpt | mcp_alone → mcp_pack20 | all20 | -24.1 | -35.2 to -14.8 | -48.1 to -5.6 |
 | gpt | mcp_alone → mcp_pack20 | nonbrowser15 | -8.3 | -20.8 to +0.0 | -25.0 to +0.0 |
+| gpt_sol | mcp_alone → mcp_pack20 | all20 | -24.2 | -32.5 to -16.7 | -39.2 to -10.0 |
+| gpt_sol | mcp_alone → mcp_pack20 | nonbrowser15 | -27.8 | -36.7 to -17.8 | -45.6 to -10.0 |
+| gpt_sol | mcp_pack20 → mcp_crowd200 | all20 | -25.0 | -34.2 to -15.8 | -42.5 to -8.3 |
+| gpt_sol | mcp_pack20 → mcp_crowd200 | nonbrowser15 | -10.0 | -20.0 to -2.2 | -25.6 to +3.3 |
+| gpt_sol | mcp_crowd200 → mcp_crowdall | all20 | -8.3 | -15.0 to -1.7 | -18.3 to +0.0 |
+| gpt_sol | mcp_crowd200 → mcp_crowdall | nonbrowser15 | -7.8 | -15.6 to +0.0 | -18.9 to +2.2 |
+| gpt_sol | mcp_alone → mcp_crowdall | all20 | -57.5 | -65.8 to -48.3 | -74.2 to -40.0 |
+| gpt_sol | mcp_alone → mcp_crowdall | nonbrowser15 | -45.6 | -55.6 to -35.6 | -62.2 to -26.6 |
 
 Miss breakdown (E2): equivalent / preliminary step / related / inappropriate / built-in only / none
 
@@ -164,8 +234,16 @@ Miss breakdown (E2): equivalent / preliminary step / related / inappropriate / b
 - sonnet mcp_pack20: 1 / 0 / 0 / 0 / 10 / 32
 - sonnet mcp_crowd200: 0 / 25 / 2 / 0 / 10 / 11
 - sonnet mcp_crowdall: 0 / 30 / 0 / 0 / 12 / 7
+- fable mcp_alone: 0 / 0 / 0 / 0 / 4 / 6
+- fable mcp_pack20: 1 / 5 / 1 / 0 / 4 / 9
+- fable mcp_crowd200: 0 / 22 / 1 / 0 / 3 / 10
+- fable mcp_crowdall: 0 / 32 / 0 / 0 / 6 / 8
 - gpt mcp_alone: 0 / 0 / 0 / 0 / 15 / 1
 - gpt mcp_pack20: 0 / 6 / 0 / 2 / 13 / 0
+- gpt_sol mcp_alone: 0 / 0 / 0 / 0 / 17 / 3
+- gpt_sol mcp_pack20: 0 / 3 / 0 / 1 / 36 / 9
+- gpt_sol mcp_crowd200: 0 / 26 / 0 / 0 / 37 / 8
+- gpt_sol mcp_crowdall: 0 / 30 / 1 / 0 / 38 / 11
 
 ## E3 constructed mixed scenarios and E3b
 
@@ -224,4 +302,4 @@ Built-in actions in mixed-scenario skill misses: builtin:Glob 300, builtin:Grep 
 
 ## Cost
 
-Billed per token (API key, GPT): $171.73. List-price equivalent of everything, including subscription runs: $371.36. Details: `cost_by_batch.csv`.
+Billed per token (API key, GPT): $241.55. List-price equivalent of everything, including subscription runs: $652.99. Details: `cost_by_batch.csv`.

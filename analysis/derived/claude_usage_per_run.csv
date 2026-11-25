@@ -7,6 +7,10 @@ E1,sonnet,alone,360,64952.9028,0.0332
 E1,sonnet,crowd1000,360,102188.725,0.088
 E1,sonnet,crowd200,360,90955.3361,0.0733
 E1,sonnet,pack20,360,71493.1694,0.0444
+E1,fable,alone,120,69102.9583,0.1227
+E1,fable,crowd1000,120,92458.275,0.3047
+E1,fable,crowd200,120,85350.6,0.2476
+E1,fable,pack20,120,74153.5667,0.1561
 E2,haiku,mcp_alone,120,118931.4583,0.0038
 E2,haiku,mcp_crowd200,120,130593.1833,0.0046
 E2,haiku,mcp_crowdall,120,172194.1167,0.0069
@@ -15,6 +19,10 @@ E2,sonnet,mcp_alone,120,97821.625,0.0472
 E2,sonnet,mcp_crowd200,120,106073.6833,0.0621
 E2,sonnet,mcp_crowdall,120,126991.05,0.1033
 E2,sonnet,mcp_pack20,120,103531.0667,0.0524
+E2,fable,mcp_alone,120,106488.3417,0.1598
+E2,fable,mcp_crowd200,120,119129.7833,0.2191
+E2,fable,mcp_crowdall,120,151461.6333,0.3815
+E2,fable,mcp_pack20,120,111140.85,0.1737
 E3b,haiku,sk_alone,30,81242.2333,0.0026
 E3b,sonnet,sk_alone,30,72153.6333,0.0361
 E3,haiku,mixed_larger,270,189679.0481,0.0092

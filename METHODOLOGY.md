@@ -26,6 +26,8 @@ All paths are relative to the repository root.
 | 3 | Two constructed mixed scenarios, skills and MCP servers together (`mixed_smaller`, `mixed_larger`) | Done: Haiku, Sonnet (round 2). GPT not run | 1,080 |
 | 3b | Five skills from GitHub-trending repositories, installed alone | Done: Haiku, Sonnet. GPT not run | 60 |
 
+Two further configurations, Claude Fable 5.2 and GPT-6 Sol, ran Experiments 1 and 2 later (960 runs each). They are described in §14, and the sections before it describe the original three configurations unless they say otherwise.
+
 A **run** is one request sent once to one model–harness configuration in one setup. A proposed follow-up, kept separate from these results, is in `FOLLOWUP_PROTOCOL.md`.
 
 ### 1.1 Data collection: two rounds
@@ -529,3 +531,88 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 **Mechanisms are only partly measured.** The captured listings (§10) show that Codex at 1,020 skills listed only 3 of the 20 targets, and those three account for 11 of its 12 hits there. They also show that Claude Code at ~220 and 1,020 skills listed most skills without a description. At 20 skills both harnesses listed every description, so the decline from `alone` to `pack20` is not explained by the listing. The listings were captured after the runs, and for Claude Code they depend on a usage record that the runs themselves changed, so visibility in each run is not known. The design does not isolate the effect of a skill's distinctiveness either: several distinctive targets kept higher rates in this sample.
 
 **Mitigations are untested.** Mitigations discussed elsewhere (sharper descriptions, router skills, hooks, retrieval, larger budgets) are hypotheses for future evaluation. Installing fewer skills is the manipulation that was tested, but its effect on task quality was not measured.
+
+---
+
+## 14. Two further configurations: Claude Fable 5.2 and GPT-6 Sol
+
+Collected on 25 November 2026 with the same harness versions (Claude Code 2.1.328, Codex CLI 0.160.0), the same requests and the same setups. The purpose is to compare models inside one harness: Fable 5.2 next to Haiku and Sonnet in Claude Code, and GPT-6 Sol next to GPT-6 Astra in Codex.
+
+### 14.1 What was run
+
+| | Claude Fable 5.2 | GPT-6 Sol |
+|---|---|---|
+| Harness and model | Claude Code, `--model fable` (the captured request names `claude-fable-5-2`) | Codex CLI, `-c model="gpt-6-sol"` (`CODEX_MODEL`), reasoning effort `medium` |
+| Access | Experimenter's Claude subscription | API key in a scratch `CODEX_HOME` |
+| E1 | 480 runs: 4 setups × 120 requests, one run per request, each in a fresh copy of its folder (`ISOLATE=1`), 3-turn limit | 480 runs: 4 setups × 120 requests, one run per request, the GPT-6 Astra command |
+| E2 | 480 runs, run like round 2: stub servers allowed (`ALLOW_MCP=1`), a fresh folder per run, 4-turn limit | 480 runs with the GPT-6 Astra command: `approval_policy="never"`, stub servers not pre-approved |
+| E3, E3b | Not run | Not run |
+| Result files | `fable.jsonl`, `mcp/fable.jsonl` | `gpt_sol.jsonl`, `mcp/gpt_sol.jsonl` |
+| Raw logs | `raw_e1/claude_fable/`, `mcp/raw/claude_fable/` (local paths removed) | Kept but not published (below) |
+
+No run had an infrastructure error, so every run is retained.
+
+**Test folders.** The original folders had been in a temporary location and were gone, so they were rebuilt with `build.py` and `mcp/build.py` from the pinned sources, this time inside the repository folder. As a check, the skill listings were captured again from the rebuilt folders (§10 method, no model called): the Claude Code listings, and every per-target row of `listing/targets.csv`, came out identical to the published ones. For Codex the listing at 1,020 skills had 329 entries where the original capture had 321, with the same 3 of the 20 targets listed; the number of entries that fit appears to depend on the length of the folder path.
+
+**Differences from the earlier runs, other than the model.**
+- Fable's E1 runs each had a fresh folder; Haiku's and Sonnet's E1 runs shared one folder per setup (apart from the 18 rerun records).
+- Claude Code's global skill-usage record was in the state the earlier runs and captures had left it, and it kept changing during Fable's runs (§10).
+- The test folders were inside a git repository. Claude Code runs had `Bash` disallowed. Codex could run read-only shell commands, so GPT-6 Sol could, and did, answer the `git.git_log` requests with `git log` in the shell (§14.4).
+- The alternatives these two configurations selected were not rated (§7.4); they are counted with the unassessable alternatives, never as equivalent.
+
+**GPT-6 Sol raw logs.** They are kept but not published: the model's shell commands (`ls /Applications`, `ps aux`, `gh auth status`, `git show`) printed details of the experimenter's machine and account. The `raw` field of those records therefore names files that are not in the repository.
+
+### 14.2 Experiment 1: skills
+
+| Model | Setup | Selected | Rate | 95% (request-cluster; Wilson where all succeeded) | Turn-limited | Alternatives: equivalent / other rated / not rated | No skill |
+|---|---|---|---|---|---|---|---|
+| Fable 5.2 | `alone` | 119/120 | 99.2% | 97.5–100.0 | 0 | 0 / 0 / 0 | 1 |
+| Fable 5.2 | `pack20` | 119/120 | 99.2% | 97.5–100.0 | 0 | 0 / 0 / 0 | 1 |
+| Fable 5.2 | `crowd200` | 118/120 | 98.3% | 95.8–100.0 | 0 | 1 / 0 / 0 | 1 |
+| Fable 5.2 | `crowd1000` | 87/120 | 72.5% | 64.2–80.0 | 6 | 5 / 1 / 9 | 18 |
+| GPT-6 Sol | `alone` | 120/120 | 100.0% | 96.9–100.0 | 0 | 0 / 0 / 0 | 0 |
+| GPT-6 Sol | `pack20` | 120/120 | 100.0% | 96.9–100.0 | 0 | 0 / 0 / 0 | 0 |
+| GPT-6 Sol | `crowd200` | 99/120 | 82.5% | 75.8–89.2 | 0 | 5 / 2 / 0 | 14 |
+| GPT-6 Sol | `crowd1000` | 14/120 | 11.7% | 5.8–18.3 | 0 | 9 / 12 / 8 | 77 |
+
+Paired changes, in percentage points with request-cluster 95% intervals:
+
+| Model | alone → pack20 | pack20 → crowd200 | crowd200 → crowd1000 | alone → crowd1000 |
+|---|---|---|---|---|
+| Fable 5.2 | +0.0 (-2.5 to +2.5) | -0.8 (-2.5 to +0.0) | -25.8 (-34.2 to -18.3) | -26.7 (-35.0 to -19.1) |
+| GPT-6 Sol | +0.0 (+0.0 to +0.0) | -17.5 (-24.2 to -10.8) | -70.8 (-79.2 to -61.7) | -88.3 (-94.2 to -81.7) |
+
+- **Fable** showed no measurable change up to ~220 skills and a drop at 1,020. A capture of its listing after the runs (`claude-fable` in `listing/summary.csv`) is identical to Haiku's: at 1,020 skills, 19 of 1,037 entries had a description, 3 of them targets. Fable therefore selected most targets from bare names, at 72.5% against 33.6% for Sonnet and 15.8% for Haiku. As in §10, the listing each run received is not known exactly.
+- **GPT-6 Sol** is within 2 percentage points of GPT-6 Astra in every setup (§9.1). At `crowd1000`, 11 of its 14 hits were on the three targets Codex listed (§10).
+
+### 14.3 Experiment 2: MCP tools
+
+| Model | Setup | Strict, all 20 | Strict, 15 single-step | 95% (single-step) | Capable server | Miss: preliminary step | Miss: built-in only | Miss: nothing | ToolSearch used | Turn-limited |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Fable 5.2 | `mcp_alone` | 110/120 (91.7%) | 80/90 (88.9%) | 82.2–94.4 | 91.7% | 0 | 4 | 6 | 111 | 4 |
+| Fable 5.2 | `mcp_pack20` | 100/120 (83.3%) | 76/90 (84.4%) | 76.7–91.1 | 87.5% | 5 | 4 | 9 | 108 | 7 |
+| Fable 5.2 | `mcp_crowd200` | 79/120 (65.8%) | 74/90 (82.2%) | 74.4–90.0 | 86.7% | 22 | 3 | 10 | 107 | 9 |
+| Fable 5.2 | `mcp_crowdall` | 74/120 (61.7%) | 74/90 (82.2%) | 73.3–90.0 | 86.7% | 32 | 6 | 8 | 106 | 15 |
+| GPT-6 Sol | `mcp_alone` | 100/120 (83.3%) | 70/90 (77.8%) | 68.9–86.7 | 83.3% | 0 | 17 | 3 | 0 | 0 |
+| GPT-6 Sol | `mcp_pack20` | 71/120 (59.2%) | 45/90 (50.0%) | 40.0–60.0 | 61.7% | 3 | 36 | 9 | 0 | 0 |
+| GPT-6 Sol | `mcp_crowd200` | 41/120 (34.2%) | 36/90 (40.0%) | 30.0–50.0 | 55.0% | 26 | 37 | 8 | 0 | 0 |
+| GPT-6 Sol | `mcp_crowdall` | 31/120 (25.8%) | 29/90 (32.2%) | 23.3–42.2 | 49.2% | 30 | 38 | 11 | 0 | 0 |
+
+Paired change for the 15 single-step targets, `mcp_alone` → `mcp_crowdall`: Fable -6.7 (-13.3 to -1.1); GPT-6 Sol -45.6 (-55.6 to -35.6). `mcp_crowd200` → `mcp_crowdall`: Fable +0.0 (-4.4 to +4.4); GPT-6 Sol -7.8 (-15.6 to +0.0).
+
+### 14.4 Reading the GPT-6 Sol MCP result
+
+GPT-6 Sol's strict rate fell with every step. Three properties of the Codex setup, none of them present in the Claude Code round 2 runs, limit what that shows:
+
+1. **Every MCP call was refused.** As for GPT-6 Astra (§5.5, §13), the stub servers were not pre-approved and `approval_policy` was `never`, so each call returned an approval error. A run that began with a preparatory call (for example listing issues before creating one, or opening a page before auditing it) could not go on to the designated tool. The “preliminary step” column counts misses whose only alternative was rated a preliminary step.
+2. **Built-in web search was available** and completed, unlike in Claude Code. Requests such as a Wikipedia summary or a stock price were often answered from the web. The “built-in only” column counts misses with no MCP call at all.
+3. **`git.git_log` was answerable in the shell,** because the folders were inside a git repository: 0, 1, 0 and 1 hits of 6 in the four setups. In the GPT-6 Astra runs, in a folder outside any repository, the shell attempt failed and the tool was then called (6 of 6 alone). Without this target, GPT-6 Sol's single-step counts are 70, 44, 36 and 28 of 84.
+
+The result is reported as measured, as a lower bound on tool selection for this configuration. Separating the model's choice from these three effects needs a rerun with the stub servers approved and the folders outside a repository.
+
+**How Codex exposed the tools.** The first model request of one E2 run per setup was captured with the stand-in server of §10 (no model called; requests not published), with both model names. In no setup, including `mcp_alone`, did the request contain an MCP tool name or definition. The request describes a code-execution tool whose text says that deferred tools are listed in an `ALL_TOOLS` value the model can filter. Mean input tokens per GPT-6 Sol run, summed over its model calls, were about 90,000, 106,000, 125,000 and 130,000 in the four setups, which also rules out 791 definitions being sent in full. The capture shows the first request only, and what the model looked up afterwards was not recorded.
+
+### 14.5 Cost
+
+- GPT-6 Sol: $30.81 for E1 and $39.00 for E2, calculated from reported usage at the [gpt-6-sol list prices](https://developers.openai.com/api/docs/models/gpt-6-sol.md) checked on 25 November 2026 (input $2, cached input $0.20, output $10 per million tokens; the cache-write price is not listed and is taken as $2.50, the same ratio to input as for GPT-6 Astra). Not reconciled against an invoice.
+- Fable 5.2: $211.81 at list price by Claude Code's own estimate, covered by the subscription.

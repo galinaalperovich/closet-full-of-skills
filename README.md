@@ -12,14 +12,19 @@ The page is `docs/index.html`, built from the sources in [`post/`](post/). The f
 
 I asked Claude Code and Codex natural requests that were written for one particular skill or MCP tool, such as “Audit the SEO of my site” for `seo-audit`, with no explicit invocation (no `/seo-audit`, no “use the seo-audit skill”). Then I counted how often the agent selected that component as more skills or tools were installed next to it.
 
-| | Claude Code + Haiku | Claude Code + Sonnet | Codex + GPT |
-|---|---|---|---|
-| **Skills** (E1): target alone → 20 → 220 → 1,020 skills | 78% → 48% → 25% → 16% | 94% → 76% → 56% → 34% | 100% → 99% → 83% → 10% |
-| **MCP tools** (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools | 84% → 82% → 79% → 80% | 88% → 76% → 78% → 77% | 91% alone (82 of 90). With 20 tools only 24 requests were run: 92% (22 of 24), down from 100% (24 of 24) on the same requests. Larger setups not run |
-| **Skills + tools together** (E3), change against the single component | skill requests −46 to −60 points (both models); tool requests −6 to −18 | | not run (cost) |
+| | Skills (E1): target alone → 20 → 220 → 1,020 skills | MCP tools (E2), 15 single-step targets: alone → 20 → ~220 → 791 tools |
+|---|---|---|
+| Claude Code + Haiku | 78% → 48% → 25% → 16% | 84% → 82% → 79% → 80% |
+| Claude Code + Sonnet | 94% → 76% → 56% → 34% | 88% → 76% → 78% → 77% |
+| Claude Code + Fable 5.2 | 99% → 99% → 98% → 72% | 89% → 84% → 82% → 82% |
+| Codex + GPT-6 Astra | 100% → 99% → 83% → 10% | 91% alone (82 of 90). With 20 tools only 24 requests were run: 92% (22 of 24), down from 100% (24 of 24) on the same requests. Larger setups not run |
+| Codex + GPT-6 Sol | 100% → 100% → 82% → 12% | 78% → 50% → 40% → 32%, with strong caveats: Codex blocked the MCP calls, had built-in web search, and one target could be done in the shell (`METHODOLOGY.md` §14) |
 
-- 4,674 retained runs: 4,020 Claude Code runs and 654 GPT runs. On top of those there is one excluded, rate-limited GPT batch (`gpt_subscription_failed.jsonl`).
+**Skills + tools together** (E3, Haiku and Sonnet only), change against the single component: skill requests −46 to −60 points, tool requests −6 to −18.
+
+- 6,594 retained runs: 4,980 Claude Code runs and 1,614 Codex runs. On top of those there is one excluded, rate-limited GPT batch (`gpt_subscription_failed.jsonl`).
 - **Two rounds of data collection.** Round 1 (20 November 2026): E1 for all three configurations, E3b, every Codex run, and a first pass of the Claude Code E2/E3 runs. Round 2 (22 November 2026): all 2,040 Claude Code E2/E3 runs again, because headless Claude Code had refused every MCP call and its per-folder auto-memory had carried notes from one run to the next. The 18 E1 runs of the one skill folder with a carried-over memory note (Sonnet, `caveman`, alone) were rerun the same way. The numbers above use round 2 for Claude Code E2/E3. Details are in `METHODOLOGY.md` §1.1.
+- **Two more configurations** were added on 25 November 2026, with the same harness versions, requests and setups: Claude Fable 5.2 in Claude Code and GPT-6 Sol in Codex, each with E1 (one run per request) and E2. They were not run in E3. Design, results and caveats are in `METHODOLOGY.md` §14.
 - **What the model saw.** After the runs, the skill listing each harness sends to the model was captured with a local stand-in server, without calling any model ([`listing/`](listing/)). At 20 skills both harnesses listed every description. At 1,020 skills, Claude Code kept descriptions for only 19 of 1,037 entries, and Codex listed only 321 entries, alphabetically, with no descriptions: 3 of the 20 targets. See `METHODOLOGY.md` §10.
 - What is measured is **selection of the designated component within the observation window**, not the quality of the answer.
 - Every rate and paired change has a 95% confidence interval (request-cluster bootstrap, 2,000 resamples, fixed seed; Wilson score interval where all runs succeeded) in `analysis/derived/`. See `METHODOLOGY.md` §8.
@@ -30,7 +35,7 @@ I asked Claude Code and Codex natural requests that were written for one particu
 ```bash
 pip install pyyaml                   # the only dependency (Python 3.9+)
 python3 analysis/analyze.py          # the published numbers: analysis/REPORT.md and analysis/derived/
-python3 analysis/raw_checks.py       # checks that need the raw logs (round 2 Claude Code runs): derived/raw_checks.csv, raw_browser.csv
+python3 analysis/raw_checks.py       # checks that need the raw logs (round 2 and Fable Claude Code runs): derived/raw_checks.csv, raw_browser.csv
 python3 analysis/budget.py           # the cost model behind the follow-up plan: derived/followup_budget.csv
 git status --short analysis/         # expect no changes: you get the same tables
 ```
@@ -73,11 +78,13 @@ python3 mcp/build.py      # E2/E3 -> envs2/  (MCP-only setups, trending skills a
 ISOLATE=1 python3 run.py alone,pack20,crowd200,crowd1000 1 haiku  results/haiku_rerun.jsonl
 ISOLATE=1 python3 run.py alone,pack20,crowd200,crowd1000 3 sonnet results/sonnet_rerun.jsonl
 python3 run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_rerun.jsonl
+CODEX_MODEL=gpt-6-sol python3 run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_sol_rerun.jsonl
 
 # E2 (MCP only), E3b (trending skills alone), E3 (mixed). Arguments: harness, model, job set, output file
 ALLOW_MCP=1 ISOLATE=1 LOAD_MAX=20 PAR=2 python3 mcp/run.py claude haiku mcp   results/haiku_mcp.jsonl
 ALLOW_MCP=1 ISOLATE=1 LOAD_MAX=20 PAR=2 python3 mcp/run.py claude sonnet mixed results/sonnet_mixed.jsonl
 python3 mcp/run.py codex  gpt   mcp   results/gpt_mcp.jsonl
+CODEX_MODEL=gpt-6-sol python3 mcp/run.py codex gpt-6-sol mcp results/gpt_sol_mcp.jsonl
 ```
 - Run `mkdir results` first.
 - Useful environment variables:
@@ -87,7 +94,8 @@ python3 mcp/run.py codex  gpt   mcp   results/gpt_mcp.jsonl
   - `ALLOW_MCP=1` (Claude Code): pre-approve the stub MCP servers. Without it, headless Claude Code refuses every MCP call, which is what happened in round 1.
   - `ISOLATE=1` (Claude Code, `run.py` and `mcp/run.py`): run each job in a fresh copy of its test folder, so Claude Code's per-folder auto-memory starts empty every time, and keep the raw output. It does not reset Claude Code's global skill-usage record (`skillUsage` in `~/.claude.json`), which decides which descriptions survive in large listings (`METHODOLOGY.md` §10).
   - `LOAD_MAX=<n>`: wait before starting a job while the 1-minute load average is above n. The mixed setups start up to 73 stub servers per run; 8 parallel runs once made a 10-core laptop unresponsive.
-  - `SKILL_REPOS` and `ENVS2_DIR`: move the inputs and test folders.
+  - `SKILL_REPOS`, `ENVS_DIR` and `ENVS2_DIR`: move the inputs and test folders.
+  - `CODEX_MODEL`: the Codex model (`run_codex.py`: the Codex default when unset; `mcp/run.py`: `gpt-6-astra` when unset).
   - `CODEX_BIN`: the path to Codex.
 - For Codex, use a separate `CODEX_HOME` that is logged in with an API key, so your personal Codex settings and skills don't leak into the runs.
 - `analysis/analyze.py` reads the shipped file names (the `INPUTS` list at its top). To analyse a rerun, point that list at your files.
@@ -100,9 +108,12 @@ python3 mcp/run.py codex  gpt   mcp   results/gpt_mcp.jsonl
 |---|---|---|
 | Claude Code, Haiku | about $0.002–0.009 | covered by a Claude subscription ($198.02 list price for the 4,020 Claude runs in the results, plus $149.64 for 3,233 runs not used in the results) |
 | Claude Code, Sonnet | about $0.03–0.14 | (included above) |
+| Claude Code, Fable 5.2 | about $0.12–0.38 | covered by the same subscription ($211.81 list price for 960 runs) |
 | Codex + GPT, skills (E1) | $0.19–0.31 measured | $119.13 for 480 runs |
 | Codex + GPT, MCP alone / 20 tools | $0.29 / $0.35 measured | $52.60 for 170 API runs |
-| Codex + GPT, ~220 / 791 tools | about $0.83 / $2.08 **estimated** | not run |
+| Codex + GPT, ~220 / 791 tools | about $0.44 / $0.46 **estimated** from GPT-6 Sol's usage, at five times its price | not run |
+| Codex + GPT-6 Sol, skills (E1) | $0.05–0.08 measured | $30.81 for 480 runs |
+| Codex + GPT-6 Sol, MCP (E2) | $0.07–0.09 measured | $39.00 for 480 runs |
 | Codex + GPT, mixed setups | about $1.5–2.2 **estimated** | not run |
 
 Most of a GPT run's cost is writing the prompt prefix (system prompt, skill listing, tool definitions) to the cache, because every run is a new session. Use `STOP_ON_429` and a spending limit on your API key.
@@ -122,12 +133,13 @@ Most of a GPT run's cost is writing the prompt prefix (system prompt, skill list
 | `build.py`, `run.py`, `run_codex.py` | E1: build the skill setups; run Claude Code; run Codex |
 | `mcp/build.py`, `mcp/run.py`, `mcp/stub_server.py` | E2, E3, E3b: build the MCP and mixed setups; run both harnesses; the stub MCP server |
 | `mcp/tools_inventory.json` | The frozen inventory of 791 MCP tool definitions from 73 servers (see `THIRD_PARTY.md`) |
-| `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl` | E1 results: one record per run |
-| `sonnet_e1_caveman_rerun.jsonl`, `raw_e1/` | E1 rerun of Sonnet / `caveman` / alone (18 runs, one fresh folder each) and its raw logs; used in place of those 18 records of `sonnet.jsonl` |
+| `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl`, `fable.jsonl`, `gpt_sol.jsonl` | E1 results: one record per run (`gpt.jsonl` is GPT-6 Astra) |
+| `sonnet_e1_caveman_rerun.jsonl`, `raw_e1/` | E1 rerun of Sonnet / `caveman` / alone (18 runs, one fresh folder each) and its raw logs, plus the raw logs of the Fable E1 runs; used in place of those 18 records of `sonnet.jsonl` |
 | `gpt_subscription_failed.jsonl` | The excluded E1 GPT batch (rate-limited subscription runs), kept for transparency |
 | `mcp/haiku_round1.jsonl`, `mcp/sonnet_round1.jsonl`, `mcp/gpt.jsonl` | E2, E3 and E3b results from round 1 (the analysis uses the GPT and E3b records) |
 | `mcp/haiku_round2.jsonl`, `mcp/sonnet_round2.jsonl` | Claude Code E2 and E3 results from round 2 (MCP allowed, a fresh folder per run) |
-| `mcp/raw/` | Raw event logs of round 2, with local paths removed |
+| `mcp/fable.jsonl`, `mcp/gpt_sol.jsonl` | E2 results for Fable 5.2 (run like round 2) and GPT-6 Sol (run like GPT-6 Astra) |
+| `mcp/raw/` | Raw event logs of round 2 and of the Fable E2 runs, with local paths removed |
 | `analysis/analyze.py` | The single entry point that produces every published number |
 | `analysis/REPORT.md`, `analysis/derived/` | Its outputs: rates, paired differences, intervals, costs, audits, input hashes |
 | `analysis/raw_checks.py` | Raw-log checks for the round 2 runs (`derived/raw_checks.csv`, `derived/raw_browser.csv`) |

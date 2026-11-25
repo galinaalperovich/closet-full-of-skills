@@ -18,6 +18,7 @@ lock=threading.Lock(); f=open(out,"a")
 ISO=os.environ.get("ISOLATE")
 PROJ=os.path.join(os.path.expanduser("~"),".claude","projects")
 RAW=os.path.join(S,"raw_e1")
+E=os.environ.get("ENVS_DIR", os.path.join(S,"envs"))   # where build.py put the test folders
 def proj_dir(path): return os.path.join(PROJ, re.sub(r"[^A-Za-z0-9]","-",path))
 def read_memory(path):
     m=os.path.join(proj_dir(path),"memory"); res={}
@@ -28,10 +29,10 @@ def read_memory(path):
     return res
 def one(j):
     c,t,i,p,rep=j
-    cwd=os.path.join(S,"envs","alone",t) if c=="alone" else os.path.join(S,"envs",c)
+    cwd=os.path.join(E,"alone",t) if c=="alone" else os.path.join(E,c)
     iso=None
     if ISO:
-        iso=os.path.join(S,"envs_iso",uuid.uuid4().hex[:12]); dst=os.path.join(iso,os.path.basename(cwd))
+        iso=os.path.join(E+"_iso",uuid.uuid4().hex[:12]); dst=os.path.join(iso,os.path.basename(cwd))
         shutil.copytree(cwd,dst,symlinks=True); cwd=dst
     rec={"cond":c,"target":t,"i":i,"rep":rep,"model":model,"fired":[],"first_tool":None}
     try:

@@ -5,3 +5,7 @@ results/
 __pycache__/
 *.pyc
 .DS_Store
+
+envs_iso/
+envs2_iso/
+mcp/raw_private/

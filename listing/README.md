@@ -26,6 +26,7 @@ The `harness` column:
 |---|---|
 | `claude` | Claude Code with Haiku, using the skill-usage record as it stood after the study |
 | `claude-sonnet` | The same with Sonnet (the listing is identical to Haiku's) |
+| `claude-fable` | The same with Fable 5.2, captured on 25 November 2026 after its runs (`pack20`, `crowd200` and `crowd1000`; the listing is identical to Haiku's) |
 | `claude-fresh` | Claude Code with a clean usage record (a separate `CLAUDE_CONFIG_DIR`) |
 | `claude-seeded` | Claude Code with a usage record seeded with heavy use of `seo-audit` and `pdf` |
 | `codex` | Codex CLI |

@@ -113,7 +113,7 @@ def one(j):
                     rec["in_tok"]=(u.get("input_tokens") or 0)+(u.get("cache_creation_input_tokens") or 0)+(u.get("cache_read_input_tokens") or 0)
             if "sub" not in rec: rec["error"]=(pr.stderr or pr.stdout)[-300:]
         else:
-            cmd=[CODEX,"exec","--json","--ephemeral","--skip-git-repo-check","--ignore-user-config","-s","read-only","-c",'model="gpt-6-astra"',"-c",'model_reasoning_effort="medium"',"-c",'approval_policy="never"']
+            cmd=[CODEX,"exec","--json","--ephemeral","--skip-git-repo-check","--ignore-user-config","-s","read-only","-c",f'model="{os.environ.get("CODEX_MODEL","gpt-6-astra")}"',"-c",'model_reasoning_effort="medium"',"-c",'approval_policy="never"']
             for s,c in cfg.items():
                 cmd+=["-c",f'mcp_servers.{s}.command="{c["command"]}"',"-c",f"mcp_servers.{s}.args={json.dumps(c['args'])}"]
             cmd.append(j["prompt"])

@@ -1,4 +1,8 @@
 exp,model,access,batch,setup,attempts,input_tokens,cached_input_tokens,cache_write_input_tokens,output_tokens,reasoning_output_tokens,runs_over_272k_total_input,list_price_usd,billed_usd,cost_basis
+E1,fable,subscription,main,alone,120,8292355,,,,,,14.7282,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E1,fable,subscription,main,crowd1000,120,11094993,,,,,,36.5663,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E1,fable,subscription,main,crowd200,120,10242072,,,,,,29.7068,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E1,fable,subscription,main,pack20,120,8898428,,,,,,18.7308,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,gpt,api_key,main,alone,120,3517402,1930046,1586543,31649,5971,0,23.3524,23.3524,OpenAI list price applied to reported usage fields
 E1,gpt,api_key,main,crowd1000,120,6557682,4118308,2438384,40921,7881,0,36.6541,36.6541,OpenAI list price applied to reported usage fields
 E1,gpt,api_key,main,crowd200,120,4973776,2703984,2268994,29471,6006,0,32.5479,32.5479,OpenAI list price applied to reported usage fields
@@ -7,6 +11,10 @@ E1,gpt,subscription,excluded_429_batch,alone,120,144919,114176,0,573,34,0,0.4503
 E1,gpt,subscription,excluded_429_batch,crowd1000,120,0,0,0,0,0,0,0,0.0,"OpenAI list price applied to reported usage fields; ChatGPT plan, not billed per token"
 E1,gpt,subscription,excluded_429_batch,crowd200,120,0,0,0,0,0,0,0,0.0,"OpenAI list price applied to reported usage fields; ChatGPT plan, not billed per token"
 E1,gpt,subscription,excluded_429_batch,pack20,120,0,0,0,0,0,0,0,0.0,"OpenAI list price applied to reported usage fields; ChatGPT plan, not billed per token"
+E1,gpt_sol,api_key,main,alone,120,5811530,4176102,1634084,89535,29032,0,5.8185,5.8185,OpenAI list price applied to reported usage fields
+E1,gpt_sol,api_key,main,crowd1000,120,11421600,8694667,2725313,120678,42313,2,9.7622,9.7622,OpenAI list price applied to reported usage fields
+E1,gpt_sol,api_key,main,crowd200,120,8529316,5996376,2531632,89901,29648,0,8.43,8.43,OpenAI list price applied to reported usage fields
+E1,gpt_sol,api_key,main,pack20,120,7042193,5110018,1930810,95117,29504,1,6.8029,6.8029,OpenAI list price applied to reported usage fields
 E1,haiku,subscription,main,alone,120,9101412,,,,,,0.2735,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,haiku,subscription,main,crowd1000,120,13826394,,,,,,0.6465,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,haiku,subscription,main,crowd200,120,12829268,,,,,,0.5882,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
@@ -15,9 +23,17 @@ E1,sonnet,subscription,main,alone,360,23383045,,,,,,11.9441,0.0,"Claude Code tot
 E1,sonnet,subscription,main,crowd1000,360,36787941,,,,,,31.6868,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,sonnet,subscription,main,crowd200,360,32743921,,,,,,26.3952,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E1,sonnet,subscription,main,pack20,360,25737541,,,,,,15.9854,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E2,fable,subscription,main,mcp_alone,120,12778601,,,,,,19.1745,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E2,fable,subscription,main,mcp_crowd200,120,14295574,,,,,,26.289,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E2,fable,subscription,main,mcp_crowdall,120,18175396,,,,,,45.7784,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
+E2,fable,subscription,main,mcp_pack20,120,13336902,,,,,,20.8399,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E2,gpt,api_key,main,mcp_alone,120,7944806,5769552,2173742,41686,3431,0,35.0407,35.0407,OpenAI list price applied to reported usage fields
 E2,gpt,api_key,main,mcp_pack20,50,4328417,3261230,1066488,19245,2459,1,17.5616,17.5616,OpenAI list price applied to reported usage fields
 E2,gpt,subscription,main,mcp_pack20,5,554251,496256,0,1695,179,0,1.161,0.0,"OpenAI list price applied to reported usage fields; ChatGPT plan, not billed per token"
+E2,gpt_sol,api_key,main,mcp_alone,120,10837759,8446831,2389065,76340,24376,4,8.4292,8.4292,OpenAI list price applied to reported usage fields
+E2,gpt_sol,api_key,main,mcp_crowd200,120,15013960,12122711,2889236,82584,25824,6,10.4775,10.4775,OpenAI list price applied to reported usage fields
+E2,gpt_sol,api_key,main,mcp_crowdall,120,15577550,12515629,3059950,79047,23190,5,10.9474,10.9474,OpenAI list price applied to reported usage fields
+E2,gpt_sol,api_key,main,mcp_pack20,120,12701660,10190926,2508676,83550,26101,4,9.1495,9.1495,OpenAI list price applied to reported usage fields
 E2,haiku,subscription,main,mcp_alone,120,14271775,,,,,,0.4544,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E2,haiku,subscription,main,mcp_crowd200,120,15671182,,,,,,0.5495,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"
 E2,haiku,subscription,main,mcp_crowdall,120,20663294,,,,,,0.8238,0.0,"Claude Code total_cost_usd estimate; Claude subscription, not billed per token"

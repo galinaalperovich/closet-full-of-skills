@@ -1,4 +1,12 @@
 model,setup,part,runs,mcp_calls,mcp_reached_stub,mcp_refused,mcp_other_error,mcp_no_result,skill_calls,skill_ok,skill_error,builtin_calls,builtin_refused,runs_saved_builtin_memory,refused_by_tool
+fable,mcp_alone,tool-browser,30,30,30,0,0,0,0,0,0,0,0,0,
+fable,mcp_alone,tool-single-step,90,83,83,0,0,0,0,0,0,30,16,0,Agent=7;WebFetch=7;WebSearch=2
+fable,mcp_crowd200,tool-browser,30,36,36,0,0,0,0,0,0,0,0,0,
+fable,mcp_crowd200,tool-single-step,90,99,99,0,0,0,2,2,0,15,11,0,Agent=4;WebFetch=4;WebSearch=3
+fable,mcp_crowdall,tool-browser,30,35,35,0,0,0,0,0,0,0,0,0,
+fable,mcp_crowdall,tool-single-step,90,113,113,0,0,0,2,2,0,16,9,0,Agent=4;WebFetch=4;WebSearch=1
+fable,mcp_pack20,tool-browser,30,31,31,0,0,0,0,0,0,0,0,0,
+fable,mcp_pack20,tool-single-step,90,85,85,0,0,0,4,4,0,22,13,0,Agent=4;WebFetch=4;WebSearch=5
 haiku,mcp_alone,tool-browser,30,21,21,0,0,0,0,0,0,0,0,0,
 haiku,mcp_alone,tool-single-step,90,90,90,0,0,0,1,1,0,80,47,5,Agent=7;WebFetch=7;WebSearch=33
 haiku,mcp_crowd200,tool-browser,30,41,41,0,0,0,0,0,0,2,0,0,

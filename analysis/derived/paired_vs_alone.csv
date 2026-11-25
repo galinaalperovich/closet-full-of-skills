@@ -5,13 +5,25 @@ E1 skills,haiku,crowd1000,-0.625,-0.7167,-0.5333,-0.7585,-0.475,120,76,1
 E1 skills,sonnet,pack20,-0.1861,-0.25,-0.125,-0.3028,-0.0861,120,30,0
 E1 skills,sonnet,crowd200,-0.3806,-0.4556,-0.2972,-0.525,-0.2499,120,55,0
 E1 skills,sonnet,crowd1000,-0.6056,-0.6861,-0.525,-0.764,-0.4472,120,82,0
+E1 skills,fable,pack20,0.0,-0.025,0.025,-0.0333,0.0333,120,1,1
+E1 skills,fable,crowd200,-0.0083,-0.0333,0.0167,-0.05,0.025,120,2,1
+E1 skills,fable,crowd1000,-0.2667,-0.35,-0.1915,-0.4167,-0.125,120,33,1
 E1 skills,gpt,pack20,-0.0083,-0.025,0.0,-0.0333,0.0,120,1,0
 E1 skills,gpt,crowd200,-0.1667,-0.2333,-0.1083,-0.2917,-0.0667,120,20,0
 E1 skills,gpt,crowd1000,-0.9,-0.95,-0.8417,-0.9917,-0.7833,120,108,0
+E1 skills,gpt_sol,pack20,0.0,0.0,0.0,0.0,0.0,120,0,0
+E1 skills,gpt_sol,crowd200,-0.175,-0.2417,-0.1083,-0.3,-0.0667,120,21,0
+E1 skills,gpt_sol,crowd1000,-0.8833,-0.9417,-0.8167,-0.975,-0.7667,120,106,0
 E2 MCP single-step tools,haiku,mcp_pack20,-0.0222,-0.0556,0.0,-0.0667,0.0,90,2,0
 E2 MCP single-step tools,haiku,mcp_crowd200,-0.0556,-0.1111,-0.0111,-0.1444,0.0,90,5,0
 E2 MCP single-step tools,haiku,mcp_crowdall,-0.0444,-0.1,0.0,-0.1444,0.0333,90,5,1
 E2 MCP single-step tools,sonnet,mcp_pack20,-0.1222,-0.2,-0.0556,-0.2556,-0.0111,90,12,1
 E2 MCP single-step tools,sonnet,mcp_crowd200,-0.1,-0.1667,-0.0444,-0.2333,-0.0111,90,9,0
 E2 MCP single-step tools,sonnet,mcp_crowdall,-0.1111,-0.1778,-0.0444,-0.2444,-0.0111,90,11,1
+E2 MCP single-step tools,fable,mcp_pack20,-0.0444,-0.0889,-0.0111,-0.1,0.0,90,4,0
+E2 MCP single-step tools,fable,mcp_crowd200,-0.0667,-0.1222,-0.0222,-0.1444,-0.0111,90,6,0
+E2 MCP single-step tools,fable,mcp_crowdall,-0.0667,-0.1333,-0.0111,-0.1556,0.0222,90,7,1
 E2 MCP single-step tools,gpt,mcp_pack20,-0.0833,-0.2083,0.0,-0.25,0.0,24,2,0
+E2 MCP single-step tools,gpt_sol,mcp_pack20,-0.2778,-0.3667,-0.1778,-0.4556,-0.1,90,26,1
+E2 MCP single-step tools,gpt_sol,mcp_crowd200,-0.3778,-0.4778,-0.2778,-0.5556,-0.1889,90,35,1
+E2 MCP single-step tools,gpt_sol,mcp_crowdall,-0.4556,-0.5556,-0.3556,-0.6222,-0.2664,90,42,1

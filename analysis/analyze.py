@@ -23,7 +23,8 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 # Claude Code E2/E3 come from the second collection round (mcp/*_round2.jsonl), in which the stub MCP servers were
 # allowed and every run had a fresh folder; the first round's Claude Code E2/E3 records are skipped (headless Claude Code
 # had denied every MCP call). The 18 E1 runs of Sonnet / caveman / alone come from an isolated rerun, because a memory
-# note saved by one original run reached later runs in that folder. E3b and all Codex records come from the first round.
+# note saved by one original run reached later runs in that folder. E3b and the GPT-6 Astra records come from the first round.
+# Claude Fable 5.2 ("fable") and GPT-6 Sol ("gpt_sol") were added on 2026-11-25: E1 with one repetition, and E2; no E3.
 OUT = os.path.join(HERE, "derived"); os.makedirs(OUT, exist_ok=True)
 SEED = 20261120; B = 2000
 P = lambda *a: os.path.join(ROOT, *a)
@@ -31,11 +32,13 @@ P = lambda *a: os.path.join(ROOT, *a)
 # ---------------------------------------------------------------- inputs + manifest
 INPUTS = {
     "E1": [("haiku.jsonl", "claude", "haiku", "subscription"), ("sonnet.jsonl", "claude", "sonnet", "subscription"),
-           ("gpt.jsonl", "codex", "gpt", "api_key")],
+           ("gpt.jsonl", "codex", "gpt", "api_key"),
+           ("fable.jsonl", "claude", "fable", "subscription"), ("gpt_sol.jsonl", "codex", "gpt_sol", "api_key")],
     "E1_excluded": [("gpt_subscription_failed.jsonl", "codex", "gpt", "subscription")],
     "R1": [("mcp/haiku_round1.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round1.jsonl", "claude", "sonnet", "subscription"),
            ("mcp/gpt.jsonl", "codex", "gpt", "by_line")],
-    "R2": [("mcp/haiku_round2.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round2.jsonl", "claude", "sonnet", "subscription")],
+    "R2": [("mcp/haiku_round2.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round2.jsonl", "claude", "sonnet", "subscription"),
+           ("mcp/fable.jsonl", "claude", "fable", "subscription"), ("mcp/gpt_sol.jsonl", "codex", "gpt_sol", "api_key")],
     "E1_rerun": [("sonnet_e1_caveman_rerun.jsonl", "claude", "sonnet", "subscription")],
 }
 E1_RERUN = lambda r: r["model"] == "sonnet" and r["setup"] == "alone" and r["target"] == "caveman"
@@ -51,7 +54,7 @@ for grp in INPUTS.values():
         manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f)))})
 for f in OTHER:
     if os.path.exists(P(f)): manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f), errors="replace"))})
-json.dump({"collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
+json.dump({"collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun); 2026-11-25 (Claude Fable 5.2 and GPT-6 Sol, E1 and E2)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
           open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 
 # ---------------------------------------------------------------- normalise records
@@ -195,7 +198,8 @@ def write_csv(name, rows_):
         for r in rows_: w.writerow({k: (round(v, 4) if isinstance(v, float) else v) for k, v in r.items()})
 pc = lambda x: f"{100*x:.1f}" if x == x else "n/a"
 
-MODELS = ["haiku", "sonnet", "gpt"]
+MODELS = ["haiku", "sonnet", "fable", "gpt", "gpt_sol"]
+GPTS = ("gpt", "gpt_sol"); CLAUDES = ["haiku", "sonnet", "fable"]
 E1S = ["alone", "pack20", "crowd200", "crowd1000"]
 E2S = ["mcp_alone", "mcp_pack20", "mcp_crowd200", "mcp_crowdall"]
 
@@ -384,8 +388,10 @@ for k, ps in list(PR.items()) + list(PR2.items()):
 write_csv("prompt_audit.csv", pa)
 
 # ---------------------------------------------------------------- 9. tokens and cost
-PRICE = dict(input=10.0, cached=1.0, cache_write=12.5, output=50.0)   # gpt-6-astra standard, developers.openai.com model page, checked 2026-11-20
-def gpt_cost(u):
+PRICES = {"gpt": dict(input=10.0, cached=1.0, cache_write=12.5, output=50.0),   # gpt-6-astra standard, developers.openai.com model page, checked 2026-11-20
+          "gpt_sol": dict(input=2.0, cached=0.2, cache_write=2.5, output=10.0)}   # gpt-6-sol, same page, checked 2026-11-25; the cache-write price is not listed and is assumed to be 1.25x input, as for Astra
+def gpt_cost(u, m="gpt"):
+    PRICE = PRICES[m]
     inp, ca, cw, out = u.get("input_tokens", 0), u.get("cached_input_tokens", 0), u.get("cache_write_input_tokens", 0), u.get("output_tokens", 0)
     unc = max(0, inp - ca - cw)
     return (unc * PRICE["input"] + ca * PRICE["cached"] + cw * PRICE["cache_write"] + out * PRICE["output"]) / 1e6
@@ -395,14 +401,14 @@ for r in attempts:
     cg[(r["exp"], r["model"], r["access"], r["batch"], r["setup"])].append(r)
 for (exp, m, acc, b, s), rs in sorted(cg.items()):
     row = dict(exp=exp, model=m, access=acc, batch=b, setup=s, attempts=len(rs))
-    if m == "gpt":
+    if m in GPTS:
         us = [r["usage"] for r in rs if r["usage"]]
         tot = Counter()
         for u in us: tot.update({k: v for k, v in u.items() if isinstance(v, int)})
         row.update(input_tokens=tot["input_tokens"], cached_input_tokens=tot["cached_input_tokens"], cache_write_input_tokens=tot["cache_write_input_tokens"],
                    output_tokens=tot["output_tokens"], reasoning_output_tokens=tot["reasoning_output_tokens"],
                    runs_over_272k_total_input=sum(1 for u in us if u.get("input_tokens", 0) > 272000),
-                   list_price_usd=sum(gpt_cost(u) for u in us), billed_usd=(sum(gpt_cost(u) for u in us) if acc == "api_key" else 0.0),
+                   list_price_usd=sum(gpt_cost(u, m) for u in us), billed_usd=(sum(gpt_cost(u, m) for u in us) if acc == "api_key" else 0.0),
                    cost_basis="OpenAI list price applied to reported usage fields" + ("" if acc == "api_key" else "; ChatGPT plan, not billed per token"))
     else:
         row.update(input_tokens=sum(r["in_tok"] or 0 for r in rs), cached_input_tokens=None, cache_write_input_tokens=None, output_tokens=None,
@@ -414,16 +420,16 @@ write_csv("cost_by_batch.csv", cost)
 # mean usage per run, GPT, by setup (for the budget model)
 gu = []
 for (exp, m, acc, b, s), rs in sorted(cg.items()):
-    if m != "gpt" or b != "main": continue
+    if m not in GPTS or b != "main": continue
     us = [r["usage"] for r in rs if r["usage"]]
     if not us: continue
     mean = lambda k: sum(u.get(k, 0) for u in us) / len(us)
-    gu.append(dict(exp=exp, setup=s, access=acc, runs=len(us), mean_input=mean("input_tokens"), mean_cached=mean("cached_input_tokens"),
-                   mean_cache_write=mean("cache_write_input_tokens"), mean_output=mean("output_tokens"), mean_cost_usd=sum(gpt_cost(u) for u in us) / len(us)))
+    gu.append(dict(exp=exp, model=m, setup=s, access=acc, runs=len(us), mean_input=mean("input_tokens"), mean_cached=mean("cached_input_tokens"),
+                   mean_cache_write=mean("cache_write_input_tokens"), mean_output=mean("output_tokens"), mean_cost_usd=sum(gpt_cost(u, m) for u in us) / len(us)))
 write_csv("gpt_usage_per_run.csv", gu)
 cu = []
 for exp in ["E1", "E2", "E3b", "E3"]:
-    for m in ["haiku", "sonnet"]:
+    for m in CLAUDES:
         for s in sorted({r["setup"] for r in retained if r["exp"] == exp}):
             rs = [r for r in retained if r["exp"] == exp and r["model"] == m and r["setup"] == s]
             if rs: cu.append(dict(exp=exp, model=m, setup=s, runs=len(rs), mean_total_input_tokens_all_turns=sum(r["in_tok"] or 0 for r in rs) / len(rs),
@@ -479,7 +485,7 @@ w("\nRuns without a raw log have only their result record: the selection fields 
 nj = [x for x in retained if x["batch"] == "main" and x["miss_class"] == "alt_not_judged"]
 njp = {(x["kind"], x["target"], x["i"], c) for x in nj for c in x["components"]}
 njc = Counter((x["exp"], x["model"], x["setup"]) for x in nj)
-w(f"Alternative ratings (`alt_judgments.json`) cover the alternatives selected in the first collection round. In the second round, {len(nj)} misses selected only alternatives that were never rated "
+w(f"Alternative ratings (`alt_judgments.json`) cover the alternatives selected in the first collection round. In the later rounds, {len(nj)} misses selected only alternatives that were never rated "
   f"({len(njp)} distinct request–alternative pairs): " + ", ".join(f"{e} {m} {s} {k}" for (e, m, s), k in sorted(njc.items())) +
   ". They are counted with the unassessable alternatives, never as equivalent, so rates that add equivalent alternatives are lower bounds for these setups.\n")
 w("## E1: designated-target skill selection\n")
@@ -489,7 +495,8 @@ w("\nMiss breakdown:\n\n| Model | Setup | Equivalent alt. | Related alt. | Inapp
 for r in e1: w(f'| {r["model"]} | {r["setup"]} | {r["miss_alt_equivalent"]} | {r["miss_alt_related"]} | {r["miss_alt_inappropriate"]} | {r["miss_alt_unassessable"]} | {r["miss_no_skill_completed"]} | {r["miss_no_skill_turn_limit"]} |')
 w("\nPaired changes (percentage points; same requests in both conditions):\n\n| Model | From → to | Change | Request-cluster 95% | Two-stage 95% | Requests worse / better |\n|---|---|---|---|---|---|")
 for r in e1p: w(f'| {r["model"]} | {r["from_setup"]} → {r["to_setup"]} | {100*r["diff"]:+.1f} | {100*r["req_lo"]:+.1f} to {100*r["req_hi"]:+.1f} | {100*r["skill_lo"]:+.1f} to {100*r["skill_hi"]:+.1f} | {r["requests_worse"]} / {r["requests_better"]} |')
-w("\nGPT `alone` selected the target in 120/120 runs. Resampling cannot produce a failure from all-success data, so its bootstrap interval is degenerate; the Wilson interval (96.9–100%) is the one to quote.\n")
+w("\nGPT `alone` selected the target in 120/120 runs, and so did GPT-6 Sol in `alone` and `pack20`. Resampling cannot produce a failure from all-success data, so those bootstrap intervals are degenerate; the Wilson interval (96.9–100%) is the one to quote.\n")
+w("Haiku and Sonnet ran each request three times per setup (360 runs); Fable, GPT and GPT-6 Sol ran it once (120 runs). Fable ran every request in a fresh copy of its folder.\n")
 w("## E2: MCP tools only\n")
 w("| Model | Setup | Strict accepted tool | Rate | Req. 95% | Non-browser 15 targets | Browser 5: strict / capable server | Capable server (secondary) | Turn-limited (browser) | ToolSearch used |\n|---|---|---|---|---|---|---|---|---|---|")
 for r in e2: w(f'| {r["model"]} | {r["setup"]} | {r["strict"]}/{r["n"]} | {pc(r["strict_rate"])}% | {pc(r["strict_req_lo"])}–{pc(r["strict_req_hi"])} | {r["nonbrowser_strict"]}/{r["nonbrowser_n"]} ({pc(r["nonbrowser_rate"])}%) | {r["browser_strict"]} / {r["browser_capable_server"]} of {r["browser_n"]} | {pc(r["capable_server_rate"])}% | {r["turn_limit"]} ({r["turn_limit_browser"]}) | {r["toolsearch"]} |')
