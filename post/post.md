@@ -49,7 +49,7 @@ If this sounds like the **needle-in-a-haystack test**, it is a harder version of
 - **A skipped skill fails silently.** Nothing breaks, and until you read the traces and logs, you won’t know the skill or tool was never picked. The agent answers anyway, and LLMs are very good at answers that look as if the skill was used, while your instructions were never read and your data was never touched. Ask for Apple’s stock price without the finance tool being called, and you may get **a confident number from the model’s memory**.
 - **One skipped skill can skip a whole recipe.** A skill often says which tools to call and in which order: run the linter, then the tests, then open the pull request. Skip the skill, and nothing makes sure those steps happen.
 - **If you have rules to follow, it gets worse.** Some projects must follow a fixed process or use specific data: a legal review, an approved template, the official price list. How do you prove to an auditor that your agent did not improvise? “We installed the skill and hoped for the best” is not an audit trail. We need to measure, and be able to prove, that the agent uses what it is supposed to use.
-- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports that 75% of project skills (27 of 36) reached the model with only a name, and [one user counted](https://github.com/anthropics/claude-code/issues/11364) 67,300 tokens of tool definitions from seven MCP servers before the first message. More reports are in the references.
+- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports that 75% of project skills (27 of 36) reached the model with only a name, and [one user counted](https://github.com/anthropics/claude-code/issues/11364) 67,300 tokens of tool definitions from seven MCP servers before the first message. At company scale, [Uber reports](https://x.com/UberEng/status/2125008806249930999) more than 5,000 skills in its internal marketplace after one year, about 100 of them switched on for every employee. More reports are in the references.
 
 ## How an agent picks a skill or a tool
 
@@ -240,7 +240,7 @@ The first is measured; treat the other two as hypotheses. The cited studies use 
 
 ### [Trick #1] Check what is actually exposed
 
-In Claude Code, `/context` shows the size of your skill listing and [`/doctor` tells you whether descriptions are being dropped](https://code.claude.com/docs/en/skills.md). Codex prints a warning when it goes over its budget ([codex#19679](https://github.com/openai/codex/issues/19679)). And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. This is the first thing I would check.
+In Claude Code, `/context` shows the size of your skill listing and [`/doctor` tells you whether descriptions are being dropped](https://code.claude.com/docs/en/skills.md). Codex prints a warning when it goes over its budget ([codex#19679](https://github.com/openai/codex/issues/19679)). And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. Since November 2026, [MCP servers can ship skills too](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more), with nothing for you to install, so your listing can grow without you noticing (I have not tested how those are listed). This is the first thing I would check.
 
 ### [Trick #2] Enable less, per project
 
@@ -250,7 +250,7 @@ This is the one thing I tested: with fewer skills installed, the designated one 
 
 - **Invoke required skills by name** (`/skill-name`) instead of hoping for a match.
 - **Give a skill a trigger nobody else has.** In my sample, skills with concrete nouns and file types held up.
-- **Use a router skill or a hook.** [A hook that makes Claude evaluate skills before answering](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) reached 84% activation in Scott Spence’s test, against 20% for a keyword hook.
+- **Use a router skill or a hook.** [A hook that makes Claude evaluate skills before answering](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. [Uber](https://x.com/UberEng/status/2125008806249930999) keeps about 100 skills on by default and uses a `find-skills` skill to search the other 5,000.
 - **Search instead of listing.** Claude Code already defers MCP tools behind [tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool). In your own agent, use the Claude API’s tool search tool, or embed the descriptions and retrieve the closest few.
 
 ## Check your own agent
@@ -399,8 +399,10 @@ The GPT-6 Astra figures are calculated from the token usage Codex reported, at [
 15. Reports about MCP tools: [claude-code#6915](https://github.com/anthropics/claude-code/issues/6915) · [#7328](https://github.com/anthropics/claude-code/issues/7328) · [#37793](https://github.com/anthropics/claude-code/issues/37793) · [#11364](https://github.com/anthropics/claude-code/issues/11364) · [Cursor forum 1](https://forum.cursor.com/t/tools-limited-to-40-total/67976) · [Cursor forum 2](https://forum.cursor.com/t/mcp-40-tools-way-to-less/79686) · [gemini-cli#21823](https://github.com/google-gemini/gemini-cli/issues/21823) · [r/mcp 1](https://www.reddit.com/r/mcp/comments/1xnmicj/) · [r/mcp 2](https://www.reddit.com/r/mcp/comments/1y0a4a2/)
 16. [Scott Spence: How to make Claude Code skills activate reliably](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) · [Ivan Seleznov: 650 trials](https://medium.com/@ivan.seleznov1/why-claude-code-skills-dont-activate-and-how-to-fix-it-86f679409af1) · [Blake Crosley: The skills my agent could not see](https://blakecrosley.com/blog/skills-my-agent-could-not-see)
 17. [ContextBolt: Too Many MCP Servers? What Each One Costs, Measured](https://contextbolt.com/blog/too-many-mcp-servers/)
-18. [OpenAI: gpt-6-astra model page and pricing](https://developers.openai.com/api/docs/models/gpt-6-astra.md)
-19. Modarressi et al. [NoLiMa: Long-Context Evaluation Beyond Literal Matching](https://arxiv.org/abs/2502.05167) (ICML 2025)
-20. Hong, Troynikov & Huber. [Context Rot: How Increasing Input Tokens Impacts LLM Performance](https://research.trychroma.com/context-rot) (Chroma, 2025)
-21. Vaswani et al. [Attention Is All You Need](https://arxiv.org/abs/1706.03762) (2017)
-22. Nakanishi. [Scalable-Softmax Is Superior for Attention](https://arxiv.org/abs/2501.19399) (2025)
+18. [Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month](https://x.com/UberEng/status/2125008806249930999) (2026)
+19. [Claude: MCP servers can now ship skills, run tasks, and more](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more) (2026)
+20. [OpenAI: gpt-6-astra model page and pricing](https://developers.openai.com/api/docs/models/gpt-6-astra.md)
+21. Modarressi et al. [NoLiMa: Long-Context Evaluation Beyond Literal Matching](https://arxiv.org/abs/2502.05167) (ICML 2025)
+22. Hong, Troynikov & Huber. [Context Rot: How Increasing Input Tokens Impacts LLM Performance](https://research.trychroma.com/context-rot) (Chroma, 2025)
+23. Vaswani et al. [Attention Is All You Need](https://arxiv.org/abs/1706.03762) (2017)
+24. Nakanishi. [Scalable-Softmax Is Superior for Attention](https://arxiv.org/abs/2501.19399) (2025)

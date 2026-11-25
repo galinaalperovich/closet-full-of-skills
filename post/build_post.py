@@ -58,7 +58,7 @@ L = {
  "nolima": "https://arxiv.org/abs/2502.05167", "rot": "https://research.trychroma.com/context-rot", "ssmax": "https://arxiv.org/abs/2501.19399",
  "ctxeng": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "repo": "https://github.com/galinaalperovich/closet-full-of-skills", "r_meth": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md", "r_listing": "https://github.com/galinaalperovich/closet-full-of-skills/tree/main/listing",
  "r_follow": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/FOLLOWUP_PROTOCOL.md", "r_prompts": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/prompts.json", "r_judge": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md",
- "r_cost": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/cost_by_batch.csv", "contextbolt": "https://contextbolt.com/blog/too-many-mcp-servers/", "davila7": "https://github.com/davila7/claude-code-templates",
+ "r_cost": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/cost_by_batch.csv", "contextbolt": "https://contextbolt.com/blog/too-many-mcp-servers/", "uber": "https://x.com/UberEng/status/2125008806249930999", "skills_mcp": "https://claude.com/resources/articles/skills-over-mcp-tasks-and-more", "davila7": "https://github.com/davila7/claude-code-templates",
  "i81081": "https://github.com/anthropics/claude-code/issues/81081", "i56710": "https://github.com/anthropics/claude-code/issues/56710", "i64606": "https://github.com/anthropics/claude-code/issues/64606",
  "i10768": "https://github.com/anthropics/claude-code/issues/10768", "c19679": "https://github.com/openai/codex/issues/19679", "r_cc": "https://www.reddit.com/r/ClaudeCode/comments/1qo0s2b/",
  "r_hell": "https://www.reddit.com/r/claudeskills/comments/1w2a45r/", "fsck": "https://blog.fsck.com/2025/12/17/claude-code-skills-not-triggering",
@@ -260,7 +260,7 @@ body = f"""
 <li><b>A skipped skill fails silently.</b> Nothing breaks, and until you read the traces and logs, you won’t know the skill or tool was never picked. The agent answers anyway, and LLMs are very good at answers that look as if the skill was used, while your instructions were never read and your data was never touched. Ask for Apple’s stock price without the finance tool being called, and you may get <b>a confident number from the model’s memory</b>.</li>
 <li><b>One skipped skill can skip a whole recipe.</b> A skill often says which tools to call and in which order: run the linter, then the tests, then open the pull request. Skip the skill, and nothing makes sure those steps happen.</li>
 <li><b>If you have rules to follow, it gets worse.</b> Some projects must follow a fixed process or use specific data: a legal review, an approved template, the official price list. How do you prove to an auditor that your agent did not improvise? “We installed the skill and hoped for the best” is not an audit trail. We need to measure, and be able to prove, that the agent uses what it is supposed to use.</li>
-<li><b>It takes an everyday setup, not an extreme one.</b> {A(L["i81081"], "One Claude Code issue")} reports that 75% of project skills (27 of 36) reached the model with only a name, and {A(L["i11364"], "one user counted")} 67,300 tokens of tool definitions from seven MCP servers before the first message. More reports are in the references.</li>
+<li><b>It takes an everyday setup, not an extreme one.</b> {A(L["i81081"], "One Claude Code issue")} reports that 75% of project skills (27 of 36) reached the model with only a name, and {A(L["i11364"], "one user counted")} 67,300 tokens of tool definitions from seven MCP servers before the first message. At company scale, {A(L["uber"], "Uber reports")} more than 5,000 skills in its internal marketplace after one year, about 100 of them switched on for every employee. More reports are in the references.</li>
 </ul>
 
 <h2>How an agent picks a skill or a tool</h2>
@@ -369,14 +369,14 @@ body = f"""
 <h2>What you can do about it</h2>
 {tab_("What I observed, how sure I am, and what to do about it.", T_TODO)}
 <h3>[Trick #1] Check what is actually exposed</h3>
-<p>In Claude Code, <code>/context</code> shows the size of your skill listing and {A(L["cc_skills"], "<code>/doctor</code> tells you whether descriptions are being dropped")}. Codex prints a warning when it goes over its budget ({A(L["c19679"], "codex#19679")}). And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. This is the first thing I would check.</p>
+<p>In Claude Code, <code>/context</code> shows the size of your skill listing and {A(L["cc_skills"], "<code>/doctor</code> tells you whether descriptions are being dropped")}. Codex prints a warning when it goes over its budget ({A(L["c19679"], "codex#19679")}). And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. Since November 2026, {A(L["skills_mcp"], "MCP servers can ship skills too")}, with nothing for you to install, so your listing can grow without you noticing (I have not tested how those are listed). This is the first thing I would check.</p>
 <h3>[Trick #2] Enable less, per project</h3>
 <p>This is the one thing I tested: with fewer skills installed, the designated one was picked more often (answer quality not measured). Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>.</p>
 <h3 id="trick-search">[Trick #3] Try other ways to discover and invoke (untested here)</h3>
 <ul>
 <li><b>Invoke required skills by name</b> (<code>/skill-name</code>) instead of hoping for a match.</li>
 <li><b>Give a skill a trigger nobody else has.</b> In my sample, skills with concrete nouns and file types held up.</li>
-<li><b>Use a router skill or a hook.</b> {A(L["spence"], "A hook that makes Claude evaluate skills before answering")} reached 84% activation in Scott Spence’s test, against 20% for a keyword hook.</li>
+<li><b>Use a router skill or a hook.</b> {A(L["spence"], "A hook that makes Claude evaluate skills before answering")} reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. {A(L["uber"], "Uber")} keeps about 100 skills on by default and uses a <code>find-skills</code> skill to search the other 5,000.</li>
 <li><b>Search instead of listing.</b> Claude Code already defers MCP tools behind {A(L["toolsearch"], "tool search")}. In your own agent, use the Claude API’s tool search tool, or embed the descriptions and retrieve the closest few.</li>
 </ul>
 
@@ -474,6 +474,8 @@ codex exec --json -s read-only "Audit the SEO of my site." \\
 <li>Reports about MCP tools: {A(L["i6915"], "claude-code#6915")} · {A(L["i7328"], "#7328")} · {A(L["i37793"], "#37793")} · {A(L["i11364"], "#11364")} · {A(L["cursor40"], "Cursor forum 1")} · {A(L["cur79686"], "Cursor forum 2")} · {A(L["g21823"], "gemini-cli#21823")} · {A(L["r_mcp1"], "r/mcp 1")} · {A(L["r_mcp2"], "r/mcp 2")}</li>
 <li>{A(L["spence"], "Scott Spence: How to make Claude Code skills activate reliably")} · {A(L["seleznov"], "Ivan Seleznov: 650 trials")} · {A(L["crosley"], "Blake Crosley: The skills my agent could not see")}</li>
 <li>{A(L["contextbolt"], "ContextBolt: Too Many MCP Servers? What Each One Costs, Measured")}</li>
+<li>{A(L["uber"], "Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month")} (2026)</li>
+<li>{A(L["skills_mcp"], "Claude: MCP servers can now ship skills, run tasks, and more")} (2026)</li>
 <li>{A(L["price"], "OpenAI: gpt-6-astra model page and pricing")}</li>
 <li>Modarressi et al. {A(L["nolima"], "NoLiMa: Long-Context Evaluation Beyond Literal Matching")} (ICML 2025)</li>
 <li>Hong, Troynikov &amp; Huber. {A(L["rot"], "Context Rot: How Increasing Input Tokens Impacts LLM Performance")} (Chroma, 2025)</li>
