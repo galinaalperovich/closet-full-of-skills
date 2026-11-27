@@ -300,7 +300,7 @@ If I had to pick one trick, this is it. Enable plugins per project, turn off unu
 
 ## Check your own agent
 
-I am packaging this check as a skill you can run on your own setup (coming soon on [GitHub](https://github.com/galinaalperovich/closet-full-of-skills)). Yes, a skill that checks whether your skills get picked. I see the irony too. Until then, the [README](https://github.com/galinaalperovich/closet-full-of-skills#check-your-own-agent) has a manual version in two commands.
+I am packaging this check as a skill you can run on your own setup (coming soon on [GitHub](https://github.com/galinaalperovich/closet-full-of-skills)). Yes, a skill that checks whether your skills get picked. I see the irony too. Let’s hope your harness picks it! Until then, the [README](https://github.com/galinaalperovich/closet-full-of-skills#check-your-own-agent) has a manual version in two commands.
 
 ## Limitations of the experiment
 

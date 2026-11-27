@@ -481,7 +481,7 @@ body = f"""
 </ul>
 
 <h2>Check your own agent</h2>
-<p>I am packaging this check as a skill you can run on your own setup (<span class="soon">coming soon</span> on {A(L["repo"], "GitHub")}). Yes, a skill that checks whether your skills get picked. I see the irony too. Until then, the {A(L["repo"] + "#check-your-own-agent", "README")} has a manual version in two commands.</p>
+<p>I am packaging this check as a skill you can run on your own setup (<span class="soon">coming soon</span> on {A(L["repo"], "GitHub")}). Yes, a skill that checks whether your skills get picked. I see the irony too. Let’s hope your harness picks it! Until then, the {A(L["repo"] + "#check-your-own-agent", "README")} has a manual version in two commands.</p>
 
 <h2>Limitations of the experiment</h2>
 <p>This is one person’s experiment, not a benchmark, and I would rather list the weak spots myself than have you find them:</p>
