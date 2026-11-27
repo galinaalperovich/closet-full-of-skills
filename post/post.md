@@ -140,7 +140,7 @@ Four details matter for reading the numbers:
 
 *Figure 4. Outcomes with 1,020 skills. Hatched: the run hit Claude Code’s 3-turn limit. “No skill detected”: no `Skill` call in Claude Code; in Codex, no command naming a `SKILL.md` (reads of Codex’s own skills under `skills/.system/` are not detected).*
 
-I went in expecting wrong skills. What I found is that most misses were not a wrong skill: they were runs where **no skill was detected at all**: the agent used its built-in tools or simply answered.
+I thought the model would pick wrong skills. What I found is that most misses were not a wrong skill: they were runs where **no skill was detected at all**: the agent used its built-in tools or simply answered as is.
 
 - **Haiku:** more than half of its no-skill runs (53 of 97) hit the 3-turn limit, so a longer window might have caught later picks.
 - **Sonnet:** two thirds of its misses (160 of 239) ended normally, with no skill.
@@ -149,7 +149,7 @@ I went in expecting wrong skills. What I found is that most misses were not a wr
 
 ## Result 2: What the model actually saw
 
-At this point I had a curve and no explanation. Was the listing cut, or did the model choose badly from a full one? I honestly did not know, so I pointed every skills setup at a stand-in server that records what each harness sends, with no model called ([scripts and results](https://github.com/galinaalperovich/closet-full-of-skills/tree/main/listing)).
+At this point, I had a curve and no explanation. Was the listing cut, or did the model choose badly from a full one? So I pointed every skills setup at a stand-in server that records **what each harness actually sends**, with no model called ([scripts and results](https://github.com/galinaalperovich/closet-full-of-skills/tree/main/listing)).
 
 *Table 3. What the skill listing contained in each setup. Haiku, Sonnet and Fable received the same listing.*
 
