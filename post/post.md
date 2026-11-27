@@ -51,8 +51,9 @@ I used to think the worst case was the agent picking a wrong skill. It turns out
 
 - **A skipped skill fails silently.** The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get **a confident number from the model’s memory**. In my runs, most misses looked exactly like this ([what the agent did instead](#misses)).
 - **One skipped skill can skip a whole recipe:** run the linter, then the tests, then open the pull request.
+- **Skipping a skill has a measurable cost.** In [Uber’s tests](https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/), sessions without its warehouse-query skill hit six times as many tool errors and took 31% longer.
 - **If you have specific business rules to follow, it gets worse.** “We installed the skill and hoped for the best” is not convincing for an audit trail.
-- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and a recent [Uber](https://x.com/UberEng/status/2125008806249930999) post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.
+- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and a recent [Uber](https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/) post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.
 
 ## Quick background: How an agent picks a skill or a tool
 
@@ -289,7 +290,7 @@ It helped less than I hoped ([Result 2](#raise-the-cap)), and every request carr
 
 ### [Trick #3] Enable less, per project
 
-If I had to pick one trick, this is it. Enable plugins per project, turn off unused skills with `/skills`, and if you only need `pdf` from a 3,000-skill collection, install `pdf`.
+If I had to pick one trick, this is it. Enable plugins per project, turn off unused skills with `/skills`, and if you only need `pdf` from a 3,000-skill collection, install `pdf`. [Uber](https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/) points the same way: it keeps about 100 skills always on out of 5,000, and its tests found that removing words, and sometimes whole skills, can help.
 
 ### [Trick #4] Name skills so they survive a cut listing
 
@@ -303,7 +304,7 @@ When the listing is cut, the name is often all the model gets ([Result 2](#resul
 ### [Trick #5] Try other ways to discover and invoke (untested here)
 
 - **Invoke required skills by name** (`/skill-name`) instead of hoping for a match.
-- **Use a router skill or a hook.** [A hook that makes Claude evaluate skills before answering](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. [Uber](https://x.com/UberEng/status/2125008806249930999) keeps about 100 skills on by default and uses a `find-skills` skill to search the other 5,000.
+- **Use a router skill or a hook.** [A hook that makes Claude evaluate skills before answering](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. [Uber](https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/) keeps about 100 skills on by default and uses a `find-skills` skill to search the other 5,000.
 - **Search instead of listing.** In your own agent, use the Claude API’s [tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool), or embed the descriptions and retrieve the closest few.
 
 ## Check your own agent
@@ -447,7 +448,7 @@ The GPT-6 figures are calculated from the token usage Codex reported, at OpenAI�
 15. Reports about MCP tools: [claude-code#6915](https://github.com/anthropics/claude-code/issues/6915) · [#7328](https://github.com/anthropics/claude-code/issues/7328) · [#37793](https://github.com/anthropics/claude-code/issues/37793) · [#11364](https://github.com/anthropics/claude-code/issues/11364) · [Cursor forum 1](https://forum.cursor.com/t/tools-limited-to-40-total/67976) · [Cursor forum 2](https://forum.cursor.com/t/mcp-40-tools-way-to-less/79686) · [gemini-cli#21823](https://github.com/google-gemini/gemini-cli/issues/21823) · [r/mcp 1](https://www.reddit.com/r/mcp/comments/1xnmicj/) · [r/mcp 2](https://www.reddit.com/r/mcp/comments/1y0a4a2/)
 16. [Scott Spence: How to make Claude Code skills activate reliably](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) · [Ivan Seleznov: 650 trials](https://medium.com/@ivan.seleznov1/why-claude-code-skills-dont-activate-and-how-to-fix-it-86f679409af1) · [Blake Crosley: The skills my agent could not see](https://blakecrosley.com/blog/skills-my-agent-could-not-see)
 17. [ContextBolt: Too Many MCP Servers? What Each One Costs, Measured](https://contextbolt.com/blog/too-many-mcp-servers/)
-18. [Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month](https://x.com/UberEng/status/2125008806249930999) (2026)
+18. [Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month](https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/) (November 2026)
 19. [Claude: MCP servers can now ship skills, run tasks, and more](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more) (2026)
 20. OpenAI model pages and pricing: [gpt-6-astra](https://developers.openai.com/api/docs/models/gpt-6-astra.md) · [gpt-6-sol](https://developers.openai.com/api/docs/models/gpt-6-sol.md)
 21. Modarressi et al. [NoLiMa: Long-Context Evaluation Beyond Literal Matching](https://arxiv.org/abs/2502.05167) (ICML 2025)

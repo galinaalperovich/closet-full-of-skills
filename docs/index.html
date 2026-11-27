@@ -149,8 +149,9 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 <ul>
 <li><b>A skipped skill fails silently.</b> The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get <b>a confident number from the model’s memory</b>. In my runs, most misses looked exactly like this (<a href="#misses">what the agent did instead</a>).</li>
 <li><b>One skipped skill can skip a whole recipe:</b> run the linter, then the tests, then open the pull request.</li>
+<li><b>Skipping a skill has a measurable cost.</b> In <a href="https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/">Uber’s tests</a>, sessions without its warehouse-query skill hit six times as many tool errors and took 31% longer.</li>
 <li><b>If you have specific business rules to follow, it gets worse.</b> “We installed the skill and hoped for the best” is not convincing for an audit trail.</li>
-<li><b>It takes an everyday setup, not an extreme one.</b> <a href="https://github.com/anthropics/claude-code/issues/81081">One Claude Code issue</a> reports 27 of 36 project skills reaching the model with only a name, and a recent <a href="https://x.com/UberEng/status/2125008806249930999">Uber</a> post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.</li>
+<li><b>It takes an everyday setup, not an extreme one.</b> <a href="https://github.com/anthropics/claude-code/issues/81081">One Claude Code issue</a> reports 27 of 36 project skills reaching the model with only a name, and a recent <a href="https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/">Uber</a> post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.</li>
 </ul>
 
 <h2 id="background">Quick background: How an agent picks a skill or a tool</h2>
@@ -374,7 +375,7 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 </ul>
 <p>It helped less than I hoped (<a href="#raise-the-cap">Result 2</a>), and every request carries the longer listing. It makes sense when you are a little over the budget, not ten times over.</p>
 <h3 id="trick-enable-less">[Trick #3] Enable less, per project</h3>
-<p>If I had to pick one trick, this is it. Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>.</p>
+<p>If I had to pick one trick, this is it. Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>. <a href="https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/">Uber</a> points the same way: it keeps about 100 skills always on out of 5,000, and its tests found that removing words, and sometimes whole skills, can help.</p>
 <h3 id="trick-naming">[Trick #4] Name skills so they survive a cut listing</h3>
 <p>When the listing is cut, the name is often all the model gets (<a href="#result-2">Result 2</a>). So the name has to do the description’s job.</p>
 <ul>
@@ -386,7 +387,7 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 <h3 id="trick-search">[Trick #5] Try other ways to discover and invoke (untested here)</h3>
 <ul>
 <li><b>Invoke required skills by name</b> (<code>/skill-name</code>) instead of hoping for a match.</li>
-<li><b>Use a router skill or a hook.</b> <a href="https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably">A hook that makes Claude evaluate skills before answering</a> reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. <a href="https://x.com/UberEng/status/2125008806249930999">Uber</a> keeps about 100 skills on by default and uses a <code>find-skills</code> skill to search the other 5,000.</li>
+<li><b>Use a router skill or a hook.</b> <a href="https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably">A hook that makes Claude evaluate skills before answering</a> reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. <a href="https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/">Uber</a> keeps about 100 skills on by default and uses a <code>find-skills</code> skill to search the other 5,000.</li>
 <li><b>Search instead of listing.</b> In your own agent, use the Claude API’s <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool">tool search tool</a>, or embed the descriptions and retrieve the closest few.</li>
 </ul>
 
@@ -519,7 +520,7 @@ figure svg:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 <li>Reports about MCP tools: <a href="https://github.com/anthropics/claude-code/issues/6915">claude-code#6915</a> · <a href="https://github.com/anthropics/claude-code/issues/7328">#7328</a> · <a href="https://github.com/anthropics/claude-code/issues/37793">#37793</a> · <a href="https://github.com/anthropics/claude-code/issues/11364">#11364</a> · <a href="https://forum.cursor.com/t/tools-limited-to-40-total/67976">Cursor forum 1</a> · <a href="https://forum.cursor.com/t/mcp-40-tools-way-to-less/79686">Cursor forum 2</a> · <a href="https://github.com/google-gemini/gemini-cli/issues/21823">gemini-cli#21823</a> · <a href="https://www.reddit.com/r/mcp/comments/1xnmicj/">r/mcp 1</a> · <a href="https://www.reddit.com/r/mcp/comments/1y0a4a2/">r/mcp 2</a></li>
 <li><a href="https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably">Scott Spence: How to make Claude Code skills activate reliably</a> · <a href="https://medium.com/@ivan.seleznov1/why-claude-code-skills-dont-activate-and-how-to-fix-it-86f679409af1">Ivan Seleznov: 650 trials</a> · <a href="https://blakecrosley.com/blog/skills-my-agent-could-not-see">Blake Crosley: The skills my agent could not see</a></li>
 <li><a href="https://contextbolt.com/blog/too-many-mcp-servers/">ContextBolt: Too Many MCP Servers? What Each One Costs, Measured</a></li>
-<li><a href="https://x.com/UberEng/status/2125008806249930999">Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month</a> (2026)</li>
+<li><a href="https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/">Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month</a> (November 2026)</li>
 <li><a href="https://claude.com/resources/articles/skills-over-mcp-tasks-and-more">Claude: MCP servers can now ship skills, run tasks, and more</a> (2026)</li>
 <li>OpenAI model pages and pricing: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra.md">gpt-6-astra</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-sol.md">gpt-6-sol</a></li>
 <li>Modarressi et al. <a href="https://arxiv.org/abs/2502.05167">NoLiMa: Long-Context Evaluation Beyond Literal Matching</a> (ICML 2025)</li>

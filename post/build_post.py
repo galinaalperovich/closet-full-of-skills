@@ -59,7 +59,7 @@ L = {
  "nolima": "https://arxiv.org/abs/2502.05167", "rot": "https://research.trychroma.com/context-rot", "ssmax": "https://arxiv.org/abs/2501.19399",
  "ctxeng": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "repo": "https://github.com/galinaalperovich/closet-full-of-skills", "r_meth": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md", "r_listing": "https://github.com/galinaalperovich/closet-full-of-skills/tree/main/listing",
  "r_follow": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/FOLLOWUP_PROTOCOL.md", "r_prompts": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/prompts.json", "r_judge": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md",
- "r_cost": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/cost_by_batch.csv", "contextbolt": "https://contextbolt.com/blog/too-many-mcp-servers/", "uber": "https://x.com/UberEng/status/2125008806249930999", "skills_mcp": "https://claude.com/resources/articles/skills-over-mcp-tasks-and-more", "davila7": "https://github.com/davila7/claude-code-templates",
+ "r_cost": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/cost_by_batch.csv", "contextbolt": "https://contextbolt.com/blog/too-many-mcp-servers/", "uber": "https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/", "skills_mcp": "https://claude.com/resources/articles/skills-over-mcp-tasks-and-more", "davila7": "https://github.com/davila7/claude-code-templates",
  "i81081": "https://github.com/anthropics/claude-code/issues/81081", "i56710": "https://github.com/anthropics/claude-code/issues/56710", "i64606": "https://github.com/anthropics/claude-code/issues/64606",
  "i10768": "https://github.com/anthropics/claude-code/issues/10768", "c19679": "https://github.com/openai/codex/issues/19679", "r_cc": "https://www.reddit.com/r/ClaudeCode/comments/1qo0s2b/",
  "r_hell": "https://www.reddit.com/r/claudeskills/comments/1w2a45r/", "fsck": "https://blog.fsck.com/2025/12/17/claude-code-skills-not-triggering",
@@ -331,6 +331,7 @@ body = f"""
 <ul>
 <li><b>A skipped skill fails silently.</b> The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get <b>a confident number from the model’s memory</b>. In my runs, most misses looked exactly like this (<a href="#misses">what the agent did instead</a>).</li>
 <li><b>One skipped skill can skip a whole recipe:</b> run the linter, then the tests, then open the pull request.</li>
+<li><b>Skipping a skill has a measurable cost.</b> In {A(L["uber"], "Uber’s tests")}, sessions without its warehouse-query skill hit six times as many tool errors and took 31% longer.</li>
 <li><b>If you have specific business rules to follow, it gets worse.</b> “We installed the skill and hoped for the best” is not convincing for an audit trail.</li>
 <li><b>It takes an everyday setup, not an extreme one.</b> {A(L["i81081"], "One Claude Code issue")} reports 27 of 36 project skills reaching the model with only a name, and a recent {A(L["uber"], "Uber")} post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.</li>
 </ul>
@@ -471,7 +472,7 @@ body = f"""
 </ul>
 <p>It helped less than I hoped (<a href="#raise-the-cap">Result 2</a>), and every request carries the longer listing. It makes sense when you are a little over the budget, not ten times over.</p>
 <h3 id="trick-enable-less">[Trick #3] Enable less, per project</h3>
-<p>If I had to pick one trick, this is it. Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>.</p>
+<p>If I had to pick one trick, this is it. Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>. {A(L["uber"], "Uber")} points the same way: it keeps about 100 skills always on out of 5,000, and its tests found that removing words, and sometimes whole skills, can help.</p>
 <h3 id="trick-naming">[Trick #4] Name skills so they survive a cut listing</h3>
 <p>When the listing is cut, the name is often all the model gets (<a href="#result-2">Result 2</a>). So the name has to do the description’s job.</p>
 <ul>
@@ -571,7 +572,7 @@ body = f"""
 <li>Reports about MCP tools: {A(L["i6915"], "claude-code#6915")} · {A(L["i7328"], "#7328")} · {A(L["i37793"], "#37793")} · {A(L["i11364"], "#11364")} · {A(L["cursor40"], "Cursor forum 1")} · {A(L["cur79686"], "Cursor forum 2")} · {A(L["g21823"], "gemini-cli#21823")} · {A(L["r_mcp1"], "r/mcp 1")} · {A(L["r_mcp2"], "r/mcp 2")}</li>
 <li>{A(L["spence"], "Scott Spence: How to make Claude Code skills activate reliably")} · {A(L["seleznov"], "Ivan Seleznov: 650 trials")} · {A(L["crosley"], "Blake Crosley: The skills my agent could not see")}</li>
 <li>{A(L["contextbolt"], "ContextBolt: Too Many MCP Servers? What Each One Costs, Measured")}</li>
-<li>{A(L["uber"], "Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month")} (2026)</li>
+<li>{A(L["uber"], "Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month")} (November 2026)</li>
 <li>{A(L["skills_mcp"], "Claude: MCP servers can now ship skills, run tasks, and more")} (2026)</li>
 <li>OpenAI model pages and pricing: {A(L["price"], "gpt-6-astra")} · {A(L["price_sol"], "gpt-6-sol")}</li>
 <li>Modarressi et al. {A(L["nolima"], "NoLiMa: Long-Context Evaluation Beyond Literal Matching")} (ICML 2025)</li>
