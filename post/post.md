@@ -254,7 +254,7 @@ Real setups have both, so I mixed them: 400 skills and all 791 tools in one setu
 
 *Figure 6. Sonnet in Claude Code: the component installed alone, and in the mix of 400 skills and 791 tools. Tool requests: the 15 single-step targets. Whiskers: 95% CI.*
 
-**The same pattern.** In the mix, Sonnet picked the designated skill in 34% of requests and the designated tool in 79%. Haiku: 21% and 78%.
+**The same pattern.** In the mix, Sonnet picked the designated skill in 34% of requests and the designated tool in 79%. Haiku: 21% and 78%. A smaller mix of 100 skills and 437 tools was already enough: 45% and 80% for Sonnet.
 
 When the agent skipped the skill, it mostly **used only built-in tools**: “Merge invoice-jan.pdf and invoice-feb.pdf” became two `Glob` searches in the empty folder and “I couldn’t find the files”.
 

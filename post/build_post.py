@@ -447,7 +447,7 @@ body = f"""
 <h2>Result 4: Skills and tools together</h2>
 <p>Real setups have both, so I mixed them: 400 skills and all 791 tools in one setup, tested with Haiku and Sonnet.</p>
 {fig_("fig_mix", "Sonnet in Claude Code: the component installed alone, and in the mix of 400 skills and 791 tools. Tool requests: the 15 single-step targets. Whiskers: 95% CI.")}
-<p><b>The same pattern.</b> In the mix, Sonnet picked the designated skill in {P(EC[("sonnet", "skill requests", "mixed_larger")]["rate"])}% of requests and the designated tool in {P(EC[("sonnet", "single-step tool requests", "mixed_larger")]["rate"])}%. Haiku: {P(EC[("haiku", "skill requests", "mixed_larger")]["rate"])}% and {P(EC[("haiku", "single-step tool requests", "mixed_larger")]["rate"])}%.</p>
+<p><b>The same pattern.</b> In the mix, Sonnet picked the designated skill in {P(EC[("sonnet", "skill requests", "mixed_larger")]["rate"])}% of requests and the designated tool in {P(EC[("sonnet", "single-step tool requests", "mixed_larger")]["rate"])}%. Haiku: {P(EC[("haiku", "skill requests", "mixed_larger")]["rate"])}% and {P(EC[("haiku", "single-step tool requests", "mixed_larger")]["rate"])}%. A smaller mix of 100 skills and 437 tools was already enough: {P(EC[("sonnet", "skill requests", "mixed_smaller")]["rate"])}% and {P(EC[("sonnet", "single-step tool requests", "mixed_smaller")]["rate"])}% for Sonnet.</p>
 <p>When the agent skipped the skill, it mostly <b>used only built-in tools</b>: “Merge invoice-jan.pdf and invoice-feb.pdf” became two <code>Glob</code> searches in the empty folder and “I couldn’t find the files”.</p>
 
 <h2>Why do skills fade while tools hold up?</h2>
