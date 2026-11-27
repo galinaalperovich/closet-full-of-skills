@@ -389,7 +389,7 @@ Before the experiment I cloned 42 popular skill repositories, found through GitH
 
 This is illustrative arithmetic, not a model of these agents, and nothing in my data measures attention. It only shows why “more entries can dilute a match” is a reasonable thing to test.
 
-In a [transformer](https://arxiv.org/abs/1706.03762), each attention head turns scores into weights with a softmax, and within one head the weights add up to 1:
+In a transformer, each attention head turns scores into weights with a softmax, and within one head the weights add up to 1:
 
 *a<sub>i</sub>* = e<sup>*s<sub>i</sub>*</sup> / Σ<sub>*j*</sub> e<sup>*s<sub>j</sub>*</sup>
 
@@ -450,8 +450,6 @@ The GPT-6 figures are calculated from the token usage Codex reported, at OpenAI�
 17. [ContextBolt: Too Many MCP Servers? What Each One Costs, Measured](https://contextbolt.com/blog/too-many-mcp-servers/)
 18. [Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month](https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/) (November 2026)
 19. [Claude: MCP servers can now ship skills, run tasks, and more](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more) (2026)
-20. OpenAI model pages and pricing: [gpt-6-astra](https://developers.openai.com/api/docs/models/gpt-6-astra.md) · [gpt-6-sol](https://developers.openai.com/api/docs/models/gpt-6-sol.md)
-21. Modarressi et al. [NoLiMa: Long-Context Evaluation Beyond Literal Matching](https://arxiv.org/abs/2502.05167) (ICML 2025)
-22. Hong, Troynikov & Huber. [Context Rot: How Increasing Input Tokens Impacts LLM Performance](https://research.trychroma.com/context-rot) (Chroma, 2025)
-23. Vaswani et al. [Attention Is All You Need](https://arxiv.org/abs/1706.03762) (2017)
-24. Nakanishi. [Scalable-Softmax Is Superior for Attention](https://arxiv.org/abs/2501.19399) (2025)
+20. Modarressi et al. [NoLiMa: Long-Context Evaluation Beyond Literal Matching](https://arxiv.org/abs/2502.05167) (ICML 2025)
+21. Hong, Troynikov & Huber. [Context Rot: How Increasing Input Tokens Impacts LLM Performance](https://research.trychroma.com/context-rot) (Chroma, 2025)
+22. Nakanishi. [Scalable-Softmax Is Superior for Attention](https://arxiv.org/abs/2501.19399) (2025)

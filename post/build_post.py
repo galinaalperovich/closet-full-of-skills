@@ -536,7 +536,7 @@ body = f"""
 
 <details class="fold"><summary><h2 id="appendix-c">Appendix C: A toy calculation about dilution</h2></summary>
 <p>This is illustrative arithmetic, not a model of these agents, and nothing in my data measures attention. It only shows why “more entries can dilute a match” is a reasonable thing to test.</p>
-<p>In a {A(L["vaswani"], "transformer")}, each attention head turns scores into weights with a softmax, and within one head the weights add up to 1:</p>
+<p>In a transformer, each attention head turns scores into weights with a softmax, and within one head the weights add up to 1:</p>
 <p class="formula"><i>a<sub>i</sub></i> = e<sup><i>s<sub>i</sub></i></sup> / Σ<sub><i>j</i></sub> e<sup><i>s<sub>j</sub></i></sup></p>
 <p>Now a cartoon with several assumptions: each skill description is one block, the target’s weight before normalising (e<sup><i>s</i></sup>) is 20 times that of every unrelated skill, which means a score higher by ln 20 ≈ 3, look-alikes get the same weight as the target, scores do not change when entries are added, and nothing else is in the context. Then the target’s share is 20 / (20 + <i>n</i>) for <i>n</i> unrelated skills, and 20 / (20 + 20<i>k</i> + <i>n</i>) if <i>k</i> of them are look-alikes:</p>
 {fig_("fig_attn", "Toy arithmetic under the assumptions in the text. Real models have many heads and layers, scores change with the input, and an attention weight is not a probability of selecting a skill.")}
@@ -574,10 +574,8 @@ body = f"""
 <li>{A(L["contextbolt"], "ContextBolt: Too Many MCP Servers? What Each One Costs, Measured")}</li>
 <li>{A(L["uber"], "Uber Engineering: How Uber Evals 1 Million Agent Skill Invocations a Month")} (November 2026)</li>
 <li>{A(L["skills_mcp"], "Claude: MCP servers can now ship skills, run tasks, and more")} (2026)</li>
-<li>OpenAI model pages and pricing: {A(L["price"], "gpt-6-astra")} · {A(L["price_sol"], "gpt-6-sol")}</li>
 <li>Modarressi et al. {A(L["nolima"], "NoLiMa: Long-Context Evaluation Beyond Literal Matching")} (ICML 2025)</li>
 <li>Hong, Troynikov &amp; Huber. {A(L["rot"], "Context Rot: How Increasing Input Tokens Impacts LLM Performance")} (Chroma, 2025)</li>
-<li>Vaswani et al. {A(L["vaswani"], "Attention Is All You Need")} (2017)</li>
 <li>Nakanishi. {A(L["ssmax"], "Scalable-Softmax Is Superior for Attention")} (2025)</li>
 </ol>
 </details>
