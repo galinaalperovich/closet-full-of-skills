@@ -12,22 +12,22 @@ Galina Alperovich · November 2026
 
 *I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex, and measured how often the agent still picked the one each request was written for.*
 
-The experiment, data and analysis: [github.com/galinaalperovich/closet-full-of-skills](https://github.com/galinaalperovich/closet-full-of-skills). Every request, every result record and every script, so you can reproduce all the numbers for free.
+The experiment, data, and analysis: [github.com/galinaalperovich/closet-full-of-skills](https://github.com/galinaalperovich/closet-full-of-skills). Every request, every result record, and every script, so you can reproduce all the numbers (for free).
 
-A skill to check your own agent: coming soon
+A skill to check your own agent: *coming soon*
 
 ## Summary
 
-Installing a skill doesn’t mean your agent will use it. I wanted to see how bad it gets, so I sent 120 natural requests to Claude Code and Codex, each written for one skill, and kept installing more skills around it:
+Apparently, installing a skill doesn’t mean your agent will use it. I wanted to see how bad it gets, so I sent 120 natural requests to Claude Code and Codex, each written for one skill, and kept installing more and more skills. That is what I found out:
 
 1. **Skills fade.** Alone, the skill was picked in 78–100% of runs. Among 1,000 others, in 10–34%, and in 72% for the strongest model. [→ Result 1](#result-1)
-2. **For smaller models, twenty is enough.** This one surprised me: among just 20 unrelated skills, Haiku fell from 78% to 48% and Sonnet from 94% to 76%. [→ Result 1](#result-1)
-3. **Past a few hundred skills, the harness quietly cuts the listing.** Of 1,020 skills, Codex listed 321, alphabetically. Claude Code kept every name but only 19 descriptions. I found a setting that raises the cap, but it won back only about ten points. [→ Result 2](#result-2)
+2. **For smaller models, just 20 is enough.** This one surprised me: among just 20 unrelated skills, Haiku fell from 78% to 48% and Sonnet from 94% to 76%! [→ Result 1](#result-1)
+3. **Past a few hundred skills, the harness quietly cuts the listing.** Of 1,020 skills, Codex listed 321, alphabetically. Claude Code kept every name but only 19 descriptions. Both harnesses have a setting that raises the cap, but it didn't help much and won back only about ten points. [→ Result 2](#result-2)
 4. **A stronger model buys room, not immunity.** Fable 5.2 held at 98% up to ~220 skills and fell only after the listing was cut. For a strong model, the harness explains more of the loss than the model’s own confusion. [→ Result 2](#result-2)
-5. **Most misses are no skill at all, not a wrong one.** The agent uses built-in tools or just writes the answer itself, and nothing tells you. [→ What the agent did instead](#misses)
-6. **MCP tools held up better.** Single-step tool selection went from 83–96% alone to 78–84% among 791, in both harnesses. [→ Result 3](#result-3)
+5. **Most misses are no skill at all, not a wrong one.** The agent uses built-in tools or just writes the answer on its own, and nothing tells you about it, response looks realistic (opening the door to the old, known hallucinations). [→ What the agent did instead](#misses)
+6. **MCP tools held up better.** Single-step tool selection went from 83–96% alone to 78–84% among 791, in both harnesses. Not bad! [→ Result 3](#result-3)
 
-The experiment has [its limits](#limitations-of-the-experiment). At the end I share [a few tricks for dealing with this problem](#what-you-can-do-about-it).
+The experiment has [its limits](#limitations-of-the-experiment). At the end, I share [a few tricks for dealing with this problem](#what-you-can-do-about-it).
 
 <!-- The table of contents is made from the headings. -->
 
@@ -37,7 +37,7 @@ Agent skills became **the new npm**. A skill is a folder with a `SKILL.md` file:
 
 Here is what made me curious. The agent chooses a skill from its description, and the descriptions in that one collection add up to about 129K tokens. *The Great Gatsby* is about 72K. No harness sends **two Gatsbys** with every request: Claude Code and Codex both cap the listing. So what happens to the skills that do not fit, and to the ones that do?
 
-It is a harder version of the **needle-in-a-haystack test**. The [original](https://github.com/gkamradt/LLMTest_NeedleInAHaystack) hides one fact in a long document and asks for it. Here the needle is one skill among hundreds, and nobody asks for it: the model has to notice that the request needs it. A few benchmarks study parts of this ([MetaTool](https://arxiv.org/abs/2310.03128), [LongFuncEval](https://arxiv.org/abs/2505.10570), [Liu et al.](https://arxiv.org/abs/2604.04323)), but none shows the full picture of a real harness. What is new in my study:
+It is a harder version of the **needle-in-a-haystack test**. The [original](https://github.com/gkamradt/LLMTest_NeedleInAHaystack) hides one fact in a long document and asks for it. Here the needle is one skill among hundreds, and nobody asks for it: the model has to notice that the request **implicitly** asks for it. A few benchmarks study parts of this problem ([MetaTool](https://arxiv.org/abs/2310.03128), [LongFuncEval](https://arxiv.org/abs/2505.10570), [Liu et al.](https://arxiv.org/abs/2604.04323)), but none shows the full picture of a real harness. What's new in this study:
 
 - **Real harnesses, not a bare model.** What the harness does before the model sees anything turned out to matter most.
 - **Real skills and tools:** 20 popular skills and 20 published MCP tools, among up to 1,000 real skills and 791 real tool definitions.
@@ -47,20 +47,20 @@ It is a harder version of the **needle-in-a-haystack test**. The [original](http
 
 ## Why it matters
 
-I used to think the worst case was the agent picking a wrong skill. The worst case is quieter than that:
+I used to think the worst case was the agent picking a wrong skill. It appeared that the worst case is **quieter** than that:
 
-- **A skipped skill fails silently.** The agent answers anyway. Ask for Apple’s stock price without the finance tool being called, and you may get **a confident number from the model’s memory**.
+- **A skipped skill fails silently.** The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get **a confident number from the model’s memory**.
 - **One skipped skill can skip a whole recipe:** run the linter, then the tests, then open the pull request.
-- **If you have rules to follow, it gets worse.** “We installed the skill and hoped for the best” is not an audit trail.
-- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and [Uber](https://x.com/UberEng/status/2125008806249930999) has more than 5,000 skills in its internal marketplace.
+- **If you have specific business rules to follow, it gets worse.** “We installed the skill and hoped for the best” is not convincing for an audit trail.
+- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and a recent [Uber](https://x.com/UberEng/status/2125008806249930999) post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.
 
-## How an agent picks a skill or a tool
+## Quick background: How an agent picks a skill or a tool
 
 A **skill** is a folder of instructions that teaches the agent *how* to do something. An **MCP tool** is a function on a server that *does* one thing, such as creating an issue.
 
-**Loading a skill is itself a tool call.** Claude Code calls its `Skill` tool; Codex reads the file with a shell command such as `cat .agents/skills/pdf/SKILL.md`. That first call is what I count as “selected” (for Codex, a command naming the skill’s `SKILL.md`; I did not check that the read succeeded).
+**Loading a skill is itself a tool call.** Claude Code calls its `Skill` tool; Codex reads the file with a shell command such as `cat .agents/skills/pdf/SKILL.md`. That first call is what I count as “selected” (for Codex, a command naming the skill’s `SKILL.md`).
 
-The two reach the model differently. Skills sit in one listing of names and descriptions, sent with every request. MCP tools are listed by name only, and the model fetches a full definition on demand.
+A skill and a tool reach the model differently. Skills sit in one listing of names and descriptions, sent with every request. MCP tools are listed by name only, and the model fetches a full definition on demand.
 
 ![Diagram. The model gets the request together with the skill listing, which holds every skill's name and description within a capped budget, and the MCP tools, which Claude Code lists by name and loads in full on demand. The model then loads a skill, which is a tool call that returns instructions, calls an MCP tool, or uses only built-in tools such as search, read and shell.](images/fig_how.png)
 
