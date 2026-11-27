@@ -128,9 +128,9 @@ Four details matter for reading the numbers:
 
 *Figure 3. The same numbers as a chart. GPT-6 Sol is the dashed line, almost on top of GPT-6 Astra. Sonnet: 360 runs per point; the others: 120. The x axis is not to scale.*
 
-**For Haiku and Sonnet, the decline is already there at 20.** These are 20 skills about different things: PDFs, SEO, TDD, animation. Still, Haiku fell from 78% to 48% and Sonnet from 94% to 76%. I expected trouble at a thousand skills, not at twenty, but **twenty is enough**.
+**For Haiku and Sonnet, the decline is already there at 20.** These are 20 skills about different things: PDFs, SEO, TDD, animation. Still, Haiku fell from 78% to 48% and Sonnet from 94% to 76%. I expected trouble at a bit higher number than **20**.
 
-**A stronger model holds longer.** Honestly, I hoped a stronger model would simply fix it, and for a while it did. Fable stayed at 99%, 99% and 98% up to ~220 skills, and only then gave way: 72% at 1,020. Still more than one request in four missed.
+**A stronger model holds longer.** I hoped a stronger model would simply fix it, and for a while it did. Fable stayed at 99%, 99%, and 98% up to ~220 skills, and only then gave way: 72% at 1,020. Still more than one request in three missed.
 
 **In Codex, the model made no difference.** I thought the cheaper model would do worse. It drew the same curve as GPT-6 Astra: 100%, 100%, 82% and 12%, next to 100%, 99%, 83% and 10%. Result 2 shows why.
 
