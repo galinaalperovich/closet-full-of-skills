@@ -225,7 +225,7 @@ Which of the 20 skills survived, and why, is in [Appendix E](#appendix-e).
 
 ## Result 3: MCP tools hold up better
 
-Then I repeated the design with 20 everyday MCP tools, each served from its real published definition. I expected the same collapse.
+Then I repeated the design with 20 everyday MCP tools (each served from its real published definition) and expected the same collapse.
 
 **To my surprise, the tools held up, in both harnesses.** With the target tool alone, the agent picked it for 83% (Haiku), 87% (Sonnet), 90% (Fable) and 96% (GPT-6 Sol) of the single-step requests. With all 791 tools installed, for 78%, 79%, 84% and 81%. Skills, remember, fell to 16%, 34%, 72% and 12%.
 
