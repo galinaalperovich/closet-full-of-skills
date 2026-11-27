@@ -250,7 +250,7 @@ Five of the 20 tools need a first step, such as opening a page before a screensh
 
 ## Result 4: Skills and tools together
 
-Real setups have both, and I wondered whether mixing changes the picture. So I mixed them: 400 skills and all 791 tools in one setup, tested with Haiku and Sonnet.
+Real applications have both, and I wondered whether mixing changes the picture. So I mixed them: 400 skills and all 791 tools in one setup, tested with Haiku and Sonnet.
 
 ![Bars with 95% intervals, Sonnet in Claude Code, installed alone and in the mix of 400 skills and 791 tools. Skill requests: 94 and 34 percent. Single-step tool requests: 87 and 79 percent.](images/fig_mix.png)
 
