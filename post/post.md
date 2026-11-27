@@ -130,7 +130,7 @@ Four details matter for reading the numbers:
 
 **For Haiku and Sonnet, the decline is already there at 20.** These are 20 skills about different things: PDFs, SEO, TDD, animation. Still, Haiku fell from 78% to 48% and Sonnet from 94% to 76%. I expected trouble at a bit higher number than **20**.
 
-**A stronger model holds longer.** I hoped a stronger model would simply fix it, and for a while it did. Fable stayed at 99%, 99%, and 98% up to ~220 skills, and only then gave way: 72% at 1,020. Still more than one request in three missed.
+**A stronger model holds longer.** I hoped a stronger model would simply fix it, and for a while it did. Fable stayed at 99%, 99%, and 98% up to ~220 skills, and only then gave way: 72% at 1,020. Still more than one request in four missed.
 
 **In Codex, the model made no difference.** I thought the cheaper model would do worse. It drew the same curve as GPT-6 Astra: 100%, 100%, 82% and 12%, next to 100%, 99%, 83% and 10%. Result 2 shows why.
 
@@ -291,14 +291,20 @@ It helped less than I hoped ([Result 2](#raise-the-cap)), and every request carr
 
 If I had to pick one trick, this is it. Enable plugins per project, turn off unused skills with `/skills`, and if you only need `pdf` from a 3,000-skill collection, install `pdf`.
 
-### [Trick #4] Try other ways to discover and invoke (untested here)
+### [Trick #4] Name skills so they survive a cut listing
+
+When the listing is cut, the name is often all the model gets ([Result 2](#result-2)). So the name has to do the description’s job.
+
+- **Name the action and the object.** `merge-pdfs` tells the model when to use it. `pdf-toolkit` or `helper` does not. In my sample, skills with concrete nouns and file types held up.
+- **Use a word nobody else uses.** At 1,020 skills, `seo-audit` was a bare name among 16 others with “seo” in them, and Sonnet picked it in 0 of 18 runs.
+- **In Codex, the alphabet matters.** Past its budget, Codex lists skills alphabetically and drops the rest: at 1,020 skills it stopped at “developer-listening”. A skill that has to be found should not start with a z. This works around one harness’s cut; it is not a fix.
+- **Split fat skills into smaller, specific ones** (untested). A skill that does five things gets a vague name, and once the listing is cut, the name may be all the model sees. Each split adds an entry to the listing, so split only skills that really do different things.
+
+### [Trick #5] Try other ways to discover and invoke (untested here)
 
 - **Invoke required skills by name** (`/skill-name`) instead of hoping for a match.
-- **Give a skill a trigger nobody else has.** In my sample, skills with concrete nouns and file types held up.
 - **Use a router skill or a hook.** [A hook that makes Claude evaluate skills before answering](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. [Uber](https://x.com/UberEng/status/2125008806249930999) keeps about 100 skills on by default and uses a `find-skills` skill to search the other 5,000.
 - **Search instead of listing.** In your own agent, use the Claude API’s [tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool), or embed the descriptions and retrieve the closest few.
-
-//[Trick #4] <add trick about naming skills better: more specific actions, and also at the beginning of the alphabet! and maybe even restructuring fat skills into smalelr more specific actionable skills that have clear actionable names>
 
 ## Check your own agent
 
