@@ -225,30 +225,30 @@ out["fig_misses"] = f'''<svg viewBox="0 0 740 {66 + 50 * len(rows)}" role="img" 
 # --- Fig: mixed scenarios (sequential ramp: load level), request-weighted rates with 95% intervals
 ec = {(r["model"], r["series"], r["setup"]): r for r in rd("e3_chart_rates.csv")}
 groups = []
-for m, nm in (("haiku", "Haiku"), ("sonnet", "Sonnet")):
-    for series, lab in (("skill requests", "150 skill requests"), ("single-step tool requests", "90 tool requests")):
-        groups.append((nm, lab, [ec[(m, series, st)] for st in ("single component", "mixed_smaller", "mixed_larger")]))
+for m, nm in (("sonnet", "Sonnet"),):
+    for series, lab in (("skill requests", "Skill requests"), ("single-step tool requests", "Tool requests")):
+        groups.append((lab, "", [ec[(m, series, st)] for st in ("single component", "mixed_larger")]))
 W, Hh = 720, 340; L, T, Bm = 50, 40, 62; pw = W - L - 20; ph = Hh - T - Bm
 Y = lambda v: T + ph * (1 - v / 100)
-gp = []; gw = pw / len(groups); bwid = 30
+gp = []; gw = pw / len(groups); bwid = 64
 for v in (0, 25, 50, 75, 100):
     gp.append(f'<line x1="{L}" y1="{Y(v):.1f}" x2="{L+pw}" y2="{Y(v):.1f}" stroke="currentColor" stroke-opacity="{.35 if v==0 else .12}"/><text x="{L-8}" y="{Y(v)+4:.1f}" text-anchor="end" font-size="11.5" fill="currentColor" fill-opacity=".7">{v}%</text>')
-labs = ["Single component", "Mixed, smaller", "Mixed, larger"]
+labs = ["Installed alone", "In the mix"]
 lx = L
 for k, lab in enumerate(labs):
-    gp.append(f'<rect x="{lx}" y="10" width="12" height="12" rx="2" fill="var(--seq{k+1})"/><text x="{lx+17}" y="20" font-size="11.5" fill="currentColor">{lab}</text>'); lx += 34 + 6.4 * len(lab)
+    gp.append(f'<rect x="{lx}" y="10" width="12" height="12" rx="2" fill="var(--seq{2*k+1})"/><text x="{lx+17}" y="20" font-size="11.5" fill="currentColor">{lab}</text>'); lx += 34 + 6.4 * len(lab)
 gp.append(f'<text x="{lx+4}" y="20" font-size="11.5" fill="currentColor" fill-opacity=".75">whiskers: 95% CI</text>')
 for gi, (nm, kind, rows) in enumerate(groups):
-    cx = L + gw * gi + gw / 2 - 1.5 * bwid - 3
+    cx = L + gw * gi + gw / 2 - len(rows) / 2 * bwid - 3
     for k, r in enumerate(rows):
         v, lo, hi = 100 * F(r["rate"]), 100 * F(r["req_lo"]), 100 * F(r["req_hi"])
         x = cx + k * (bwid + 3); y = Y(v); xm = x + bwid / 2
-        gp.append(f'<path d="M{x:.1f},{Y(0):.1f} V{y+4:.1f} Q{x:.1f},{y:.1f} {x+4:.1f},{y:.1f} H{x+bwid-4:.1f} Q{x+bwid:.1f},{y:.1f} {x+bwid:.1f},{y+4:.1f} V{Y(0):.1f} Z" fill="var(--seq{k+1})"><title>{nm} {kind}, {labs[k]}: {v:.1f}% (95% CI {lo:.0f}–{hi:.0f}%)</title></path>')
+        gp.append(f'<path d="M{x:.1f},{Y(0):.1f} V{y+4:.1f} Q{x:.1f},{y:.1f} {x+4:.1f},{y:.1f} H{x+bwid-4:.1f} Q{x+bwid:.1f},{y:.1f} {x+bwid:.1f},{y+4:.1f} V{Y(0):.1f} Z" fill="var(--seq{2*k+1})"><title>{nm} {kind}, {labs[k]}: {v:.1f}% (95% CI {lo:.0f}–{hi:.0f}%)</title></path>')
         gp.append(f'<path d="M{xm:.1f},{Y(hi):.1f} V{Y(lo):.1f} M{xm-4:.1f},{Y(hi):.1f} H{xm+4:.1f} M{xm-4:.1f},{Y(lo):.1f} H{xm+4:.1f}" stroke="currentColor" stroke-opacity=".7" stroke-width="1.3" fill="none"/>')
-        gp.append(f'<text x="{xm:.1f}" y="{Y(hi)-5:.1f}" text-anchor="middle" font-size="11" fill="currentColor">{v:.0f}</text>')
+        gp.append(f'<text x="{xm:.1f}" y="{Y(hi)-5:.1f}" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">{v:.0f}%</text>')
     gp.append(f'<text x="{L+gw*gi+gw/2:.1f}" y="{T+ph+20}" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">{nm}</text><text x="{L+gw*gi+gw/2:.1f}" y="{T+ph+37}" text-anchor="middle" font-size="12" fill="currentColor" fill-opacity=".8">{kind}</text>')
-_ml = lambda m, se: ", ".join(f"{100 * F(ec[(m, se, st)]['rate']):.0f}" for st in ("single component", "mixed_smaller", "mixed_larger"))
-out["fig_mix"] = f'<svg viewBox="0 0 {W} {Hh}" role="img" aria-label="Grouped bars with 95% intervals, Claude Code. Skill requests: Haiku {_ml("haiku", "skill requests")} percent; Sonnet {_ml("sonnet", "skill requests")} percent. Single-step tool requests: Haiku {_ml("haiku", "single-step tool requests")} percent; Sonnet {_ml("sonnet", "single-step tool requests")} percent, for single component, mixed smaller and mixed larger setups."><g {FONT}>{"".join(gp)}</g></svg>'
+_ml = lambda m, se: " and ".join(f"{100 * F(ec[(m, se, st)]['rate']):.0f}" for st in ("single component", "mixed_larger"))
+out["fig_mix"] = f'<svg viewBox="0 0 {W} {Hh}" role="img" aria-label="Bars with 95% intervals, Sonnet in Claude Code, installed alone and in the mix of 400 skills and 791 tools. Skill requests: {_ml("sonnet", "skill requests")} percent. Single-step tool requests: {_ml("sonnet", "single-step tool requests")} percent."><g {FONT}>{"".join(gp)}</g></svg>'
 
 # --- Fig: forest plot, paired change versus "alone" (percentage points, 95% CI by request-cluster bootstrap)
 pv = rd("paired_vs_alone.csv")

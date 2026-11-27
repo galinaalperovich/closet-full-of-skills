@@ -47,10 +47,10 @@ It is a harder version of the **needle-in-a-haystack test**. The [original](http
 
 ## Why it matters
 
-- **A skipped skill fails silently.** Nothing breaks. The agent answers anyway, and LLMs are very good at answers that look as if the skill was used. Ask for Apple’s stock price without the finance tool being called, and you may get **a confident number from the model’s memory**.
-- **One skipped skill can skip a whole recipe.** A skill often says which tools to call and in which order: run the linter, then the tests, then open the pull request. Skip the skill, and nothing makes sure those steps happen.
-- **If you have rules to follow, it gets worse.** A legal review, an approved template, the official price list: how do you prove to an auditor that your agent did not improvise? “We installed the skill and hoped for the best” is not an audit trail.
-- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and [one user counted](https://github.com/anthropics/claude-code/issues/11364) 67,300 tokens of tool definitions from seven MCP servers. [Uber reports](https://x.com/UberEng/status/2125008806249930999) more than 5,000 skills in its internal marketplace, about 100 of them on for every employee.
+- **A skipped skill fails silently.** The agent answers anyway. Ask for Apple’s stock price without the finance tool being called, and you may get **a confident number from the model’s memory**.
+- **One skipped skill can skip a whole recipe:** run the linter, then the tests, then open the pull request.
+- **If you have rules to follow, it gets worse.** “We installed the skill and hoped for the best” is not an audit trail.
+- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and [Uber](https://x.com/UberEng/status/2125008806249930999) has more than 5,000 skills in its internal marketplace.
 
 ## How an agent picks a skill or a tool
 
@@ -104,10 +104,10 @@ Five configurations ran them: Claude Haiku, Sonnet and Fable 5.2 in Claude Code 
 
 Four details matter for reading the numbers:
 
-1. **Fake skill bodies.** Each skill keeps its real name and description, which is all the agent sees when it chooses, but its instructions are one line: “reply with one short sentence”. MCP tools keep their real definitions and answer every call with “Done.” The choice is realistic; everything after it is not.
-2. **Fresh, empty folders.** Empty, so every setup sees the same thing, though a request about `report.pdf` finds no such file. Fresh, because Claude Code keeps a memory per folder: in my first pass, notes saved in one run were loaded by the next, and five such runs all missed the skill. I reran every affected run, with a little less enthusiasm than the first time.
-3. **Short observation window.** Claude Code was capped at 3 turns for skills, since picking a skill is almost always the first decision, and at 8 for MCP tools, where some requests need a step first (open the page, then take the screenshot). Codex has no turn cap.
-4. **Scoring.** A skill request is a hit only if the agent picks exactly that skill; a tool request also counts an equivalent tool on another server. Other picks were later rated by a separate Claude session from the two descriptions ([prompt and rules](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md)), a model’s judgment, not a human’s.
+1. **Fake skill bodies.** Each skill keeps its real name and description, but its instructions are one line: “reply with one short sentence”. MCP tools keep their real definitions and answer every call with “Done.”
+2. **Fresh, empty folders.** Every setup sees the same thing, and Claude Code’s per-folder memory cannot carry notes from one run to the next.
+3. **Short observation window.** Claude Code was capped at 3 turns for skills and 8 for MCP tools. Codex has no turn cap.
+4. **Scoring.** A hit is exactly the designated skill, or the designated tool or an equivalent one on another server. Other picks were rated later by a separate Claude session ([prompt and rules](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md)).
 
 **How to read the numbers.** Each configuration got 120 skill requests and 120 tool requests, 90 of them for tools that need a single call. Brackets are 95% confidence intervals from resampling requests. They do not cover the random draw of extra skills or the request wording; details are in the [methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md).
 
@@ -147,7 +147,7 @@ Most misses were not a wrong skill. They were runs where **no skill was detected
 
 ## Result 2: What the model actually saw
 
-Was the listing cut, or did the model choose badly from a full one? The cheapest question of the study to answer, and the most useful: I re-ran every skills setup against a stand-in server that records what each harness sends, with no model called ([scripts and results](https://github.com/galinaalperovich/closet-full-of-skills/tree/main/listing)).
+Was the listing cut, or did the model choose badly from a full one? To find out, I pointed every skills setup at a stand-in server that records what each harness sends, with no model called ([scripts and results](https://github.com/galinaalperovich/closet-full-of-skills/tree/main/listing)).
 
 *Table 3. What the skill listing contained in each setup. Haiku, Sonnet and Fable received the same listing.*
 
@@ -164,15 +164,15 @@ Was the listing cut, or did the model choose badly from a full one? The cheapest
 
 Take `seo-audit` and its six requests, such as “Audit the SEO of my site.”
 
-*Table 4. The same skill and the same requests. Only the listing changed.*
+*Table 4. The same skill, the same requests. Only the listing changed.*
 
-| Setup | What the listing said about it | How often it was picked (all six requests) |
+| Setup | What the model saw | Picked |
 |---|---|---|
-| 20 skills, both harnesses | `seo-audit: When the user wants to audit or diagnose SEO, or asks why traffic dropped…` (all 405 characters) | Sonnet 18 of 18, Fable 6 of 6, GPT-6 Astra 6 of 6 |
-| 1,020 skills, Claude Code | `seo-audit`: a bare name, next to 16 other bare names with “seo” in them | Sonnet 0 of 18, Fable 3 of 6 (it loaded `canonical-tag-checker`, `indexing-issue-auditor`, `seo-hreflang` and `seo-technical` instead) |
-| 1,020 skills, Codex | nothing: the list ends at “developer-listening” | GPT-6 Astra 0 of 6, GPT-6 Sol 0 of 6 |
+| 20 skills | `seo-audit: When the user wants to audit or diagnose SEO…` | Sonnet: 18 of 18 |
+| 1,020 skills, Claude Code | `seo-audit` | Sonnet: 0 of 18 |
+| 1,020 skills, Codex | nothing | GPT-6 Astra: 0 of 6 |
 
-In Claude Code the skill lost its description and drowned among look-alike names; in Codex it was never offered.
+In Claude Code the skill became a bare name among 16 other names with “seo” in them; in Codex it was never offered.
 
 ### Codex: first shorter, then gone
 
@@ -219,17 +219,7 @@ One run per request, so read these as directions, not precise sizes.
 - **A new skill starts at the back of the queue.** In Claude Code, used skills keep their descriptions. Calling a new one by name is the obvious way in.
 - **In Codex, past about 320 skills, the end of the alphabet does not exist** (about 620 at the maximum budget). Beyond that, the only fix I know is fewer skills.
 
-### Which skills kept being selected
-
-![Arrow chart for Sonnet: each skill from installed alone to installed among 1,020 others, 18 runs each, grouped by where it ends up. Kept being selected: grill-me and json-canvas 100 to 94 percent, mcp-builder 100 to 78, xlsx 83 to 78, pptx 100 to 67. Sometimes: docx 94 to 56, pdf 100 to 50, tdd 100 to 39, obsidian-markdown 83 to 33. Rarely or never: 11 skills, including seo-audit, security-and-hardening, diagnosing-bugs and animate, which fell from 100 to 0.](images/fig_dumbbell.png)
-
-*Figure 5. Sonnet: each skill alone (hollow dot) and among 1,020 others (filled dot), 18 runs each, grouped by where it ends up. Each dot rests on 6 requests, so a difference of a few runs is not a ranking.*
-
-`grill-me` went from 100% to 94%, `seo-audit` from 100% to **0%**. Three things seem to separate the groups (observations over 20 skills, not a test):
-
-1. **Did the description survive?** `grill-me` and `json-canvas`, the two that held best, were among the three targets that kept a description at 1,020 skills.
-2. **If not, does the name say it all?** `xlsx`, `pptx`, `docx` and `mcp-builder` held up as bare names, because the request mentions the file type or an MCP server. `humanizer` or `caveman` say little on their own.
-3. **Could the model do the job without help?** The skills that vanished cover things models believe they already do well: write copy, find a bug, review security, audit SEO. There the agent did not pick a wrong skill; it picked none (15 of `seo-audit`’s 18 Sonnet runs).
+Which of the 20 skills survived, and why, is in [Appendix E](#appendix-e).
 
 ## Result 3: MCP tools hold up better
 
@@ -239,9 +229,9 @@ Then I repeated the design with 20 everyday MCP tools, each served from its real
 
 ![Line chart for the target alone, 20, about 220 and all installed. Skills, solid lines: Fable 99, 99, 98, 72; Sonnet 94, 76, 56, 34; Haiku 78, 48, 25, 16; GPT-6 Sol 100, 100, 82, 12 percent. Single-step MCP tools, dashed: Fable 90, 87, 81, 84; Sonnet 87, 81, 76, 79; Haiku 83, 78, 77, 78; GPT-6 Sol 96, 78, 86, 81 percent.](images/fig_fade.png)
 
-*Figure 6. Skills (solid) against the 15 single-step MCP tool targets (dashed), with 95% CIs. Haiku, Sonnet and Fable ran in Claude Code, GPT-6 Sol in Codex. Different tasks and scoring rules; the x axis is not to scale.*
+*Figure 5. Skills (solid) against the 15 single-step MCP tool targets (dashed), with 95% CIs. Haiku, Sonnet and Fable ran in Claude Code, GPT-6 Sol in Codex. Different tasks and scoring rules; the x axis is not to scale.*
 
-What loss there was came at the first step, from one tool to twenty, where near neighbours appear: four GitHub tools, two browser servers. After that the curve is flat: 571 more tools, from ~220 to 791, changed **nothing measurable** (77% → 78% for Haiku, 76% → 79% for Sonnet, 81% → 84% for Fable, 86% → 81% for GPT-6 Sol).
+What loss there was came at the first step, from one tool to twenty. After that the curve is flat: 571 more tools changed **nothing measurable**.
 
 *Table 6. Share of single-step tool requests where the agent called the designated tool (or an equivalent one), with 95% CIs.*
 
@@ -252,45 +242,37 @@ What loss there was came at the first step, from one tool to twenty, where near 
 | ~220 | 77% [68–84] | 76% [67–84] | 81% [73–89] | 86% [78–92] |
 | 791 | 78% [69–86] | 79% [70–87] | 84% [77–91] | 81% [73–89] |
 
-**Neither harness lists all the tools.** Claude Code lists MCP tools by name and has the model fetch a definition with `ToolSearch`, which it did in 68–88% of the runs in the two larger setups. Codex’s first request contains no MCP tool definitions either, so it also has the model look tools up. That is the main difference from skills, where everything hangs on one listing.
+**Neither harness lists all the tools.** Both list MCP tools by name and have the model look a definition up (`ToolSearch` in Claude Code). That is the main difference from skills, where everything hangs on one listing.
 
-**Five of the 20 tools need a first step**, so I report them apart. “Take a screenshot of example.com” means opening the page first, and a tool for that exists only in the two larger setups. There the agent opened the page and then called the right tool in 90% of requests (217 of 240). In the two smaller setups there is nothing to open a page with, and Sonnet mostly declined to screenshot a page it could not load (25 of 60). Sensible of it.
+Five of the 20 tools need a first step, such as opening a page before a screenshot, and a tool for that exists only in the two larger setups. There the agent took both steps in 90% of requests (217 of 240). I keep these five out of the curve.
 
 ## Result 4: Skills and tools together
 
-Real setups have both. I built two: a smaller one with 100 skills and 437 tools, and a larger one with 400 skills and all 791 tools, including overlaps such as `xlsx` next to an Excel server. I ran them for Haiku and Sonnet, with 150 skill requests (the 20 targets plus five trending skills) and the tool requests.
+Real setups have both, so I mixed them: 400 skills and all 791 tools in one setup, tested with Haiku and Sonnet.
 
-![Grouped bars with 95% intervals, Claude Code. Skill requests: Haiku 79, 33, 21 percent; Sonnet 94, 45, 34 percent. Single-step tool requests: Haiku 83, 79, 78 percent; Sonnet 87, 80, 79 percent, for single component, mixed smaller and mixed larger setups.](images/fig_mix.png)
+![Bars with 95% intervals, Sonnet in Claude Code, installed alone and in the mix of 400 skills and 791 tools. Skill requests: 94 and 34 percent. Single-step tool requests: 87 and 79 percent.](images/fig_mix.png)
 
-*Figure 7. Claude Code. “Single component”: the target installed alone. Tool requests: the 15 single-step targets. Whiskers: 95% CI.*
+*Figure 6. Sonnet in Claude Code: the component installed alone, and in the mix of 400 skills and 791 tools. Tool requests: the 15 single-step targets. Whiskers: 95% CI.*
 
-**The same pattern, only stronger.** From the component alone to the smaller and the larger mix, skill requests went 79% → 33% → 21% for Haiku and 94% → 45% → 34% for Sonnet, and single-step tool requests 83% → 79% → 78% for Haiku and 87% → 80% → 79% for Sonnet.
+**The same pattern.** In the mix, Sonnet picked the designated skill in 34% of requests and the designated tool in 79%. Haiku: 21% and 78%.
 
-When the agent skipped the skill, in 79% of those requests (317 of 400) it **only used built-in tools**, mostly `Glob` and `Grep`. “Merge invoice-jan.pdf and invoice-feb.pdf” became two `Glob` searches in the empty folder and “I couldn’t find the files”, with no `pdf` skill.
+When the agent skipped the skill, it mostly **used only built-in tools**: “Merge invoice-jan.pdf and invoice-feb.pdf” became two `Glob` searches in the empty folder and “I couldn’t find the files”.
 
 ## Why do skills fade while tools hold up?
 
 ![Forest plot of paired changes versus the target alone, in percentage points, with 95% confidence intervals, one block per model, at 20, about 220 and all installed. Haiku: skills -31, -53, -62; MCP tools -6, -7, -6. Sonnet: skills -19, -38, -61; MCP tools -6, -11, -8. Fable: skills +0, -1, -27; MCP tools -3, -9, -6. GPT-6 Astra: skills -1, -17, -90; MCP tools not measured. GPT-6 Sol: skills +0, -18, -88; MCP tools -18, -10, -14.](images/fig_forest.png)
 
-*Figure 8. Change from the target alone, in percentage points, with 95% CIs, model by model. Filled dots: skills, 120 requests. Hollow dots: single-step MCP tools, 90 requests. GPT-6 Astra ran the skills experiment only.*
+*Figure 7. Change from the target alone, in percentage points, with 95% CIs, model by model. Filled dots: skills, 120 requests. Hollow dots: single-step MCP tools, 90 requests. GPT-6 Astra ran the skills experiment only.*
 
-Three explanations fit what I saw. The first is measured; treat the other two as hypotheses:
+Three explanations fit what I saw. The first is measured; the other two are hypotheses:
 
-1. **Skills lose their descriptions; tools can be searched.** A skill listing is like **a restaurant menu printed on one page**: the more dishes, the smaller the print, until the descriptions are dropped. MCP tools are also listed by name only, but that is more like asking the waiter: the model searches and gets the full definition back. A skill that is only a name has no waiter. Research agrees: retrieving a few tools instead of listing them all raised selection from 13.6% to 43.1% in [RAG-MCP](https://arxiv.org/abs/2505.03275) and from 49% to 74% in [an internal Anthropic evaluation](https://anthropic.com/engineering/advanced-tool-use).
-2. **Tools match the words of a request; skills match its meaning.** A tool name is a verb the request nearly repeats (`create_issue`), while a skill describes a workflow in broad words its neighbours share. Without shared words, accuracy drops: in [NoLiMa](https://arxiv.org/abs/2502.05167), a strong model fell from 99.3% to 69.7% at 32K tokens, and Chroma’s [Context Rot](https://research.trychroma.com/context-rot) found on-topic distractors hurt most.
-3. **An action needs a tool; a goal does not.** “Open an issue in acme/webapp” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can, so the model may decide it needs no help. [MetaTool](https://arxiv.org/abs/2310.03128) found most models struggle to decide whether they need a tool at all.
+1. **Skills lose their descriptions; tools can be searched.** A skill listing is like **a restaurant menu printed on one page**: the more dishes, the smaller the print. Tools are more like asking the waiter: the model searches and gets the full definition back. Retrieving a few tools instead of listing them all raised selection from 13.6% to 43.1% in [RAG-MCP](https://arxiv.org/abs/2505.03275).
+2. **Tools match the words of a request; skills match its meaning.** A tool name is a verb the request nearly repeats (`create_issue`). A skill describes a workflow in broad words its neighbours share ([NoLiMa](https://arxiv.org/abs/2502.05167), [Context Rot](https://research.trychroma.com/context-rot)).
+3. **An action needs a tool; a goal does not.** “Open an issue” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can ([MetaTool](https://arxiv.org/abs/2310.03128)).
 
 A toy calculation of the dilution idea is in [Appendix C](#appendix-c).
 
 ## What you can do about it
-
-*Table 7. What I observed, how sure I am, and what to do about it.*
-
-| What I observed | How sure | What to do |
-|---|---|---|
-| Selection of the designated skill fell as more skills were installed, starting at 20 | Measured; 95% CIs exclude zero from 20 skills on for Haiku and Sonnet, at 1,020 for all five models; one sample of extra skills | Enable fewer skills per project |
-| Past a few hundred skills, the listing was cut: Codex dropped skills alphabetically, Claude Code kept mostly names | Captured after the study with the same versions; no model called | Check what the model can see before rewriting descriptions |
-| Single-step MCP tool selection held from 220 to 791 tools, in Claude Code and in Codex | Measured: no change, paired 95% CIs within ±10 points; search not isolated | Prefer search over a full listing where you can |
 
 ### [Trick #1] Check what is actually exposed
 
@@ -316,39 +298,18 @@ This worked best in my runs. Enable plugins per project, turn off unused skills 
 
 ## Check your own agent
 
-The easy way is on its way: I am packaging this check as a skill you can run on your own setup (coming soon). Yes, a skill that checks whether your skills get picked. I see the irony too.
-
-Until then, go to a real project folder and send a few requests the way you would really ask:
-
-```
-# Claude Code: prints the skill or MCP tool it selected
-claude -p "Audit the SEO of my site." --output-format stream-json --verbose --max-turns 3 \
-  | jq -r 'select(.type=="assistant") | .message.content[]?
-           | select(.type=="tool_use") | select(.name=="Skill" or (.name|startswith("mcp__")))
-           | if .name=="Skill" then "skill: " + .input.skill else "tool: " + .name end'
-
-# Codex: prints the SKILL.md paths named in its commands (a match does not prove
-# the read succeeded, and Codex's own skills under skills/.system are not matched)
-codex exec --json -s read-only "Audit the SEO of my site." \
-  | grep -o 'skills/[a-z0-9-]*/SKILL.md' | sort -u
-```
-
-Then repeat with only that skill enabled. Three things I learned the hard way:
-
-- **In `-p` mode, Claude Code refuses MCP calls you have not allowed.** Add `--allowedTools mcp__<server>`.
-- **Claude Code keeps a memory per folder.** A note saved in one test run is loaded in the next, so use a fresh folder for every run.
-- **Codex has both problems in its own flavour.** With `approval_policy="never"` it blocks MCP calls on servers you have not approved (`-c 'mcp_servers.<name>.default_tools_approval_mode="approve"'`), and it ships 5 skills of its own (`-c skills.bundled.enabled=false`).
+I am packaging this check as a skill you can run on your own setup (coming soon on [GitHub](https://github.com/galinaalperovich/closet-full-of-skills)). Yes, a skill that checks whether your skills get picked. I see the irony too. Until then, the [README](https://github.com/galinaalperovich/closet-full-of-skills#check-your-own-agent) has a manual version in two commands.
 
 ## Limitations of the experiment
 
 This is one person’s experiment, not a benchmark, and I would rather list the weak spots myself than have you find them:
 
 - **Selection, not quality.** A run without the skill can still produce a fine answer.
-- **Listing captured afterwards.** In Claude Code it depends on a usage record my own runs kept updating, so the exact listing of each run is unknown.
+- **Listing captured afterwards**, so the exact listing of each run is unknown.
 - **Few samples.** One random draw of extra skills and six LLM-written requests per target.
 - **Configurations, not models.** Models can be compared inside one harness, not across the two.
-- **The tool runs are a second attempt.** My first test server told the agent to “reply with one short sentence”, which ended a run after its first call, and my first Codex setup blocked the calls altogether. I repeated all tool runs with a plain “Done.”, more turns and the calls allowed. In Codex I also turned off built-in web search, so a stock price has to come from the tool.
-- **Thinner data for Fable and Codex.** One run per request, no mixed setups, and GPT-6 Astra ran the skills experiment only. Codex does not report an MCP server that failed to start, so a tool miss could be a server that never connected.
+- **The tool runs are a second attempt.** My first test server ended a run after its first call, and my first Codex setup blocked the calls. I repeated all tool runs with both fixed.
+- **Thinner data for Fable and Codex.** One run per request, no mixed setups, and GPT-6 Astra ran the skills experiment only.
 
 The [full methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md), all data and all scripts are in [the GitHub repo](https://github.com/galinaalperovich/closet-full-of-skills).
 
@@ -368,7 +329,7 @@ Thanks for reading! If you run the check on your own setup, tell me what you got
 
 ## Appendix A: The 20 target skills
 
-*Table 8. The 20 target skills, where they come from, and one of their six requests.*
+*Table 7. The 20 target skills, where they come from, and one of their six requests.*
 
 | # | Skill | From | What it does | One of its six requests |
 |---|---|---|---|---|
@@ -404,7 +365,7 @@ Before the experiment I cloned 42 popular skill repositories, found through GitH
 
 ![Bar chart: estimated tokens of skill descriptions per collection, from 129 thousand for sickn33 down to 9 thousand on my laptop, against a listing budget of about 2 thousand tokens. The largest collection's descriptions are longer than The Great Gatsby, 72 thousand tokens.](images/fig_weight.png)
 
-*Figure 9. Estimated size of the skill descriptions if you install each collection whole. The red line is roughly Claude Code’s listing budget for a 200K window.*
+*Figure 8. Estimated size of the skill descriptions if you install each collection whole. The red line is roughly Claude Code’s listing budget for a 200K window.*
 
 **Overlapping collections.** Whether two copies of a skill are both exposed depends on how you install them. [Claude Code namespaces plugin skills](https://code.claude.com/docs/en/skills.md) as `/plugin-name:skill-name`, so both load. [Codex’s documentation](https://learn.chatgpt.com/docs/build-skills) says same-name skills are not merged. Copying folders by hand into one skills folder keeps one copy. I deduplicated names in my setups, so the experiment did not measure duplicates.
 
@@ -420,13 +381,13 @@ Now a cartoon with several assumptions: each skill description is one block, the
 
 ![Toy model, not data. If the target skill gets 20 times the weight of an unrelated skill before normalising, its share of attention is 100 percent alone, 51 percent with 20 skills, 8 percent with 220, 2 percent with 1,020, and 1.5 percent with 1,020 skills of which 16 look-alikes get the same weight as the target. The look-alikes then take 24 percent.](images/fig_attn.png)
 
-*Figure 10. Toy arithmetic under the assumptions in the text. Real models have many heads and layers, scores change with the input, and an attention weight is not a probability of selecting a skill.*
+*Figure 9. Toy arithmetic under the assumptions in the text. Real models have many heads and layers, scores change with the input, and an attention weight is not a probability of selecting a skill.*
 
 Nakanishi’s [Scalable-Softmax](https://arxiv.org/abs/2501.19399) paper describes a related effect, attention weights flattening as inputs grow, and proposes a fix. That is background research, not evidence about my runs.
 
 ## Appendix D: What this cost
 
-*Table 9. What the runs cost.*
+*Table 8. What the runs cost.*
 
 | Item | Runs | Cost |
 |---|---|---|
@@ -443,6 +404,14 @@ Nakanishi’s [Scalable-Softmax](https://arxiv.org/abs/2501.19399) paper describ
 | Claude Code runs I discarded: two earlier rounds of MCP and mixed runs, a rerun I stopped, and 18 skill runs I repeated (same subscription) | 5,153 | $0 extra ($327.54 list) |
 
 The GPT-6 figures are calculated from the token usage Codex reported, at OpenAI’s list prices ([Astra](https://developers.openai.com/api/docs/models/gpt-6-astra.md), [Sol](https://developers.openai.com/api/docs/models/gpt-6-sol.md); Sol’s cache-write price is not listed, and I assumed the same ratio as Astra’s), and not reconciled against the invoice ([per-batch breakdown](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/cost_by_batch.csv)). The Claude Code list prices leave out the tool runs that I stopped as soon as the designated tool was called, because a stopped run reports no cost.
+
+## Appendix E: Which skills kept being selected
+
+![Arrow chart for Sonnet: each skill from installed alone to installed among 1,020 others, 18 runs each, grouped by where it ends up. Kept being selected: grill-me and json-canvas 100 to 94 percent, mcp-builder 100 to 78, xlsx 83 to 78, pptx 100 to 67. Sometimes: docx 94 to 56, pdf 100 to 50, tdd 100 to 39, obsidian-markdown 83 to 33. Rarely or never: 11 skills, including seo-audit, security-and-hardening, diagnosing-bugs and animate, which fell from 100 to 0.](images/fig_dumbbell.png)
+
+*Figure 10. Sonnet: each skill alone (hollow dot) and among 1,020 others (filled dot), 18 runs each, grouped by where it ends up. Each dot rests on 6 requests, so a difference of a few runs is not a ranking.*
+
+`grill-me` went from 100% to 94%, `seo-audit` from 100% to **0%**. A skill held up if its description survived the cut (`grill-me`, `json-canvas`), or if its name says it all (`xlsx`, `pptx`, `docx`). It vanished if the model believes it can do the job without help: write copy, find a bug, audit SEO. Observations over 20 skills, not a test.
 
 ## References
 

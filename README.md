@@ -169,6 +169,29 @@ Most of a GPT run's cost is writing the prompt prefix (system prompt, skill list
 
 Run records use the setup names from the time the runs were made: `mixed_typical` and `mixed_heavy` are called “mixed, smaller” and “mixed, larger” in the methodology and the post.
 
+## Check your own agent
+
+A skill that runs this check on your own setup is coming soon. Until then, the manual version: go to a real project folder and send a few requests the way you would really ask.
+
+```bash
+# Claude Code: prints the skill or MCP tool it selected
+claude -p "Audit the SEO of my site." --output-format stream-json --verbose --max-turns 3 \
+  | jq -r 'select(.type=="assistant") | .message.content[]?
+           | select(.type=="tool_use") | select(.name=="Skill" or (.name|startswith("mcp__")))
+           | if .name=="Skill" then "skill: " + .input.skill else "tool: " + .name end'
+
+# Codex: prints the SKILL.md paths named in its commands (a match does not prove
+# the read succeeded, and Codex's own skills under skills/.system are not matched)
+codex exec --json -s read-only "Audit the SEO of my site." \
+  | grep -o 'skills/[a-z0-9-]*/SKILL.md' | sort -u
+```
+
+Then repeat with only that skill enabled. A handful of requests won't give you a reliable rate, but it shows whether the skill is ever picked. Three things to know:
+
+- **In `-p` mode, Claude Code refuses MCP calls you have not allowed.** Add `--allowedTools mcp__<server>`.
+- **Claude Code keeps a memory per folder.** A note saved in one test run is loaded in the next, so use a fresh folder for every run.
+- **Codex has both problems in its own flavour.** With `approval_policy="never"` it blocks MCP calls on servers you have not approved (`-c 'mcp_servers.<name>.default_tools_approval_mode="approve"'`), and it ships 5 skills of its own (`-c skills.bundled.enabled=false`).
+
 ## Known limitations (in short)
 
 - **Selection, not quality.** A run without the skill can still produce a fine answer.
