@@ -172,7 +172,7 @@ for m, nm in MN:
                     values=[100 * F(e1[(m, s)]["rate"]) for s in S], ci=[e1ci(m, s) for s in S]))
 out["fig_skills"] = line_chart(ser, ["Target alone", "20 skills", "220 skills", "1,020 skills"],
     "Line chart: share of requests where the designated skill was selected, for the target alone, 20, 220 and 1,020 skills installed. "
-    + "; ".join(f"{nm} " + ", ".join(f"{100 * F(e1[(m, s)]['rate']):.0f}" for s in S) for m, nm in MN) + " percent.")
+    + ", ".join(f"{nm} " + ", ".join(f"{100 * F(e1[(m, s)]['rate']):.0f}" for s in S) for m, nm in MN) + " percent.")
 
 # --- Fig: skills fade, tools bend (Claude, non-browser tools)
 e2 = {(r["model"], r["setup"]): r for r in rd("e2_mcp_rates.csv")}
@@ -188,8 +188,8 @@ for m, nm in CL3:
 _tl = lambda m: ", ".join(f"{100 * F(e2[(m, s)]['nonbrowser_rate']):.0f}" for s in M)
 out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "All installed"], title="Skills (solid) vs single-step MCP tools (dashed)", aria=
     "Line chart for the target alone, 20, about 220 and all installed. Skills, solid lines: "
-    + "; ".join(f"{nm} " + ", ".join(f"{100 * F(e1[(m, s)]['rate']):.0f}" for s in S) for m, nm in CL3) + " percent. Single-step MCP tools, dashed: "
-    + "; ".join(f"{nm} {_tl(m)}" for m, nm in CL3) + " percent.")
+    + ", ".join(f"{nm} " + ", ".join(f"{100 * F(e1[(m, s)]['rate']):.0f}" for s in S) for m, nm in CL3) + " percent. Single-step MCP tools, dashed: "
+    + ", ".join(f"{nm} {_tl(m)}" for m, nm in CL3) + " percent.")
 
 # --- Fig: what happened on misses at 1,020 skills
 segs = [("Designated skill", "target"), ("Equivalent alternative", "eq"), ("Other alternative", "alt"), ("No skill detected, finished", "none"), ("No skill detected, hit turn limit", "cap")]
@@ -292,7 +292,7 @@ grid = "".join(f'<line x1="{X(v):.1f}" y1="{grid_top}" x2="{X(v):.1f}" y2="{y-12
 rows_svg.append(f'<text x="{(x0+x1)/2:.1f}" y="{y+6}" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity=".75">change from the target alone, in percentage points (same requests in both setups)</text>')
 _fl = lambda exp, m: ", ".join(f"{100 * F(PV[(exp, m, st)]['diff']):+.0f}" for st in (("pack20", "crowd200", "crowd1000") if exp == "E1 skills" else ("mcp_pack20", "mcp_crowd200", "mcp_crowdall")) if (exp, m, st) in PV and PV[(exp, m, st)]["n_pairs"] != "24")
 _aria = ("Forest plot of paired changes versus the target alone, in percentage points, with 95% confidence intervals, one block per model, at 20, about 220 and all installed. "
-         + " ".join(f"{NM[m]}: skills {_fl('E1 skills', m)}" + (f"; MCP tools {_fl(TOOLS_EXP, m)}." if _fl(TOOLS_EXP, m) else "; MCP tools not measured.") for m in FOREST_M))
+         + " ".join(f"{NM[m]}: skills {_fl('E1 skills', m)}" + (f", MCP tools {_fl(TOOLS_EXP, m)}." if _fl(TOOLS_EXP, m) else ", MCP tools not measured.") for m in FOREST_M))
 out["fig_forest"] = (f'<svg viewBox="0 0 {W} {y+20}" role="img" aria-label="{_aria}">'
                      f'<g {FONT}>{grid}{"".join(rows_svg)}</g></svg>')
 

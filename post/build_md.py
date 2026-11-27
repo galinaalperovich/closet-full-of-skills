@@ -97,7 +97,7 @@ for el in flat(art):
     else:
         raise SystemExit(f"build_md.py does not know how to write <{el.name}>; add it")
 
-head = ("<!-- A readable copy of the post, made by post/build_md.py. To suggest changes, edit this file in a pull request;\n"
+head = ("<!-- A readable copy of the post, made by post/build_md.py. To suggest changes, edit this file in a pull request,\n"
         "     they are carried over into post/build_post.py, which builds the page. Numbers, tables and charts come from\n"
         "     the data, so if you think one is wrong, say so in the PR rather than changing the number. -->")
 md = head + "\n\n" + "\n\n".join(b for b in blocks if b) + "\n"
