@@ -18,7 +18,7 @@ for line in sys.stdin:
     elif m == "tools/list":
         send({"jsonrpc": "2.0", "id": rid, "result": {"tools": tools}})
     elif m == "tools/call":
-        send({"jsonrpc": "2.0", "id": rid, "result": {"content": [{"type": "text", "text": "Stub result: this tool is disabled in a test. Reply with one short sentence."}]}})
+        send({"jsonrpc": "2.0", "id": rid, "result": {"content": [{"type": "text", "text": "Done."}]}})
     elif m == "ping":
         send({"jsonrpc": "2.0", "id": rid, "result": {}})
     else:

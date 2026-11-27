@@ -30,6 +30,7 @@ if os.path.exists(out):
 jobs=[j for j in jobs if (j["env"],j["target"],j["i"]) not in done]
 if os.environ.get("ONLY_ENV"): jobs=[j for j in jobs if j["env"]==os.environ["ONLY_ENV"]]
 if os.environ.get("ONLY_I"): jobs=[j for j in jobs if j["i"]==int(os.environ["ONLY_I"])]
+if os.environ.get("ONLY_KIND"): jobs=[j for j in jobs if j["kind"]==os.environ["ONLY_KIND"]]
 if os.environ.get("ONLY_TARGET"): jobs=[j for j in jobs if j["target"]==os.environ["ONLY_TARGET"]]
 lock=threading.Lock(); f=open(out,"a")
 SK=re.compile(r"skills/([a-z0-9][a-z0-9\-]*)/SKILL\.md")
@@ -51,7 +52,7 @@ def classify(rec, used):
     else: rec["outcome"]="none"
     ov=OVERLAP.get(rec["target"]) if rec["kind"]=="skill" else None
     rec["overlap_tool"]=bool(ov) and any(u.startswith("mcp:") and any(u[4:].startswith(o) for o in ov) for u in used)
-RAW=os.path.join(H,"raw")
+RAW=os.environ.get("RAW_DIR") or os.path.join(H,"raw")
 # ISOLATE=1: run each Claude Code job in a fresh copy of its test folder, at a new path with the same folder name.
 # Claude Code keeps auto-memory per folder path (~/.claude/projects/<path>/memory); without this, notes saved by one run
 # are loaded by later runs in the same folder. Memory files a run writes are kept in its raw log.
@@ -71,6 +72,28 @@ def save_raw(rec, pr, cmd, extra=None):
     with gzip.open(fn,"wt") as g: json.dump({"cmd":[c for c in cmd],"stdout_events":pr.stdout,"stderr":pr.stderr[-20000:],"returncode":pr.returncode,**(extra or {})},g)
     rec["raw"]=os.path.relpath(fn,H)
 STOP=[False]
+# STOP_ON_HIT=1 (Claude Code): end a run as soon as it calls an accepted tool. The stub reply ("Done.") no longer tells the
+# agent to stop, so without this a run goes on to its turn limit after the outcome is already decided. A stopped run has
+# sub="stopped_on_hit" and no cost or token totals.
+SOH=os.environ.get("STOP_ON_HIT")
+class PR: pass
+def run_stream(cmd, cwd, is_hit, timeout=420):
+    import tempfile
+    ef=tempfile.TemporaryFile(mode="w+")
+    p=subprocess.Popen(cmd,cwd=cwd,stdout=subprocess.PIPE,stderr=ef,text=True,stdin=subprocess.DEVNULL)
+    pr=PR(); pr.stopped=False; lines=[]; timed=[False]
+    def kill(): timed[0]=True; p.kill()
+    t=threading.Timer(timeout,kill); t.start()
+    try:
+        for l in p.stdout:
+            lines.append(l)
+            if is_hit and is_hit(l): pr.stopped=True; p.terminate(); break
+        try: p.wait(timeout=20)
+        except subprocess.TimeoutExpired: p.kill(); p.wait()
+    finally: t.cancel()
+    ef.seek(0); pr.stdout="".join(lines); pr.stderr=ef.read(); pr.returncode=p.returncode; ef.close()
+    if timed[0]: raise subprocess.TimeoutExpired(cmd,timeout)
+    return pr
 # LOAD_MAX=<n>: wait before starting a job while the 1-minute load average is above n. The mixed setups start up to
 # 73 stub servers per run, and 8 parallel runs once made the machine unresponsive. Default off.
 LOAD_MAX=float(os.environ.get("LOAD_MAX","0"))
@@ -86,12 +109,22 @@ def one(j):
     used=[]; ts=False
     try:
         if harness=="claude":
-            cmd=["claude","-p",j["prompt"],"--model",model,"--output-format","stream-json","--verbose","--setting-sources","project","--strict-mcp-config","--no-session-persistence","--max-turns","4","--disallowedTools","Bash"]
+            cmd=["claude","-p",j["prompt"],"--model",model,"--output-format","stream-json","--verbose","--setting-sources","project","--strict-mcp-config","--no-session-persistence","--max-turns",os.environ.get("MAX_TURNS","4"),"--disallowedTools","Bash"]
             if cfg: cmd+=["--mcp-config",os.path.join(cwd,"_mcp.json")]
             # ALLOW_MCP=1: headless Claude Code denies MCP calls that are not allowed, so without it every MCP call gets a
             # permission denial instead of the stub result (the first-round runs). The published runs used it.
             if cfg and os.environ.get("ALLOW_MCP"): cmd+=["--allowedTools",",".join("mcp__"+s for s in cfg)]
-            pr=subprocess.run(cmd,cwd=cwd,capture_output=True,text=True,timeout=420,stdin=subprocess.DEVNULL)
+            acc=set(j["accept"])
+            def is_hit(l):
+                if '"tool_use"' not in l: return False
+                try: e=json.loads(l)
+                except Exception: return False
+                if e.get("type")!="assistant": return False
+                for b in e.get("message",{}).get("content",[]):
+                    n=b.get("name","") if b.get("type")=="tool_use" else ""
+                    if n.startswith("mcp__") and ".".join(n.split("__",2)[1:]) in acc: return True
+                return False
+            pr=run_stream(cmd,cwd,is_hit if SOH else None)
             mem=read_memory(cwd); rec["memory_files_after"]=len(mem)
             save_raw(rec, pr, cmd, {"isolated":bool(iso),"memory_after":mem})
             for l in pr.stdout.splitlines():
@@ -111,11 +144,17 @@ def one(j):
                 if e.get("type")=="result":
                     rec["cost"]=e.get("total_cost_usd"); rec["sub"]=e.get("subtype"); u=e.get("usage",{})
                     rec["in_tok"]=(u.get("input_tokens") or 0)+(u.get("cache_creation_input_tokens") or 0)+(u.get("cache_read_input_tokens") or 0)
+            if "sub" not in rec and pr.stopped: rec["sub"]="stopped_on_hit"
             if "sub" not in rec: rec["error"]=(pr.stderr or pr.stdout)[-300:]
         else:
             cmd=[CODEX,"exec","--json","--ephemeral","--skip-git-repo-check","--ignore-user-config","-s","read-only","-c",f'model="{os.environ.get("CODEX_MODEL","gpt-6-astra")}"',"-c",'model_reasoning_effort="medium"',"-c",'approval_policy="never"']
+            # CODEX_WEB_SEARCH=disabled: turn off Codex's built-in web search, which Claude Code does not have here.
+            if os.environ.get("CODEX_WEB_SEARCH"): cmd+=["-c",f'web_search="{os.environ["CODEX_WEB_SEARCH"]}"']
             for s,c in cfg.items():
                 cmd+=["-c",f'mcp_servers.{s}.command="{c["command"]}"',"-c",f"mcp_servers.{s}.args={json.dumps(c['args'])}"]
+                # CODEX_APPROVE_MCP=1: pre-approve the stub servers' tools. Without it, approval_policy="never" makes
+                # Codex refuse every MCP call after the model chose it.
+                if os.environ.get("CODEX_APPROVE_MCP"): cmd+=["-c",f'mcp_servers.{s}.default_tools_approval_mode="approve"']
             cmd.append(j["prompt"])
             pr=subprocess.run(cmd,cwd=cwd,capture_output=True,text=True,timeout=420,stdin=subprocess.DEVNULL)
             save_raw(rec, pr, cmd)

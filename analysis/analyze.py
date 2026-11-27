@@ -25,6 +25,10 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 # had denied every MCP call). The 18 E1 runs of Sonnet / caveman / alone come from an isolated rerun, because a memory
 # note saved by one original run reached later runs in that folder. E3b and the GPT-6 Astra records come from the first round.
 # Claude Fable 5.2 ("fable") and GPT-6 Sol ("gpt_sol") were added on 2026-11-25: E1 with one repetition, and E2; no E3.
+# Third round (mcp/*_round3.jsonl, 2026-11-25): every E2 run and the tool requests of E3 were repeated for Haiku, Sonnet,
+# Fable and GPT-6 Sol with a stub reply that does not tell the agent to stop ("Done."), an 8-turn limit in Claude Code,
+# and, in Codex, the stub servers approved, web search off and the test folders outside a git repository. These replace
+# the second-round E2 records and E3 tool records, which stay in the repo. GPT-6 Astra's partial E2 is first-round only.
 OUT = os.path.join(HERE, "derived"); os.makedirs(OUT, exist_ok=True)
 SEED = 20261120; B = 2000
 P = lambda *a: os.path.join(ROOT, *a)
@@ -39,13 +43,15 @@ INPUTS = {
            ("mcp/gpt.jsonl", "codex", "gpt", "by_line")],
     "R2": [("mcp/haiku_round2.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round2.jsonl", "claude", "sonnet", "subscription"),
            ("mcp/fable.jsonl", "claude", "fable", "subscription"), ("mcp/gpt_sol.jsonl", "codex", "gpt_sol", "api_key")],
+    "R3": [("mcp/haiku_round3.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round3.jsonl", "claude", "sonnet", "subscription"),
+           ("mcp/fable_round3.jsonl", "claude", "fable", "subscription"), ("mcp/gpt_sol_round3.jsonl", "codex", "gpt_sol", "api_key")],
     "E1_rerun": [("sonnet_e1_caveman_rerun.jsonl", "claude", "sonnet", "subscription")],
 }
 E1_RERUN = lambda r: r["model"] == "sonnet" and r["setup"] == "alone" and r["target"] == "caveman"
 OTHER = ["prompts.json", "mcp/mcp_targets.json", "mcp/trending_skill_prompts.json", "mcp/tools_inventory.json",
          "build.py", "run.py", "run_codex.py", "mcp/build.py", "mcp/run.py", "mcp/stub_server.py",
          "scan.py", "weight.py", "report.py", "scan.json", "weight.json", "source_commits.tsv",
-         "analysis/alt_judge_input.json", "analysis/alt_judgments.json", "analysis/analyze.py"]
+         "analysis/alt_judge_input.json", "analysis/alt_judgments.json", "analysis/alt_judge_input_2.json", "analysis/alt_judgments_2.json", "analysis/analyze.py"]
 def sha(p):
     h = hashlib.sha256(); h.update(open(p, "rb").read()); return h.hexdigest()
 manifest = []
@@ -54,7 +60,7 @@ for grp in INPUTS.values():
         manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f)))})
 for f in OTHER:
     if os.path.exists(P(f)): manifest.append({"file": f, "sha256": sha(P(f)), "lines": sum(1 for _ in open(P(f), errors="replace"))})
-json.dump({"collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun); 2026-11-25 (Claude Fable 5.2 and GPT-6 Sol, E1 and E2)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
+json.dump({"collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun); 2026-11-25 (Claude Fable 5.2 and GPT-6 Sol, E1; third round of E2 and E3 tool requests)", "seed": SEED, "bootstrap_resamples": B, "files": manifest},
           open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 
 # ---------------------------------------------------------------- normalise records
@@ -66,7 +72,7 @@ def termination(rec, harness):
     err = str(rec.get("error") or "")
     if harness == "claude":
         s = rec.get("sub")
-        if s == "success": return "completed"
+        if s in ("success", "stopped_on_hit"): return "completed"   # stopped_on_hit: the runner ended the run at the accepted call
         if s == "error_max_turns": return "turn_limit"
         if s: return "harness_error"
     else:
@@ -87,14 +93,14 @@ def norm_e1(rec, harness, model, access, f, ln):
                 target_sel=bool(rec["hit"]), capable_server=None, overlap_family=None, toolsearch=None,
                 n_skills=rec.get("n_skills"), n_tools=None, mcp_failed=[], cost=rec.get("cost"), usage=rec.get("usage"),
                 in_tok=rec.get("in_tok"), first_tool=rec.get("first_tool"), has_raw=has_raw(rec, f))
-def norm_mcp(rec, harness, model, access, f, ln):
+def norm_mcp(rec, harness, model, access, f, ln, cap=4):
     env = rec["env"].split("/")[0]; exp = {"mcp": "E2", "sk": "E3b", "mixed": "E3"}[env.split("_")[0]]
     used = rec.get("used", [])
     # Codex's own MCP discovery tools (list_mcp_resources etc., server "codex" or the queried server) are harness
     # built-ins, not experimental components (the recorded `outcome` field is left untouched).
     used = ["builtin:" + u[4:] if u.startswith("mcp:") and (u.split(".")[0] == "mcp:codex" or u.split(".", 1)[1] in HARNESS_MCP) else u for u in used]
     return dict(exp=exp, harness=harness, model=model, access=access, file=f, line=ln, setup=SETUP_NAME.get(env, env), kind=rec["kind"],
-                target=rec["target"], i=rec["i"], rep=0, turn_cap=4 if harness == "claude" else None, term=termination(rec, harness),
+                target=rec["target"], i=rec["i"], rep=0, turn_cap=cap if harness == "claude" else None, term=termination(rec, harness),
                 components=[u for u in used if not u.startswith("builtin:")], builtins=[u for u in used if u.startswith("builtin:")],
                 target_sel=bool(rec.get("hit_strict")), capable_server=bool(rec.get("hit")), overlap_family=rec.get("overlap_tool"),
                 toolsearch=rec.get("toolsearch"), n_skills=rec.get("n_skills"), n_tools=rec.get("n_tools"),
@@ -105,8 +111,9 @@ for grp, items in INPUTS.items():
         for ln, l in enumerate(open(P(f))):
             rec = json.loads(l)
             acc = access if access != "by_line" else ("api_key" if "ts" not in rec else "subscription")
-            r = (norm_e1 if grp.startswith("E1") else norm_mcp)(rec, harness, model, acc, f, ln)
+            r = norm_e1(rec, harness, model, acc, f, ln) if grp.startswith("E1") else norm_mcp(rec, harness, model, acc, f, ln, 8 if grp == "R3" else 4)
             if grp == "R1" and harness == "claude" and r["exp"] in ("E2", "E3"): continue   # replaced by the second round
+            if grp == "R2" and (r["exp"] == "E2" or (r["exp"] == "E3" and r["kind"] == "tool")): continue   # replaced by the third round
             if grp == "E1" and E1_RERUN(r): SUPERSEDED.append(r); continue   # replaced by the isolated rerun
             r["batch"] = "excluded_429_batch" if grp == "E1_excluded" else "main"
             r["infra_fail"] = r["term"] in ("api_error", "timeout", "harness_error", "unknown")
@@ -122,9 +129,10 @@ infra_only = [r for r in seen.values() if r["infra_fail"]]
 
 # ---------------------------------------------------------------- alternative appropriateness (retrospective)
 JUD = {}
-jp = os.path.join(HERE, "alt_judgments.json")
-if os.path.exists(jp):
-    for j in json.load(open(jp)): JUD[j["id"]] = j["label"]
+for jf in ("alt_judgments.json", "alt_judgments_2.json"):   # the second batch covers pairs from the later runs
+    jp = os.path.join(HERE, jf)
+    if os.path.exists(jp):
+        for j in json.load(open(jp)): JUD[j["id"]] = j["label"]
 RANK = ["equivalent", "preliminary_step", "related_partial", "unassessable", "inappropriate"]
 def miss_class(r):
     if r["target_sel"]: return "target"
@@ -336,6 +344,8 @@ for m in MODELS:
     for b in ["mcp_pack20", "mcp_crowd200", "mcp_crowdall"]:
         rb = [r for r in sel(exp="E2", model=m, setup=b) if r["target"] not in BROWSER]
         if ra and rb: pva.append(dict(experiment="E2 MCP single-step tools", model=m, to_setup=b, **paired_row(ra, rb, "target_sel")))
+        ra2, rb2 = sel(exp="E2", model=m, setup="mcp_alone"), sel(exp="E2", model=m, setup=b)
+        if ra2 and rb2: pva.append(dict(experiment="E2 MCP tools", model=m, to_setup=b, **paired_row(ra2, rb2, "target_sel")))
 write_csv("paired_vs_alone.csv", pva)
 # rates behind the mixed-scenario chart, request-weighted, with intervals
 e3c = []
@@ -348,6 +358,9 @@ for m in ["haiku", "sonnet"]:
     e3c.append(dict(model=m, series="single-step tool requests", setup="single component", **req_rate_row(nb(sel(exp="E2", model=m, setup="mcp_alone")), "target_sel")))
     for s in ["mixed_smaller", "mixed_larger"]:
         e3c.append(dict(model=m, series="single-step tool requests", setup=s, **req_rate_row(nb(sel(model=m, setup=s, kind="tool")), "target_sel")))
+    e3c.append(dict(model=m, series="tool requests", setup="single component", **req_rate_row(sel(exp="E2", model=m, setup="mcp_alone"), "target_sel")))
+    for s in ["mixed_smaller", "mixed_larger"]:
+        e3c.append(dict(model=m, series="tool requests", setup=s, **req_rate_row(sel(model=m, setup=s, kind="tool"), "target_sel")))
 write_csv("e3_chart_rates.csv", e3c)
 
 # ---------------------------------------------------------------- 6. builtin actions in mixed skill misses

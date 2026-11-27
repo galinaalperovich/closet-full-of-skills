@@ -14,16 +14,29 @@ E1 skills,gpt,crowd1000,-0.9,-0.95,-0.8417,-0.9917,-0.7833,120,108,0
 E1 skills,gpt_sol,pack20,0.0,0.0,0.0,0.0,0.0,120,0,0
 E1 skills,gpt_sol,crowd200,-0.175,-0.2417,-0.1083,-0.3,-0.0667,120,21,0
 E1 skills,gpt_sol,crowd1000,-0.8833,-0.9417,-0.8167,-0.975,-0.7667,120,106,0
-E2 MCP single-step tools,haiku,mcp_pack20,-0.0222,-0.0556,0.0,-0.0667,0.0,90,2,0
-E2 MCP single-step tools,haiku,mcp_crowd200,-0.0556,-0.1111,-0.0111,-0.1444,0.0,90,5,0
-E2 MCP single-step tools,haiku,mcp_crowdall,-0.0444,-0.1,0.0,-0.1444,0.0333,90,5,1
-E2 MCP single-step tools,sonnet,mcp_pack20,-0.1222,-0.2,-0.0556,-0.2556,-0.0111,90,12,1
-E2 MCP single-step tools,sonnet,mcp_crowd200,-0.1,-0.1667,-0.0444,-0.2333,-0.0111,90,9,0
-E2 MCP single-step tools,sonnet,mcp_crowdall,-0.1111,-0.1778,-0.0444,-0.2444,-0.0111,90,11,1
-E2 MCP single-step tools,fable,mcp_pack20,-0.0444,-0.0889,-0.0111,-0.1,0.0,90,4,0
-E2 MCP single-step tools,fable,mcp_crowd200,-0.0667,-0.1222,-0.0222,-0.1444,-0.0111,90,6,0
-E2 MCP single-step tools,fable,mcp_crowdall,-0.0667,-0.1333,-0.0111,-0.1556,0.0222,90,7,1
+E2 MCP single-step tools,haiku,mcp_pack20,-0.0556,-0.1222,0.0111,-0.1556,0.0222,90,7,2
+E2 MCP tools,haiku,mcp_pack20,-0.0667,-0.1333,0.0,-0.175,0.0333,120,13,5
+E2 MCP single-step tools,haiku,mcp_crowd200,-0.0667,-0.1222,-0.0222,-0.1556,0.0,90,6,0
+E2 MCP tools,haiku,mcp_crowd200,-0.0167,-0.0667,0.0333,-0.1,0.0667,120,6,4
+E2 MCP single-step tools,haiku,mcp_crowdall,-0.0556,-0.1111,0.0,-0.1556,0.0222,90,6,1
+E2 MCP tools,haiku,mcp_crowdall,-0.0333,-0.0833,0.0083,-0.1167,0.0333,120,6,2
+E2 MCP single-step tools,sonnet,mcp_pack20,-0.0556,-0.1111,-0.0111,-0.1336,0.0,90,5,0
+E2 MCP tools,sonnet,mcp_pack20,-0.15,-0.225,-0.0833,-0.2833,-0.0417,120,19,1
+E2 MCP single-step tools,sonnet,mcp_crowd200,-0.1111,-0.1778,-0.0556,-0.2333,-0.0111,90,10,0
+E2 MCP tools,sonnet,mcp_crowd200,0.0,-0.0833,0.075,-0.15,0.1583,120,11,11
+E2 MCP single-step tools,sonnet,mcp_crowdall,-0.0778,-0.1444,-0.0222,-0.1889,0.0222,90,8,1
+E2 MCP tools,sonnet,mcp_crowdall,0.0,-0.0667,0.0667,-0.125,0.1083,120,8,8
+E2 MCP single-step tools,fable,mcp_pack20,-0.0333,-0.0778,0.0,-0.0889,0.0,90,3,0
+E2 MCP tools,fable,mcp_pack20,-0.05,-0.0919,-0.0167,-0.1083,-0.0083,120,6,0
+E2 MCP single-step tools,fable,mcp_crowd200,-0.0889,-0.1444,-0.0333,-0.2,-0.0111,90,8,0
+E2 MCP tools,fable,mcp_crowd200,-0.0833,-0.1333,-0.0333,-0.1669,-0.0167,120,10,0
+E2 MCP single-step tools,fable,mcp_crowdall,-0.0556,-0.1111,-0.0111,-0.1444,0.0,90,5,0
+E2 MCP tools,fable,mcp_crowdall,-0.0667,-0.1167,-0.025,-0.15,0.0,120,8,0
 E2 MCP single-step tools,gpt,mcp_pack20,-0.0833,-0.2083,0.0,-0.25,0.0,24,2,0
-E2 MCP single-step tools,gpt_sol,mcp_pack20,-0.2778,-0.3667,-0.1778,-0.4556,-0.1,90,26,1
-E2 MCP single-step tools,gpt_sol,mcp_crowd200,-0.3778,-0.4778,-0.2778,-0.5556,-0.1889,90,35,1
-E2 MCP single-step tools,gpt_sol,mcp_crowdall,-0.4556,-0.5556,-0.3556,-0.6222,-0.2664,90,42,1
+E2 MCP tools,gpt,mcp_pack20,-0.2407,-0.3519,-0.1481,-0.4815,-0.0556,54,13,0
+E2 MCP single-step tools,gpt_sol,mcp_pack20,-0.1778,-0.2556,-0.1,-0.3444,-0.0333,90,16,0
+E2 MCP tools,gpt_sol,mcp_pack20,-0.15,-0.2167,-0.0917,-0.2917,-0.0417,120,18,0
+E2 MCP single-step tools,gpt_sol,mcp_crowd200,-0.1,-0.1667,-0.0444,-0.2333,0.0,90,9,0
+E2 MCP tools,gpt_sol,mcp_crowd200,-0.1,-0.1583,-0.05,-0.2167,-0.0083,120,12,0
+E2 MCP single-step tools,gpt_sol,mcp_crowdall,-0.1444,-0.2222,-0.0778,-0.3,-0.0222,90,13,0
+E2 MCP tools,gpt_sol,mcp_crowdall,-0.1333,-0.2,-0.075,-0.2667,-0.0333,120,16,0

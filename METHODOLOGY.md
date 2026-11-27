@@ -28,6 +28,8 @@ All paths are relative to the repository root.
 
 Two further configurations, Claude Fable 5.2 and GPT-6 Sol, ran Experiments 1 and 2 later (960 runs each). They are described in §14, and the sections before it describe the original three configurations unless they say otherwise.
 
+**Round 3.** All tool runs (E2, and the tool requests of E3) were later repeated for Haiku, Sonnet, Fable 5.2 and GPT-6 Sol with a stub reply that does not end the run, and with the Codex setup corrected. `analyze.py`, the README and the post use round 3 for every tool result. It is described in §15; §9.2, the tool rows of §9.3, and §14.3–14.4 keep the earlier numbers for the record.
+
 A **run** is one request sent once to one model–harness configuration in one setup. A proposed follow-up, kept separate from these results, is in `FOLLOWUP_PROTOCOL.md`.
 
 ### 1.1 Data collection: two rounds
@@ -616,3 +618,85 @@ The result is reported as measured, as a lower bound on tool selection for this 
 
 - GPT-6 Sol: $30.81 for E1 and $39.00 for E2, calculated from reported usage at the [gpt-6-sol list prices](https://developers.openai.com/api/docs/models/gpt-6-sol.md) checked on 25 November 2026 (input $2, cached input $0.20, output $10 per million tokens; the cache-write price is not listed and is taken as $2.50, the same ratio to input as for GPT-6 Astra). Not reconciled against an invoice.
 - Fable 5.2: $211.81 at list price by Claude Code's own estimate, covered by the subscription.
+
+---
+
+## 15. Round 3: the tool runs repeated with a neutral stub reply
+
+Collected on 25–27 November 2026 with the same harness versions, requests, tool definitions and setups. **The tool results in the post and in the README are from this round.** §9.2, the tool rows of §9.3, and §14.3–14.4 describe the earlier rounds, whose records stay in the repository.
+
+### 15.1 Why
+
+Two properties of the earlier tool runs made a miss depend on the setup and not on the agent's choice:
+
+1. **The stub reply ended the run.** `mcp/stub_server.py` answered every call with "Stub result: this tool is disabled in a test. Reply with one short sentence." A run that began with a preparatory call (open a page before a screenshot, list issues before opening one) stopped there and never reached the designated tool. This is what made the five browser targets fall in the two larger setups (§9.2).
+2. **The first GPT-6 Sol run had three further confounds** (§14.4): Codex refused every MCP call under `approval_policy="never"`, its built-in web search was available, and the test folders were inside a git repository, so `git log` in the shell answered the `git.git_log` requests.
+
+### 15.2 What changed
+
+| | Rounds 1–2 and §14 | Round 3 |
+|---|---|---|
+| Stub reply to every call | "Stub result: this tool is disabled in a test. Reply with one short sentence." | "Done." |
+| Claude Code turn limit (E2, E3 tool requests) | 4 | 8 (`MAX_TURNS=8`) |
+| End of a Claude Code run | The harness's own end | The runner ends the run at the first call of an accepted tool (`STOP_ON_HIT=1`); other runs end as before. A stopped run has `sub="stopped_on_hit"`, counts as completed, and has no cost or token totals |
+| Codex MCP approval | Not approved: every call refused | `mcp_servers.<name>.default_tools_approval_mode="approve"` (`CODEX_APPROVE_MCP=1`): calls reach the stub |
+| Codex web search | On | `web_search="disabled"` (`CODEX_WEB_SEARCH=disabled`) |
+| Codex test folders | Inside a git repository (§14) | Outside any git repository |
+| Claude Code | Stub servers allowed, a fresh folder per run, `Bash` disallowed | The same |
+
+Runs: 480 per configuration for E2 (Haiku, Sonnet, Fable 5.2, GPT-6 Sol), and the 240 tool requests of E3 for Haiku and for Sonnet. The skill requests of E3 and E3b were not repeated, because they do not depend on the stub server. No run had an infrastructure error. GPT-6 Astra was not repeated; its partial first-round E2 records (`mcp/gpt.jsonl`) are still read by `analyze.py` but are not used in the post. Result files: `mcp/*_round3.jsonl`. Raw logs: `mcp/raw_r3/` for Claude Code (local paths removed); the GPT-6 Sol logs are kept but not published, as in §14.
+
+Stopping a run at the accepted call cannot change the primary metric, which only asks whether an accepted tool was called within the window. It does remove what came after the call from the record, so "first component", cost and token figures for these runs are not comparable with the earlier rounds.
+
+### 15.3 Results: E2
+
+"Single-step" is the 15 targets that need one call; "browser" is the five targets that need a page opened first (§5.3).
+
+| Model | Setup | Strict, 15 single-step | 95% (request-cluster) | Strict, 5 browser | Strict, all 20 | Miss: equivalent alternative | Miss: preliminary step | Miss: built-in only | Miss: nothing | ToolSearch used | Turn-limited |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Haiku | `mcp_alone` | 75/90 (83.3%) | 75.6–91.1 | 24/30 | 99/120 (82.5%) | 0 | 0 | 5 | 16 | 99 | 0 |
+| Haiku | `mcp_pack20` | 70/90 (77.8%) | 68.9–86.7 | 21/30 | 91/120 (75.8%) | 1 | 2 | 10 | 15 | 103 | 0 |
+| Haiku | `mcp_crowd200` | 69/90 (76.7%) | 67.8–84.4 | 28/30 | 97/120 (80.8%) | 1 | 3 | 10 | 9 | 101 | 1 |
+| Haiku | `mcp_crowdall` | 70/90 (77.8%) | 68.9–85.6 | 25/30 | 95/120 (79.2%) | 0 | 8 | 8 | 9 | 104 | 1 |
+| Sonnet | `mcp_alone` | 78/90 (86.7%) | 78.9–93.3 | 19/30 | 97/120 (80.8%) | 0 | 0 | 3 | 20 | 109 | 0 |
+| Sonnet | `mcp_pack20` | 73/90 (81.1%) | 73.3–88.9 | 6/30 | 79/120 (65.8%) | 0 | 1 | 5 | 33 | 104 | 0 |
+| Sonnet | `mcp_crowd200` | 68/90 (75.6%) | 66.7–84.4 | 29/30 | 97/120 (80.8%) | 2 | 1 | 8 | 11 | 91 | 1 |
+| Sonnet | `mcp_crowdall` | 71/90 (78.9%) | 70.0–86.7 | 26/30 | 97/120 (80.8%) | 1 | 5 | 8 | 9 | 81 | 0 |
+| Fable 5.2 | `mcp_alone` | 81/90 (90.0%) | 83.3–95.6 | 30/30 | 111/120 (92.5%) | 0 | 0 | 5 | 4 | 111 | 0 |
+| Fable 5.2 | `mcp_pack20` | 78/90 (86.7%) | 78.9–93.3 | 27/30 | 105/120 (87.5%) | 0 | 1 | 2 | 12 | 108 | 0 |
+| Fable 5.2 | `mcp_crowd200` | 73/90 (81.1%) | 73.3–88.9 | 28/30 | 101/120 (84.2%) | 2 | 2 | 5 | 10 | 105 | 1 |
+| Fable 5.2 | `mcp_crowdall` | 76/90 (84.4%) | 76.7–91.1 | 27/30 | 103/120 (85.8%) | 0 | 3 | 6 | 8 | 106 | 3 |
+| GPT-6 Sol | `mcp_alone` | 86/90 (95.6%) | 91.1–98.9 | 30/30 | 116/120 (96.7%) | 0 | 0 | 0 | 4 | 0 | 0 |
+| GPT-6 Sol | `mcp_pack20` | 70/90 (77.8%) | 68.9–85.6 | 28/30 | 98/120 (81.7%) | 5 | 2 | 5 | 10 | 0 | 0 |
+| GPT-6 Sol | `mcp_crowd200` | 77/90 (85.6%) | 77.8–92.2 | 27/30 | 104/120 (86.7%) | 0 | 3 | 5 | 8 | 0 | 0 |
+| GPT-6 Sol | `mcp_crowdall` | 73/90 (81.1%) | 73.3–88.9 | 27/30 | 100/120 (83.3%) | 1 | 5 | 6 | 8 | 0 | 0 |
+
+Paired change for the 15 single-step targets, in percentage points with request-cluster 95% intervals:
+
+| Model | alone → pack20 | pack20 → crowd200 | crowd200 → crowdall | alone → crowdall |
+|---|---|---|---|---|
+| Haiku | -5.6 (-12.2 to +1.1) | -1.1 (-7.8 to +5.6) | +1.1 (-4.4 to +6.7) | -5.6 (-11.1 to +0.0) |
+| Sonnet | -5.6 (-11.1 to -1.1) | -5.6 (-12.2 to +0.0) | +3.3 (-3.3 to +10.0) | -7.8 (-14.4 to -2.2) |
+| Fable 5.2 | -3.3 (-7.8 to +0.0) | -5.6 (-10.0 to -1.1) | +3.3 (+0.0 to +7.8) | -5.6 (-11.1 to -1.1) |
+| GPT-6 Sol | -17.8 (-25.6 to -10.0) | +7.8 (+1.1 to +14.4) | -4.4 (-8.9 to -1.1) | -14.4 (-22.2 to -7.8) |
+
+- **Single-step targets.** All four configurations kept selecting the designated tool as tools were added; the change from ~220 to 791 tools is within a few points for each.
+- **GPT-6 Sol.** With the calls approved, web search off and the folders outside a repository, its rates are in the range of the Claude Code configurations. The decline in §14.3 came from the setup.
+- **Browser targets.** In the two larger setups a tool for opening a page is installed, and the agents called it and then the designated tool. With the target alone or among the 20 targets, no such tool exists; Fable 5.2 and GPT-6 Sol mostly called the designated tool anyway, and Sonnet mostly declined (6 of 30 in `mcp_pack20`). The two small setups are therefore not comparable with the two larger ones for these five targets, and the post keeps them out of the main curve.
+
+### 15.4 Results: tool requests in the mixed scenarios
+
+| Model | Setup | Strict, all 20 targets | 15 single-step targets, request-weighted (95%) |
+|---|---|---|---|
+| Haiku | `mixed_smaller` | 97/120 (80.8%) | 78.9% (70.0–86.7) |
+| Haiku | `mixed_larger` | 96/120 (80.0%) | 77.8% (68.9–85.6) |
+| Sonnet | `mixed_smaller` | 98/120 (81.7%) | 80.0% (71.1–87.8) |
+| Sonnet | `mixed_larger` | 97/120 (80.8%) | 78.9% (70.0–86.7) |
+
+### 15.5 Alternatives rated in a second batch
+
+The pairs of request and alternative from target misses that the first batch (§7.4) did not cover, 104 in all (21 from the Fable 5.2 and GPT-6 Sol skills runs, 83 from the round 3 tool runs), were rated by a separate, blind Claude agent with the same prompt and labels: 22 equivalent, 40 preliminary step, 31 related, 8 inappropriate, 3 unassessable. Input and output are `analysis/alt_judge_input_2.json` and `analysis/alt_judgments_2.json`; `analysis/alt_judge_make_batch2.py` builds the input. With these, the statement in §14.1 that the alternatives of the two later configurations were not rated no longer holds.
+
+### 15.6 Cost
+
+GPT-6 Sol, round 3: $35.79 for 480 runs at list prices (cache-write price assumed, §14.5). The Claude Code runs were on the experimenter's subscription; list prices are recorded only for the runs that were not stopped at the accepted call.

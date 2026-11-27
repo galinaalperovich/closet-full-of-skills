@@ -8,5 +8,5 @@ C1,Claude Code (Claude plan),"Observation window: 40 seeded requests x {pack20, 
 C2,Claude Code (Claude plan),"Fixture-backed folders: 31 file-referencing requests x {alone, crowd1000} x 2 models",124,4.0,5.99,no (list-price equivalent)
 C3,Claude Code (Claude plan),"Filler-sample replication: crowd1000 with seeds 8 and 9, all 120 requests x 2 models",480,22.42,33.62,no (list-price equivalent)
 C4,Claude Code (Claude plan),"Positive/negative controls (as G2) x {alone, crowd1000} x 2 models",160,5.16,7.73,no (list-price equivalent)
-C5,Claude Code (Claude plan),"Crossed skills x tools design: {100, 400 skills} x {20, 791 tools}, nested pools; Haiku all 270 requests, Sonnet i in {0,2,4}",1620,89.26,133.89,no (list-price equivalent)
-C6,Claude Code (Claude plan),"Browser targets with non-terminal stubs (navigate returns a page): 30 requests x {alone, pack20, crowdall} x 2 models, 8 turns",180,19.84,29.75,no (list-price equivalent)
+C5,Claude Code (Claude plan),"Crossed skills x tools design: {100, 400 skills} x {20, 791 tools}, nested pools; Haiku all 270 requests, Sonnet i in {0,2,4}",1620,58.32,87.48,no (list-price equivalent)
+C6,Claude Code (Claude plan),"Browser targets with non-terminal stubs (navigate returns a page): 30 requests x {alone, pack20, crowdall} x 2 models, 8 turns",180,3.87,5.8,no (list-price equivalent)

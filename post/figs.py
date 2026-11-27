@@ -63,7 +63,10 @@ def hero_dots(x, y, s, n, r):
         o.append(f'<circle cx="{x + d * (i + .5) + jx:.1f}" cy="{y + (s - rows_ * d) / 2 + d * (j + .5) + jy:.1f}" r="{r}"/>')
     return o, (x + d * (ti + .5), y + (s - rows_ * d) / 2 + d * (tj + .5))
 e1h = {(r["model"], r["setup"]): r for r in rd("e1_rates.csv")}
-_rng = lambda s: (lambda v: f"{min(v)}–{max(v)}%")([round(100 * F(e1h[(m, s)]["rate"])) for m in ALLM])
+# The big number is the range across four models; the strongest model, Fable, is shown on its own line, because at
+# 1,020 skills it sits far from the rest and one range from 10 to 72 percent would hide the decline.
+_rng = lambda s: (lambda v: f"{min(v)}–{max(v)}%")([round(100 * F(e1h[(m, s)]["rate"])) for m in ALLM if m != "fable"])
+_fab = lambda s: f'{round(100 * F(e1h[("fable", s)]["rate"]))}%'
 HS, HG, HX0, HY0 = 240, 44, 60, 108
 hero = []
 for k, (n, lab, s, r, col) in enumerate([(1, "1 skill", "alone", 0, "var(--band-hi)"), (20, "20 skills", "pack20", 6.5, "currentColor"),
@@ -77,12 +80,14 @@ for k, (n, lab, s, r, col) in enumerate([(1, "1 skill", "alone", 0, "var(--band-
     hero.append(f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="17" fill="var(--accent)" fill-opacity=".22"/>'
                 f'<circle cx="{tx:.1f}" cy="{ty:.1f}" r="9" fill="var(--accent)" stroke="var(--surface)" stroke-width="3"/>')
     hero.append(f'<text x="{cx}" y="{HY0 + HS + 44}" text-anchor="middle" font-size="25" font-weight="600" fill="currentColor">{lab}</text>'
-                f'<text x="{cx}" y="{HY0 + HS + 100}" text-anchor="middle" font-size="46" font-weight="700" fill="{col}">{_rng(s)}</text>')
-out["fig_hero"] = (f'<svg viewBox="0 0 1200 520" role="img" aria-label="Headline image. One skill, shown as a highlighted dot, installed alone and then among 20, 220 and 1,020 skills. '
-                   f'How often the agent picked it: {_rng("alone")}, {_rng("pack20")}, {_rng("crowd200")} and {_rng("crowd1000")} of requests, across Claude Code (Haiku, Sonnet, Fable) and Codex (GPT-6 Astra, GPT-6 Sol).">'
+                f'<text x="{cx}" y="{HY0 + HS + 96}" text-anchor="middle" font-size="46" font-weight="700" fill="{col}">{_rng(s)}</text>'
+                f'<text x="{cx}" y="{HY0 + HS + 134}" text-anchor="middle" font-size="22" fill="currentColor" fill-opacity=".8">strongest model: <tspan font-weight="700" fill-opacity="1">{_fab(s)}</tspan></text>')
+out["fig_hero"] = (f'<svg viewBox="0 0 1200 550" role="img" aria-label="Headline image. One skill, shown as a highlighted dot, installed alone and then among 20, 220 and 1,020 skills. '
+                   f'How often the agent picked it: {_rng("alone")}, {_rng("pack20")}, {_rng("crowd200")} and {_rng("crowd1000")} of requests across Haiku and Sonnet in Claude Code and GPT-6 Astra and GPT-6 Sol in Codex. '
+                   f'The strongest model, Claude Fable 5.2: {_fab("alone")}, {_fab("pack20")}, {_fab("crowd200")} and {_fab("crowd1000")}.">'
                    f'<g {FONT}><text x="{HX0}" y="56" font-size="30" font-weight="600" fill="currentColor">How often the agent picks the skill <tspan fill="var(--accent)">●</tspan> a request was written for</text>'
                    f'{"".join(hero)}'
-                   f'<text x="{HX0}" y="{HY0 + HS + 146}" font-size="21" fill="currentColor" fill-opacity=".65">Range across five models in Claude Code and Codex, 120 requests each</text>'
+                   f'<text x="{HX0}" y="{HY0 + HS + 180}" font-size="21" fill="currentColor" fill-opacity=".65">Big numbers: range across four models. Strongest model: Claude Fable 5.2. 120 requests each.</text>'
                    f'</g></svg>')
 
 # --- Fig: how selection works (skills vs MCP tools)
@@ -173,7 +178,7 @@ out["fig_skills"] = line_chart(ser, ["Target alone", "20 skills", "220 skills", 
 e2 = {(r["model"], r["setup"]): r for r in rd("e2_mcp_rates.csv")}
 M = ["mcp_alone", "mcp_pack20", "mcp_crowd200", "mcp_crowdall"]
 ser = []
-CL3 = (("fable", "Fable"), ("sonnet", "Sonnet"), ("haiku", "Haiku"))
+CL3 = (("fable", "Fable"), ("sonnet", "Sonnet"), ("haiku", "Haiku"), ("gpt_sol", "GPT-6 Sol"))
 for m, nm in CL3:
     ser.append(dict(name=nm, tip=f"{nm} skills", short=f"{nm} skills", color=COL[nm], values=[100 * F(e1[(m, s)]["rate"]) for s in S],
                     ci=[e1ci(m, s) for s in S]))
@@ -181,8 +186,8 @@ for m, nm in CL3:
                     values=[100 * F(e2[(m, s)]["nonbrowser_rate"]) for s in M],
                     ci=[(100 * F(e2[(m, s)]["nonbrowser_req_lo"]), 100 * F(e2[(m, s)]["nonbrowser_req_hi"])) for s in M]))
 _tl = lambda m: ", ".join(f"{100 * F(e2[(m, s)]['nonbrowser_rate']):.0f}" for s in M)
-out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "All installed"], title="Claude Code: skills (solid) vs the 15 single-step, non-browser MCP tool targets (dashed)", aria=
-    "Line chart for Claude Code, for the target alone, 20, about 220 and all installed. Skills, solid lines: "
+out["fig_fade"] = line_chart(ser, ["Alone", "20 installed", "~220 installed", "All installed"], title="Skills (solid) vs single-step MCP tools (dashed)", aria=
+    "Line chart for the target alone, 20, about 220 and all installed. Skills, solid lines: "
     + "; ".join(f"{nm} " + ", ".join(f"{100 * F(e1[(m, s)]['rate']):.0f}" for s in S) for m, nm in CL3) + " percent. Single-step MCP tools, dashed: "
     + "; ".join(f"{nm} {_tl(m)}" for m, nm in CL3) + " percent.")
 
@@ -249,33 +254,46 @@ out["fig_mix"] = f'<svg viewBox="0 0 {W} {Hh}" role="img" aria-label="Grouped ba
 pv = rd("paired_vs_alone.csv")
 SIZE = {"pack20": "20", "crowd200": "~220", "crowd1000": "1,020", "mcp_pack20": "20", "mcp_crowd200": "~220", "mcp_crowdall": "791"}
 NM = {"haiku": "Haiku", "sonnet": "Sonnet", "fable": "Fable", "gpt": "GPT-6 Astra", "gpt_sol": "GPT-6 Sol"}
-sections = [("Skills: change vs target skill alone", "E1 skills", "skills"), ("Single-step MCP tools: change vs target tool alone", "E2 MCP single-step tools", "tools")]
-W = 740; x0, x1 = 250, 600; X = lambda d: x0 + (x1 - x0) * (d + 100) / 110
-rows_svg = []; y = 44
+# One block per model: three rows (20, ~220, all installed), each with the skills change (filled dot) and the tools change
+# (hollow dot) on the same axis, so skills and tools can be compared model by model.
+HARN = {"haiku": "Claude Code", "sonnet": "Claude Code", "fable": "Claude Code", "gpt": "Codex", "gpt_sol": "Codex"}
+PV = {(r["experiment"], r["model"], r["to_setup"]): r for r in pv}
+TOOLS_EXP = "E2 MCP single-step tools"
+LEVELS = [("20 installed", "pack20", "mcp_pack20"), ("~220 installed", "crowd200", "mcp_crowd200"), ("all installed", "crowd1000", "mcp_crowdall")]
+FOREST_M = [m for m in ("haiku", "sonnet", "fable", "gpt", "gpt_sol")]
+W = 790; x0, x1 = 225, 575; X = lambda d: x0 + (x1 - x0) * (d + 100) / 110
+rows_svg = []; y = 62
+rows_svg.append(f'<circle cx="{x0}" cy="14" r="5.5" fill="currentColor" stroke="currentColor" stroke-width="2"/><text x="{x0+12}" y="18" font-size="12" fill="currentColor">skills (all = 1,020)</text>'
+                f'<circle cx="{x0+150}" cy="14" r="5.5" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><text x="{x0+162}" y="18" font-size="12" fill="currentColor">single-step MCP tools (all = 791)</text>')
 for v in (-100, -75, -50, -25, 0):
-    rows_svg.append(f'<text x="{X(v):.1f}" y="30" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{v:+d}</text>'.replace("+0", "0"))
-grid_top = y
-for title, exp, unit in sections:
-    rows_svg.append(f'<text x="12" y="{y+14}" font-size="12.5" font-weight="600" fill="currentColor">{title}</text>'); y += 26
-    for r in [r for r in pv if r["experiment"] == exp]:
-        d, lo, hi = (100 * F(r[k]) for k in ("diff", "req_lo", "req_hi"))
-        col = COL[NM[r["model"]]]; n = r["n_pairs"]
-        lab = f'{NM[r["model"]]}, {SIZE[r["to_setup"]]} {unit}' + (" (24 requests)" if n == "24" else "")
-        fill = col if unit == "skills" else "var(--surface)"
-        rows_svg.append(f'<text x="{x0-12}" y="{y+4}" text-anchor="end" font-size="12" fill="currentColor">{lab}</text>'
-                        f'<line x1="{X(lo):.1f}" y1="{y}" x2="{X(hi):.1f}" y2="{y}" stroke="{col}" stroke-width="2.5" stroke-linecap="round"/>'
-                        f'<circle cx="{X(d):.1f}" cy="{y}" r="5.5" fill="{fill}" stroke="{col}" stroke-width="2"><title>{lab}: {d:+.1f} pp (95% CI {lo:+.1f} to {hi:+.1f}), {n} paired requests</title></circle>'
-                        f'<text x="{x1+12}" y="{y+4}" font-size="11.5" fill="currentColor"><tspan font-weight="600">{d:+.0f}</tspan> [{lo:+.0f}, {hi:+.0f}]</text>'.replace("+0]", "0]").replace("[+0,", "[0,").replace(">+0<", ">0<"))
-        y += 22
-    y += 10
-grid = "".join(f'<line x1="{X(v):.1f}" y1="{grid_top}" x2="{X(v):.1f}" y2="{y-6}" stroke="currentColor" stroke-opacity="{.45 if v==0 else .1}" stroke-width="{1.5 if v==0 else 1}"/>' for v in (-100, -75, -50, -25, 0))
-rows_svg.append(f'<text x="{(x0+x1)/2:.1f}" y="{y+10}" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity=".75">change in percentage points (same requests in both setups)</text>')
-_fl = lambda exp, m: ", ".join(f"{100 * F(r['diff']):+.0f}" for r in pv if r["experiment"] == exp and r["model"] == m)
-_aria = ("Forest plot of paired changes versus the target alone, in percentage points, with 95% confidence intervals. "
-         "Skills at 20, 220 and 1,020: " + "; ".join(f"{NM[m]} {_fl('E1 skills', m)}" for m in ALLM) + ". "
-         "Single-step MCP tools at 20, 220 and 791: " + "; ".join(f"{NM[m]} {_fl('E2 MCP single-step tools', m)}" for m in ALLM if m != "gpt")
-         + f"; GPT-6 Astra {_fl('E2 MCP single-step tools', 'gpt')} at 20 tools on 24 requests.")
-out["fig_forest"] = (f'<svg viewBox="0 0 {W} {y+22}" role="img" aria-label="{_aria}">'
+    rows_svg.append(f'<text x="{X(v):.1f}" y="46" text-anchor="middle" font-size="11" fill="currentColor" fill-opacity=".7">{v:+d}</text>'.replace("+0", "0"))
+rows_svg.append(f'<text x="{x1+14}" y="46" font-size="11" fill="currentColor" fill-opacity=".7">skills</text><text x="{x1+118}" y="46" font-size="11" fill="currentColor" fill-opacity=".7">tools</text>')
+grid_top = y - 8
+def _mark(r, col, filled, lab):
+    d, lo, hi = (100 * F(r[k]) for k in ("diff", "req_lo", "req_hi"))
+    return (f'<line x1="{X(lo):.1f}" y1="{y}" x2="{X(hi):.1f}" y2="{y}" stroke="{col}" stroke-width="2.5" stroke-linecap="round" stroke-opacity="{1 if filled else .55}"/>'
+            f'<circle cx="{X(d):.1f}" cy="{y}" r="5.5" fill="{col if filled else "var(--surface)"}" stroke="{col}" stroke-width="2"><title>{lab}: {d:+.1f} pp (95% CI {lo:+.1f} to {hi:+.1f}), {r["n_pairs"]} paired requests</title></circle>')
+def _num(r, x):
+    d, lo, hi = (100 * F(r[k]) for k in ("diff", "req_lo", "req_hi"))
+    return f'<text x="{x}" y="{y+4}" font-size="11.5" fill="currentColor"><tspan font-weight="600">{d:+.0f}</tspan> [{lo:+.0f}, {hi:+.0f}]</text>'.replace("+0]", "0]").replace("[+0,", "[0,").replace(">+0<", ">0<")
+for m in FOREST_M:
+    col = COL[NM[m]]
+    rows_svg.append(f'<text x="12" y="{y+4}" font-size="12.5" font-weight="600" fill="currentColor">{NM[m]}</text>'
+                    f'<text x="12" y="{y+20}" font-size="11" fill="currentColor" fill-opacity=".7">{HARN[m]}</text>')
+    for lab, sk, tl in LEVELS:
+        rs, rt = PV.get(("E1 skills", m, sk)), PV.get((TOOLS_EXP, m, tl))
+        if rt and rt["n_pairs"] == "24": rt = None
+        rows_svg.append(f'<text x="{x0-12}" y="{y+4}" text-anchor="end" font-size="11.5" fill="currentColor" fill-opacity=".8">{lab}</text>')
+        if rt: rows_svg.append(_mark(rt, col, False, f"{NM[m]}, MCP tools, {lab}") + _num(rt, x1 + 118))
+        if rs: rows_svg.append(_mark(rs, col, True, f"{NM[m]}, skills, {lab}") + _num(rs, x1 + 14))
+        y += 21
+    y += 13
+grid = "".join(f'<line x1="{X(v):.1f}" y1="{grid_top}" x2="{X(v):.1f}" y2="{y-12}" stroke="currentColor" stroke-opacity="{.45 if v==0 else .1}" stroke-width="{1.5 if v==0 else 1}"/>' for v in (-100, -75, -50, -25, 0))
+rows_svg.append(f'<text x="{(x0+x1)/2:.1f}" y="{y+6}" text-anchor="middle" font-size="11.5" fill="currentColor" fill-opacity=".75">change from the target alone, in percentage points (same requests in both setups)</text>')
+_fl = lambda exp, m: ", ".join(f"{100 * F(PV[(exp, m, st)]['diff']):+.0f}" for st in (("pack20", "crowd200", "crowd1000") if exp == "E1 skills" else ("mcp_pack20", "mcp_crowd200", "mcp_crowdall")) if (exp, m, st) in PV and PV[(exp, m, st)]["n_pairs"] != "24")
+_aria = ("Forest plot of paired changes versus the target alone, in percentage points, with 95% confidence intervals, one block per model, at 20, about 220 and all installed. "
+         + " ".join(f"{NM[m]}: skills {_fl('E1 skills', m)}" + (f"; MCP tools {_fl(TOOLS_EXP, m)}." if _fl(TOOLS_EXP, m) else "; MCP tools not measured.") for m in FOREST_M))
+out["fig_forest"] = (f'<svg viewBox="0 0 {W} {y+20}" role="img" aria-label="{_aria}">'
                      f'<g {FONT}>{grid}{"".join(rows_svg)}</g></svg>')
 
 # --- Fig: which skills kept being selected (Sonnet): an arrow per skill from "alone" to "with 1,020 skills",

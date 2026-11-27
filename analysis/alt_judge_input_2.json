@@ -1,0 +1,834 @@
+[
+ {
+  "id": "skill|diagnosing-bugs|2|skill:systematic-debugging",
+  "request": "Debug this: the worker crashes intermittently with no stack trace.",
+  "designated_target": "diagnosing-bugs",
+  "target_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+  "alternative": "skill:systematic-debugging",
+  "alternative_description": "Skill. Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes"
+ },
+ {
+  "id": "skill|diagnosing-bugs|3|skill:systematic-debugging",
+  "request": "Something is broken in the auth flow and I can't work out what. Dig in.",
+  "designated_target": "diagnosing-bugs",
+  "target_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+  "alternative": "skill:systematic-debugging",
+  "alternative_description": "Skill. Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes"
+ },
+ {
+  "id": "skill|diagnosing-bugs|4|skill:debugging-strategies",
+  "request": "The app throws TypeError: cannot read properties of undefined on startup. Diagnose it.",
+  "designated_target": "diagnosing-bugs",
+  "target_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+  "alternative": "skill:debugging-strategies",
+  "alternative_description": "Skill. Transform debugging from frustrating guesswork into systematic problem-solving with proven strategies, powerful tools, and methodical approaches."
+ },
+ {
+  "id": "skill|diagnosing-bugs|5|skill:debugging-strategies",
+  "request": "Users report data disappearing after saving. Investigate the root cause.",
+  "designated_target": "diagnosing-bugs",
+  "target_description": "Skill. Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow.",
+  "alternative": "skill:debugging-strategies",
+  "alternative_description": "Skill. Transform debugging from frustrating guesswork into systematic problem-solving with proven strategies, powerful tools, and methodical approaches."
+ },
+ {
+  "id": "skill|frontend-design|1|skill:better-ui",
+  "request": "Redesign this settings page so it has a distinct visual identity.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:better-ui",
+  "alternative_description": "Skill. Polishes surfaces, icons and motion with exact values for border radius, optical alignment, shadows, icon states and animation."
+ },
+ {
+  "id": "skill|frontend-design|2|skill:build-design",
+  "request": "Create a React component for a pricing section with real attention to typography and color.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:build-design",
+  "alternative_description": "Skill. Builds UI from a Figma file or a design image so it matches the design, using the project's existing tokens and components."
+ },
+ {
+  "id": "skill|frontend-design|5|skill:better-ui",
+  "request": "Give this signup form a more intentional, polished look.",
+  "designated_target": "frontend-design",
+  "target_description": "Skill. Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
+  "alternative": "skill:better-ui",
+  "alternative_description": "Skill. Polishes surfaces, icons and motion with exact values for border radius, optical alignment, shadows, icon states and animation."
+ },
+ {
+  "id": "skill|mcp-builder|5|skill:api-integration",
+  "request": "I need to let agents talk to our CRM. Build the MCP server for it.",
+  "designated_target": "mcp-builder",
+  "target_description": "Skill. Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+  "alternative": "skill:api-integration",
+  "alternative_description": "Skill. Designs event-driven architectures, webhook systems, API chaining flows, ETL pipelines, and integration patterns between services."
+ },
+ {
+  "id": "skill|security-and-hardening|1|skill:file-uploads",
+  "request": "Harden this file upload endpoint.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:file-uploads",
+  "alternative_description": "Skill. Expert at handling file uploads and cloud storage. Covers S3, Cloudflare R2, presigned URLs, multipart uploads, and image optimization. Knows how to handle large files without blocking."
+ },
+ {
+  "id": "skill|security-and-hardening|4|skill:auth-implementation-patterns",
+  "request": "Add authentication to this API route securely.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:auth-implementation-patterns",
+  "alternative_description": "Skill. Implement or review authentication and authorization with explicit token, session and resource-access boundaries."
+ },
+ {
+  "id": "skill|security-and-hardening|5|skill:backend-security-coder",
+  "request": "Check this webhook handler for security issues before we ship.",
+  "designated_target": "security-and-hardening",
+  "target_description": "Skill. Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions or session cookies, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+  "alternative": "skill:backend-security-coder",
+  "alternative_description": "Skill. Expert in secure backend coding practices specializing in input validation, authentication, and API security. Use PROACTIVELY for backend security implementations or security code reviews."
+ },
+ {
+  "id": "skill|seo-audit|3|skill:seo-hreflang",
+  "request": "Are our canonical tags and hreflang set up correctly?",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won''t rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:seo-hreflang",
+  "alternative_description": "Skill. Hreflang and international SEO audit, validation, and generation. Detects common mistakes, validates language/region codes, and generates correct hreflang implementations. Use when user says \"hreflang\", \"i18n SEO\", \"international SEO\", \"multi-language\", \"multi-region\", or \"language tags\"."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:indexing-issue-auditor",
+  "request": "Diagnose why Google isn't indexing our blog posts.",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won''t rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:indexing-issue-auditor",
+  "alternative_description": "Skill. High-level technical SEO and site architecture auditor. Invoke to scan local or live environments for indexing, crawl budget, and structural errors."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:robots-txt-validator",
+  "request": "Diagnose why Google isn't indexing our blog posts.",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won''t rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:robots-txt-validator",
+  "alternative_description": "Skill. Robots.txt Validator. Use when working with robots.txt text, crawler and URLs to test."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:seo-plan",
+  "request": "Diagnose why Google isn't indexing our blog posts.",
+  "designated_target": "seo-audit",
+  "target_description": "Skill. When the user wants to audit or diagnose SEO, or asks why traffic dropped, a page won''t rank, or whether a setup like canonicals, hreflang, or redirects is right: technical SEO, indexing, Google updates, on-page and titles, Core Web Vitals, local SEO. Start here when someone just says their SEO is bad. For pages at scale, see programmatic-seo. For structured data, see schema. For AI search, see ai-seo.",
+  "alternative": "skill:seo-plan",
+  "alternative_description": "Skill. Strategic SEO planning for new or existing websites. Industry-specific templates, competitive analysis, content strategy, and implementation roadmap. Use when user says \"SEO plan\", \"SEO strategy\", \"content strategy\", \"site architecture\", or \"SEO roadmap\"."
+ },
+ {
+  "id": "skill|tdd|1|skill:test-driven-development",
+  "request": "Fix this off-by-one bug using red-green-refactor.",
+  "designated_target": "tdd",
+  "target_description": "Skill. Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor\", or wants integration tests.",
+  "alternative": "skill:test-driven-development",
+  "alternative_description": "Skill. Use a failing behavioral test to guide a feature or bug fix, then implement and refactor with relevant regression checks."
+ },
+ {
+  "id": "skill|vercel-react-best-practices|1|skill:react-best-practices",
+  "request": "My React app re-renders too much. Optimise this component.",
+  "designated_target": "vercel-react-best-practices",
+  "target_description": "Skill. React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React components, Next.js pages, data fetching, bundle optimization, or performance improvements.",
+  "alternative": "skill:react-best-practices",
+  "alternative_description": "Skill. Comprehensive performance optimization guide for React and Next.js applications, adapted from Vercel’s published guidance. Use when writing new React components or Next.js pages, implementing data fetching (client or server-side), or reviewing code for performance issues."
+ },
+ {
+  "id": "skill|webapp-testing|1|skill:browser-harness",
+  "request": "Take a screenshot of the dashboard page of my local dev server and tell me if anything looks broken.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-harness",
+  "alternative_description": "Skill. Drive an existing browser through CDP for authenticated, visual, or interactive web automation."
+ },
+ {
+  "id": "skill|webapp-testing|3|skill:playwright-skill",
+  "request": "Write a Playwright script that verifies the signup page on localhost:5173.",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:playwright-skill",
+  "alternative_description": "Skill. Write and run scoped Playwright browser automation, responsive checks, screenshots and login-flow tests with a local Node executor."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:browser-act",
+  "request": "The button on my local React app does nothing when clicked. Can you debug it in a real browser?",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-act",
+  "alternative_description": "Skill. Use BrowserAct for authenticated browser automation, JS-rendered extraction, screenshots, parallel sessions, verification handling, and human handoff."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:browser-harness",
+  "request": "The button on my local React app does nothing when clicked. Can you debug it in a real browser?",
+  "designated_target": "webapp-testing",
+  "target_description": "Skill. Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",
+  "alternative": "skill:browser-harness",
+  "alternative_description": "Skill. Drive an existing browser through CDP for authenticated, visual, or interactive web automation."
+ },
+ {
+  "id": "tool|context7.get-library-docs|0|mcp:fetch.fetch",
+  "request": "Get the latest docs for Next.js route handlers.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|context7.get-library-docs|0|mcp:github.search_code",
+  "request": "Get the latest docs for Next.js route handlers.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:github.search_code",
+  "alternative_description": "MCP tool. Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:duckduckgo-search.duckduckgo_web_search",
+  "request": "How do I set up streaming in the current version of the Vercel AI SDK? Use up-to-date docs.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:duckduckgo-search.duckduckgo_web_search",
+  "alternative_description": "MCP tool. Performs a web search using the DuckDuckGo, ideal for general queries, news, articles, and online content. Use this for broad information gathering, recent events, or when you need diverse web sources. Supports content filtering and region-specific searches. Maximum 20 results per request."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:fetch.fetch",
+  "request": "How do I set up streaming in the current version of the Vercel AI SDK? Use up-to-date docs.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:github.search_code",
+  "request": "How do I set up streaming in the current version of the Vercel AI SDK? Use up-to-date docs.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:github.search_code",
+  "alternative_description": "MCP tool. Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:npx-fetch.fetch_json",
+  "request": "How do I set up streaming in the current version of the Vercel AI SDK? Use up-to-date docs.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:npx-fetch.fetch_json",
+  "alternative_description": "MCP tool. Fetch a JSON file from a URL"
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:npx-fetch.fetch_markdown",
+  "request": "How do I set up streaming in the current version of the Vercel AI SDK? Use up-to-date docs.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:npx-fetch.fetch_markdown",
+  "alternative_description": "MCP tool. Fetch a website and return the content as Markdown"
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:playwright-mcp.browser_navigate",
+  "request": "How do I set up streaming in the current version of the Vercel AI SDK? Use up-to-date docs.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|context7.get-library-docs|2|mcp:fetch.fetch",
+  "request": "Pull the current Prisma documentation for relation queries.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|context7.get-library-docs|2|mcp:github.search_code",
+  "request": "Pull the current Prisma documentation for relation queries.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:github.search_code",
+  "alternative_description": "MCP tool. Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns."
+ },
+ {
+  "id": "tool|context7.get-library-docs|3|mcp:github.search_code",
+  "request": "Fetch up-to-date Tailwind CSS v4 documentation on theme variables.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:github.search_code",
+  "alternative_description": "MCP tool. Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns."
+ },
+ {
+  "id": "tool|context7.get-library-docs|4|mcp:fetch.fetch",
+  "request": "What's the current API for TanStack Query's useSuspenseQuery? Check the docs.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|context7.get-library-docs|5|mcp:fetch.fetch",
+  "request": "Look up the latest Drizzle ORM docs for migrations.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|context7.get-library-docs|5|mcp:github.search_code",
+  "request": "Look up the latest Drizzle ORM docs for migrations.",
+  "designated_target": "context7.get-library-docs",
+  "target_description": "MCP tool. Fetches up-to-date documentation for a library. You must call 'resolve-library-id' first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/project/version' in their query.",
+  "alternative": "mcp:github.search_code",
+  "alternative_description": "MCP tool. Fast and precise code search across ALL GitHub repositories using GitHub's native search engine. Best for finding exact symbols, functions, classes, or specific code patterns."
+ },
+ {
+  "id": "tool|filesystem.directory_tree|4|mcp:filesystem.list_allowed_directories",
+  "request": "How is /Users/me/projects/api organized? Show the directory layout.",
+  "designated_target": "filesystem.directory_tree",
+  "target_description": "MCP tool. Get a recursive tree view of files and directories as a JSON structure. Each entry includes 'name', 'type' (file/directory), and 'children' for directories. Files have no children array, while directories always have a children array (which may be empty). The output is formatted with 2-space indentation for readability. Only works within allowed directories.",
+  "alternative": "mcp:filesystem.list_allowed_directories",
+  "alternative_description": "MCP tool. Returns the list of directories that this server is allowed to access. Use this to understand which directories are available before trying to access files."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.get_me",
+  "request": "Can you report this on GitHub for acme/docs? The install page links to a 404.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.get_me",
+  "alternative_description": "MCP tool. Get details of the authenticated GitHub user. Use this when a request is about the user's own profile for GitHub. Or when information is missing to build other tool calls."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.search_repositories",
+  "request": "Can you report this on GitHub for acme/docs? The install page links to a 404.",
+  "designated_target": "github.create_issue",
+  "target_description": "MCP tool. Create a new issue in a GitHub repository with a title and optional body.",
+  "alternative": "mcp:github.search_repositories",
+  "alternative_description": "MCP tool. Find GitHub repositories by name, description, readme, topics, or other metadata. Perfect for discovering projects, finding examples, or locating specific repositories across GitHub."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:git.git_branch",
+  "request": "My branch hotfix-500 in octo/api is ready. Put up a PR against main.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:git.git_branch",
+  "alternative_description": "MCP tool. List Git branches"
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.get_commit",
+  "request": "My branch hotfix-500 in octo/api is ready. Put up a PR against main.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.get_commit",
+  "alternative_description": "MCP tool. Get details for a commit from a GitHub repository"
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.get_file_contents",
+  "request": "My branch hotfix-500 in octo/api is ready. Put up a PR against main.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.get_file_contents",
+  "alternative_description": "MCP tool. Get the contents of a file or directory from a GitHub repository"
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.get_me",
+  "request": "My branch hotfix-500 in octo/api is ready. Put up a PR against main.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.get_me",
+  "alternative_description": "MCP tool. Get details of the authenticated GitHub user. Use this when a request is about the user's own profile for GitHub. Or when information is missing to build other tool calls."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.search_repositories",
+  "request": "My branch hotfix-500 in octo/api is ready. Put up a PR against main.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.search_repositories",
+  "alternative_description": "MCP tool. Find GitHub repositories by name, description, readme, topics, or other metadata. Perfect for discovering projects, finding examples, or locating specific repositories across GitHub."
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.get_commit",
+  "request": "Make a pull request for branch deps-bump in acme/webapp with a short description.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.get_commit",
+  "alternative_description": "MCP tool. Get details for a commit from a GitHub repository"
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.get_file_contents",
+  "request": "Make a pull request for branch deps-bump in acme/webapp with a short description.",
+  "designated_target": "github.create_pull_request",
+  "target_description": "MCP tool. Create a new pull request in a GitHub repository.",
+  "alternative": "mcp:github.get_file_contents",
+  "alternative_description": "MCP tool. Get the contents of a file or directory from a GitHub repository"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|0|skill:dataviz",
+  "request": "Make a bar chart of our monthly signups: Jan 120, Feb 180, Mar 260, Apr 310.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "skill:dataviz",
+  "alternative_description": "Skill. (Harness built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|0|skill:run",
+  "request": "Make a bar chart of our monthly signups: Jan 120, Feb 180, Mar 260, Apr 310.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "skill:run",
+  "alternative_description": "Skill. (Harness built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|2|skill:artifact-design",
+  "request": "Create a column chart comparing revenue for 2024 (1.2M) and 2025 (1.9M).",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "skill:artifact-design",
+  "alternative_description": "Skill. (Harness built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:painter.drawing_generateCanvas",
+  "request": "Turn these numbers into a bar chart image: Q1 10, Q2 14, Q3 9, Q4 17.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "mcp:painter.drawing_generateCanvas",
+  "alternative_description": "MCP tool. Generate a new drawing canvas with specified width and height."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:painter.drawing_getCanvasPng",
+  "request": "Turn these numbers into a bar chart image: Q1 10, Q2 14, Q3 9, Q4 17.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "mcp:painter.drawing_getCanvasPng",
+  "alternative_description": "MCP tool. Get the current drawing canvas as a PNG image (base64 encoded)."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:playwright-mcp.browser_navigate",
+  "request": "Turn these numbers into a bar chart image: Q1 10, Q2 14, Q3 9, Q4 17.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "mcp:playwright-mcp.browser_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:playwright-mcp.browser_take_screenshot",
+  "request": "Turn these numbers into a bar chart image: Q1 10, Q2 14, Q3 9, Q4 17.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "mcp:playwright-mcp.browser_take_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:puppeteer.puppeteer_navigate",
+  "request": "Turn these numbers into a bar chart image: Q1 10, Q2 14, Q3 9, Q4 17.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "mcp:puppeteer.puppeteer_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:puppeteer.puppeteer_screenshot",
+  "request": "Turn these numbers into a bar chart image: Q1 10, Q2 14, Q3 9, Q4 17.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "mcp:puppeteer.puppeteer_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page or a specific element"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|5|skill:artifact-design",
+  "request": "Plot bug counts per team as bars: Web 12, Mobile 7, API 4, Infra 2.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "skill:artifact-design",
+  "alternative_description": "Skill. (Harness built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|5|skill:dataviz",
+  "request": "Plot bug counts per team as bars: Web 12, Mobile 7, API 4, Infra 2.",
+  "designated_target": "mcp-server-chart.generate_bar_chart",
+  "target_description": "MCP tool. Generate a bar chart to show data for numerical comparisons among different categories, such as, comparing categorical data and for horizontal comparisons.",
+  "alternative": "skill:dataviz",
+  "alternative_description": "Skill. (Harness built-in skill; description not captured)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:chrome-devtools.list_pages",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:chrome-devtools.new_page",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:npx-fetch.fetch_html",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:npx-fetch.fetch_html",
+  "alternative_description": "MCP tool. Fetch a website and return the content as HTML"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-ea.playwright_get_visible_html",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get_visible_html",
+  "alternative_description": "MCP tool. Get the HTML content of the current page. By default, all <script> tags are removed from the output unless removeScripts is explicitly set to false."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-ea.playwright_get_visible_text",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get_visible_text",
+  "alternative_description": "MCP tool. Get the visible text content of the current page"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-ea.playwright_navigate",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_evaluate",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_evaluate",
+  "alternative_description": "MCP tool. Evaluate JavaScript expression on page or element"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_find",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_find",
+  "alternative_description": "MCP tool. Search the accessibility snapshot of the current page for text or a regular expression. Returns matching snapshot nodes with a few lines of surrounding context (like search snippets), each shown under its path from the root of the tree, which is cheaper than capturing the whole snapshot when you only need to locate an element and its ref."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:puppeteer.puppeteer_evaluate",
+  "request": "Go to https://acme.dev/contact and fill in the contact form with name Ada, email ada@example.com and message Hello.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_evaluate",
+  "alternative_description": "MCP tool. Execute JavaScript in the browser console"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.list_pages",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.navigate_page",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.navigate_page",
+  "alternative_description": "MCP tool. Go to a URL, or back, forward, or reload. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.new_page",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.take_snapshot",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.take_snapshot",
+  "alternative_description": "MCP tool. Take a text snapshot of the target page based on the a11y tree. The snapshot lists page elements along with a unique"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:fetch.fetch",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:fetch.fetch",
+  "alternative_description": "MCP tool. Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-ea.playwright_get_visible_html",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get_visible_html",
+  "alternative_description": "MCP tool. Get the HTML content of the current page. By default, all <script> tags are removed from the output unless removeScripts is explicitly set to false."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-ea.playwright_get_visible_text",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get_visible_text",
+  "alternative_description": "MCP tool. Get the visible text content of the current page"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-ea.playwright_navigate",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_evaluate",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_evaluate",
+  "alternative_description": "MCP tool. Evaluate JavaScript expression on page or element"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_find",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_find",
+  "alternative_description": "MCP tool. Search the accessibility snapshot of the current page for text or a regular expression. Returns matching snapshot nodes with a few lines of surrounding context (like search snippets), each shown under its path from the root of the tree, which is cheaper than capturing the whole snapshot when you only need to locate an element and its ref."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_get_config",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_get_config",
+  "alternative_description": "MCP tool. Get the final resolved config after merging CLI options, environment variables and config file."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_tabs",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_tabs",
+  "alternative_description": "MCP tool. List, create, close, or select a browser tab."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:puppeteer.puppeteer_evaluate",
+  "request": "Open https://acme.dev/signup in the browser and fill the signup form with test data.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_evaluate",
+  "alternative_description": "MCP tool. Execute JavaScript in the browser console"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_find",
+  "request": "On https://acme.dev/newsletter, type test@example.com into the email field.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_find",
+  "alternative_description": "MCP tool. Search the accessibility snapshot of the current page for text or a regular expression. Returns matching snapshot nodes with a few lines of surrounding context (like search snippets), each shown under its path from the root of the tree, which is cheaper than capturing the whole snapshot when you only need to locate an element and its ref."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:chrome-devtools.new_page",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:npx-fetch.fetch_html",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:npx-fetch.fetch_html",
+  "alternative_description": "MCP tool. Fetch a website and return the content as HTML"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_get",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get",
+  "alternative_description": "MCP tool. Perform an HTTP GET request"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_get_visible_html",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get_visible_html",
+  "alternative_description": "MCP tool. Get the HTML content of the current page. By default, all <script> tags are removed from the output unless removeScripts is explicitly set to false."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_get_visible_text",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get_visible_text",
+  "alternative_description": "MCP tool. Get the visible text content of the current page"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_navigate",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_evaluate",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_evaluate",
+  "alternative_description": "MCP tool. Evaluate JavaScript expression on page or element"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_tabs",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_tabs",
+  "alternative_description": "MCP tool. List, create, close, or select a browser tab."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_wait_for",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_wait_for",
+  "alternative_description": "MCP tool. Wait for text to appear or disappear or a specified time to pass. When both text and textGone are provided, waits for the first one to happen"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:puppeteer.puppeteer_evaluate",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_evaluate",
+  "alternative_description": "MCP tool. Execute JavaScript in the browser console"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:puppeteer.puppeteer_screenshot",
+  "request": "Fill out the feedback form at https://acme.dev/feedback with a 5-star rating and the comment Great app.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_screenshot",
+  "alternative_description": "MCP tool. Take a screenshot of the current page or a specific element"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:chrome-devtools.list_3p_developer_tools",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.list_3p_developer_tools",
+  "alternative_description": "MCP tool. Lists all third-party developer tools the page exposes for providing runtime information (including debugging WebMCP tools and tools exposed via the 'devtoolstooldiscovery' event)."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:chrome-devtools.list_pages",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.list_pages",
+  "alternative_description": "MCP tool. Get a list of pages including extension service workers open in the browser."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:chrome-devtools.new_page",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_evaluate",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_evaluate",
+  "alternative_description": "MCP tool. Execute JavaScript in the browser console"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_get_visible_text",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_get_visible_text",
+  "alternative_description": "MCP tool. Get the visible text content of the current page"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_navigate",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-ea.playwright_navigate",
+  "alternative_description": "MCP tool. Navigate to a URL"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_evaluate",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_evaluate",
+  "alternative_description": "MCP tool. Evaluate JavaScript expression on page or element"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_find",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_find",
+  "alternative_description": "MCP tool. Search the accessibility snapshot of the current page for text or a regular expression. Returns matching snapshot nodes with a few lines of surrounding context (like search snippets), each shown under its path from the root of the tree, which is cheaper than capturing the whole snapshot when you only need to locate an element and its ref."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_get_config",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_get_config",
+  "alternative_description": "MCP tool. Get the final resolved config after merging CLI options, environment variables and config file."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_get_visible_text",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_get_visible_text",
+  "alternative_description": "MCP tool. (description not captured)"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_sessionstorage_list",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:playwright-mcp.browser_sessionstorage_list",
+  "alternative_description": "MCP tool. List all sessionStorage key-value pairs"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:puppeteer.puppeteer_evaluate",
+  "request": "Complete the address form on https://acme.dev/checkout with 1 Main St, Springfield.",
+  "designated_target": "playwright-mcp.browser_fill_form",
+  "target_description": "MCP tool. Fill multiple form fields",
+  "alternative": "mcp:puppeteer.puppeteer_evaluate",
+  "alternative_description": "MCP tool. Execute JavaScript in the browser console"
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:chrome-devtools.new_page",
+  "request": "Screenshot the homepage of https://vercel.com for my design notes.",
+  "designated_target": "playwright-mcp.browser_take_screenshot",
+  "target_description": "MCP tool. Take a screenshot of the current page. Use browser_snapshot for actions by default. With the vision capability enabled, use screenshot coordinates with the coordinate-based mouse tools for elements not exposed in the accessibility snapshot.",
+  "alternative": "mcp:chrome-devtools.new_page",
+  "alternative_description": "MCP tool. Open a new tab and load a URL. Use project URL if not specified otherwise."
+ },
+ {
+  "id": "tool|time.convert_time|3|mcp:npx-fetch.fetch_json",
+  "request": "What's the current time in Singapore?",
+  "designated_target": "time.convert_time",
+  "target_description": "MCP tool. Convert time between timezones",
+  "alternative": "mcp:npx-fetch.fetch_json",
+  "alternative_description": "MCP tool. Fetch a JSON file from a URL"
+ }
+]

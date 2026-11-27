@@ -23,28 +23,28 @@ E1,codex,gpt_sol,alone,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E1,codex,gpt_sol,crowd1000,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E1,codex,gpt_sol,crowd200,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E1,codex,gpt_sol,pack20,api_key,main,120,120,120,0,0,0,not recorded,0,0
-E2,claude,fable,mcp_alone,subscription,main,120,120,120,0,4,0,"skills=23,tools=28",0,120
-E2,claude,fable,mcp_crowd200,subscription,main,120,120,120,0,9,1,"skills=23,tools=247",0,120
-E2,claude,fable,mcp_crowdall,subscription,main,120,120,120,0,15,5,"skills=23,tools=818",0,120
-E2,claude,fable,mcp_pack20,subscription,main,120,120,120,0,7,0,"skills=23,tools=47",0,120
-E2,claude,haiku,mcp_alone,subscription,main,120,120,120,0,32,5,"skills=23,tools=28",0,120
-E2,claude,haiku,mcp_crowd200,subscription,main,120,120,120,0,45,12,"skills=23,tools=247",0,120
-E2,claude,haiku,mcp_crowdall,subscription,main,120,120,120,0,59,16,"skills=23,tools=818",0,120
-E2,claude,haiku,mcp_pack20,subscription,main,120,120,120,0,54,21,"skills=23,tools=47",0,120
+E2,claude,fable,mcp_alone,subscription,main,120,120,120,0,0,0,"skills=23,tools=28",0,120
+E2,claude,fable,mcp_crowd200,subscription,main,120,120,120,0,1,1,"skills=23,tools=247",0,120
+E2,claude,fable,mcp_crowdall,subscription,main,120,120,120,0,3,3,"skills=23,tools=818",0,120
+E2,claude,fable,mcp_pack20,subscription,main,120,120,120,0,0,0,"skills=23,tools=47",0,120
+E2,claude,haiku,mcp_alone,subscription,main,120,120,120,0,0,0,"skills=23,tools=28",0,120
+E2,claude,haiku,mcp_crowd200,subscription,main,120,120,120,0,1,1,"skills=23,tools=247",0,120
+E2,claude,haiku,mcp_crowdall,subscription,main,120,120,120,0,1,1,"skills=23,tools=818",0,120
+E2,claude,haiku,mcp_pack20,subscription,main,120,120,120,0,0,0,"skills=23,tools=47",0,120
 E2,claude,sonnet,mcp_alone,subscription,main,120,120,120,0,0,0,"skills=23,tools=28",0,120
-E2,claude,sonnet,mcp_crowd200,subscription,main,120,120,120,0,8,7,"skills=23,tools=247",0,120
-E2,claude,sonnet,mcp_crowdall,subscription,main,120,120,120,0,2,0,"skills=23,tools=818",0,120
-E2,claude,sonnet,mcp_pack20,subscription,main,120,120,120,0,7,5,"skills=23,tools=47",0,120
+E2,claude,sonnet,mcp_crowd200,subscription,main,120,120,120,0,1,1,"skills=23,tools=247",0,120
+E2,claude,sonnet,mcp_crowdall,subscription,main,120,120,120,0,0,0,"skills=23,tools=818",0,120
+E2,claude,sonnet,mcp_pack20,subscription,main,120,120,120,0,0,0,"skills=23,tools=47",0,120
 E2,codex,gpt,mcp_alone,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E2,codex,gpt,mcp_pack20,api_key,main,50,50,50,0,0,0,not recorded,0,0
 E2,codex,gpt,mcp_pack20,subscription,main,5,5,4,1,0,0,not recorded,0,0
-E2,codex,gpt_sol,mcp_alone,api_key,main,120,120,120,0,0,0,not recorded,0,0
-E2,codex,gpt_sol,mcp_crowd200,api_key,main,120,120,120,0,0,0,not recorded,0,0
-E2,codex,gpt_sol,mcp_crowdall,api_key,main,120,120,120,0,0,0,not recorded,0,0
-E2,codex,gpt_sol,mcp_pack20,api_key,main,120,120,120,0,0,0,not recorded,0,0
-E3,claude,haiku,mixed_larger,subscription,main,270,270,270,0,113,66,"skills=423,tools=818",0,270
-E3,claude,haiku,mixed_smaller,subscription,main,270,270,270,0,91,49,"skills=123,tools=464",0,270
-E3,claude,sonnet,mixed_larger,subscription,main,270,270,270,0,20,18,"skills=423,tools=818",0,270
+E2,codex,gpt_sol,mcp_alone,api_key,main,120,120,120,0,0,0,not recorded,0,120
+E2,codex,gpt_sol,mcp_crowd200,api_key,main,120,120,120,0,0,0,not recorded,0,120
+E2,codex,gpt_sol,mcp_crowdall,api_key,main,120,120,120,0,0,0,not recorded,0,120
+E2,codex,gpt_sol,mcp_pack20,api_key,main,120,120,120,0,0,0,not recorded,0,120
+E3,claude,haiku,mixed_larger,subscription,main,270,270,270,0,55,54,"skills=423,tools=818",0,270
+E3,claude,haiku,mixed_smaller,subscription,main,270,270,270,0,42,39,"skills=123,tools=464",0,270
+E3,claude,sonnet,mixed_larger,subscription,main,270,270,270,0,17,17,"skills=423,tools=818",0,270
 E3,claude,sonnet,mixed_smaller,subscription,main,270,270,270,0,9,9,"skills=123,tools=464",0,270
 E3b,claude,haiku,sk_alone,subscription,main,30,30,30,0,0,0,"skills=24,tools=27",0,0
 E3b,claude,sonnet,sk_alone,subscription,main,30,30,30,0,0,0,"skills=24,tools=27",0,0

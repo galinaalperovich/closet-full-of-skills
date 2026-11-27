@@ -1,5 +1,5 @@
 {
- "collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun); 2026-11-25 (Claude Fable 5.2 and GPT-6 Sol, E1 and E2)",
+ "collection_date": "2026-11-20 (E1, E3b, Codex); 2026-11-22 (Claude Code E2/E3 second round, Sonnet caveman alone E1 rerun); 2026-11-25 (Claude Fable 5.2 and GPT-6 Sol, E1; third round of E2 and E3 tool requests)",
  "seed": 20261120,
  "bootstrap_resamples": 2000,
  "files": [
@@ -69,6 +69,26 @@
    "lines": 480
   },
   {
+   "file": "mcp/haiku_round3.jsonl",
+   "sha256": "dc0d2a0ed0850b4514cc48c6e69fe3529928e2647ced7317dc45c9d9ec92244f",
+   "lines": 720
+  },
+  {
+   "file": "mcp/sonnet_round3.jsonl",
+   "sha256": "dc253ba3f1b60e8ae4d996a0c5b50e10c50ee52e0756312f312fb40bbe434660",
+   "lines": 720
+  },
+  {
+   "file": "mcp/fable_round3.jsonl",
+   "sha256": "942c4b86655e2cf5e816116c152f245de69b2f024cb23187bfc6863242c39cf7",
+   "lines": 480
+  },
+  {
+   "file": "mcp/gpt_sol_round3.jsonl",
+   "sha256": "d0b242a51e8197afbd6866f4f239481517dad97b441adc90d23d79507e2c7112",
+   "lines": 480
+  },
+  {
    "file": "sonnet_e1_caveman_rerun.jsonl",
    "sha256": "56c0e143fb209e2a2494e9c0d9570c0ca1da23485171a3e61baa665454d48962",
    "lines": 18
@@ -115,12 +135,12 @@
   },
   {
    "file": "mcp/run.py",
-   "sha256": "d9007a9eadfc5d456429980a0b7974888d79afc4cf2623bd122d955f25754dc9",
-   "lines": 153
+   "sha256": "27eb284052546dd01ff4c43cfbce2644a42ce4b4a437be9eb8c4d0beb9b0d3ca",
+   "lines": 192
   },
   {
    "file": "mcp/stub_server.py",
-   "sha256": "546d879d2532ae12d63ad8777b900b467beccb9bde8a3ed41d7babc2250c3efa",
+   "sha256": "ca12a5b087ad567cf8439a1ddd7871e82104a560edea68a3b3a7eff25293da0e",
    "lines": 25
   },
   {
@@ -164,9 +184,19 @@
    "lines": 1052
   },
   {
+   "file": "analysis/alt_judge_input_2.json",
+   "sha256": "5880c0b27f77300ce6246cd69818d737d8e642e964aa602103864a90716cd740",
+   "lines": 834
+  },
+  {
+   "file": "analysis/alt_judgments_2.json",
+   "sha256": "fea4ea4b73939850007b1e7fab4cc9509ce92e90888dc1ee3942bdf59e08f3c7",
+   "lines": 522
+  },
+  {
    "file": "analysis/analyze.py",
-   "sha256": "cd3e5fa73727e36a714185fefde4cc5c27566c4d11dc8503cbf5b2a5d902a889",
-   "lines": 525
+   "sha256": "4e6714c558ab3e85632a4745244fbba46e67c8ec76a7031656979a879516aa8a",
+   "lines": 538
   }
  ]
 }

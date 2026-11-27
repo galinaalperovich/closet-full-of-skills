@@ -1,0 +1,522 @@
+[
+ {
+  "id": "skill|diagnosing-bugs|2|skill:systematic-debugging",
+  "label": "equivalent",
+  "reason": "Near-duplicate systematic debugging skill covering the same bug-diagnosis task."
+ },
+ {
+  "id": "skill|diagnosing-bugs|3|skill:systematic-debugging",
+  "label": "equivalent",
+  "reason": "Near-duplicate systematic debugging skill covering the same bug-diagnosis task."
+ },
+ {
+  "id": "skill|diagnosing-bugs|4|skill:debugging-strategies",
+  "label": "equivalent",
+  "reason": "Near-duplicate systematic debugging skill covering the same bug-diagnosis task."
+ },
+ {
+  "id": "skill|diagnosing-bugs|5|skill:debugging-strategies",
+  "label": "equivalent",
+  "reason": "Near-duplicate systematic debugging skill covering the same bug-diagnosis task."
+ },
+ {
+  "id": "skill|frontend-design|1|skill:better-ui",
+  "label": "related_partial",
+  "reason": "Detail polish (radius, shadows, motion) only partly serves a redesign for distinct visual identity."
+ },
+ {
+  "id": "skill|frontend-design|2|skill:build-design",
+  "label": "related_partial",
+  "reason": "Builds UI, but presumes a Figma/design image and existing tokens; none given, no aesthetic direction."
+ },
+ {
+  "id": "skill|frontend-design|5|skill:better-ui",
+  "label": "equivalent",
+  "reason": "Request is for a polished look; a UI polish skill covers that directly."
+ },
+ {
+  "id": "skill|mcp-builder|5|skill:api-integration",
+  "label": "related_partial",
+  "reason": "Service integration patterns are adjacent, but it gives no MCP server guidance."
+ },
+ {
+  "id": "skill|security-and-hardening|1|skill:file-uploads",
+  "label": "related_partial",
+  "reason": "Covers upload mechanics and storage, not security hardening specifically."
+ },
+ {
+  "id": "skill|security-and-hardening|4|skill:auth-implementation-patterns",
+  "label": "equivalent",
+  "reason": "Dedicated skill for implementing authentication with explicit security boundaries."
+ },
+ {
+  "id": "skill|security-and-hardening|5|skill:backend-security-coder",
+  "label": "equivalent",
+  "reason": "Backend security code-review skill directly fits a webhook security check."
+ },
+ {
+  "id": "skill|seo-audit|3|skill:seo-hreflang",
+  "label": "related_partial",
+  "reason": "Validates hreflang thoroughly but does not cover canonical tags."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:indexing-issue-auditor",
+  "label": "equivalent",
+  "reason": "Technical SEO auditor explicitly scoped to indexing problems."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:robots-txt-validator",
+  "label": "related_partial",
+  "reason": "Robots.txt is only one possible cause of non-indexing."
+ },
+ {
+  "id": "skill|seo-audit|5|skill:seo-plan",
+  "label": "inappropriate",
+  "reason": "Strategic SEO planning and roadmaps, not diagnosis of an indexing failure."
+ },
+ {
+  "id": "skill|tdd|1|skill:test-driven-development",
+  "label": "equivalent",
+  "reason": "Near-duplicate TDD skill: failing test first, then implement and refactor."
+ },
+ {
+  "id": "skill|vercel-react-best-practices|1|skill:react-best-practices",
+  "label": "equivalent",
+  "reason": "Near-duplicate React performance guide adapted from the same Vercel guidance."
+ },
+ {
+  "id": "skill|webapp-testing|1|skill:browser-harness",
+  "label": "equivalent",
+  "reason": "Drives a real browser via CDP for visual and interactive work; covers screenshot/debugging."
+ },
+ {
+  "id": "skill|webapp-testing|3|skill:playwright-skill",
+  "label": "equivalent",
+  "reason": "Writes and runs Playwright automation and tests; directly matches."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:browser-act",
+  "label": "related_partial",
+  "reason": "Browser automation aimed at authenticated/extraction tasks; no stated debugging or log inspection for local apps."
+ },
+ {
+  "id": "skill|webapp-testing|4|skill:browser-harness",
+  "label": "equivalent",
+  "reason": "Drives a real browser via CDP for visual and interactive work; covers screenshot/debugging."
+ },
+ {
+  "id": "tool|context7.get-library-docs|0|mcp:fetch.fetch",
+  "label": "equivalent",
+  "reason": "Fetching the official docs page as markdown returns current documentation directly."
+ },
+ {
+  "id": "tool|context7.get-library-docs|0|mcp:github.search_code",
+  "label": "related_partial",
+  "reason": "Code search may surface usage or doc sources but is not a documentation lookup."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:duckduckgo-search.duckduckgo_web_search",
+  "label": "preliminary_step",
+  "reason": "Web search locates the current docs page; snippets alone are not the documentation."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:fetch.fetch",
+  "label": "equivalent",
+  "reason": "Fetching the official docs page as markdown returns current documentation directly."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:github.search_code",
+  "label": "related_partial",
+  "reason": "Code search may surface usage or doc sources but is not a documentation lookup."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:npx-fetch.fetch_json",
+  "label": "related_partial",
+  "reason": "JSON fetch could check the current package version, but docs pages are not JSON."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:npx-fetch.fetch_markdown",
+  "label": "equivalent",
+  "reason": "Fetching the official docs page as markdown returns current documentation directly."
+ },
+ {
+  "id": "tool|context7.get-library-docs|1|mcp:playwright-mcp.browser_navigate",
+  "label": "preliminary_step",
+  "reason": "Navigating a browser to the docs page precedes reading its content."
+ },
+ {
+  "id": "tool|context7.get-library-docs|2|mcp:fetch.fetch",
+  "label": "equivalent",
+  "reason": "Fetching the official docs page as markdown returns current documentation directly."
+ },
+ {
+  "id": "tool|context7.get-library-docs|2|mcp:github.search_code",
+  "label": "related_partial",
+  "reason": "Code search may surface usage or doc sources but is not a documentation lookup."
+ },
+ {
+  "id": "tool|context7.get-library-docs|3|mcp:github.search_code",
+  "label": "related_partial",
+  "reason": "Code search may surface usage or doc sources but is not a documentation lookup."
+ },
+ {
+  "id": "tool|context7.get-library-docs|4|mcp:fetch.fetch",
+  "label": "equivalent",
+  "reason": "Fetching the official docs page as markdown returns current documentation directly."
+ },
+ {
+  "id": "tool|context7.get-library-docs|5|mcp:fetch.fetch",
+  "label": "equivalent",
+  "reason": "Fetching the official docs page as markdown returns current documentation directly."
+ },
+ {
+  "id": "tool|context7.get-library-docs|5|mcp:github.search_code",
+  "label": "related_partial",
+  "reason": "Code search may surface usage or doc sources but is not a documentation lookup."
+ },
+ {
+  "id": "tool|filesystem.directory_tree|4|mcp:filesystem.list_allowed_directories",
+  "label": "preliminary_step",
+  "reason": "Checks which directories are accessible before requesting the tree; shows no layout itself."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.get_me",
+  "label": "inappropriate",
+  "reason": "Owner and repo are given; user profile adds nothing needed to file the issue."
+ },
+ {
+  "id": "tool|github.create_issue|4|mcp:github.search_repositories",
+  "label": "preliminary_step",
+  "reason": "Confirms the named repository exists before filing; does not create the issue."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:git.git_branch",
+  "label": "inappropriate",
+  "reason": "Lists local branches; request concerns a branch in a remote GitHub repo."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.get_commit",
+  "label": "preliminary_step",
+  "reason": "Inspecting the branch's commit informs PR title/description; does not open the PR."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.get_file_contents",
+  "label": "preliminary_step",
+  "reason": "Reading branch contents can inform the description; does not open the PR."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.get_me",
+  "label": "inappropriate",
+  "reason": "Owner, repo and branches are given; user profile is not needed for the PR."
+ },
+ {
+  "id": "tool|github.create_pull_request|2|mcp:github.search_repositories",
+  "label": "preliminary_step",
+  "reason": "Confirms the named repository exists; does not open the PR."
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.get_commit",
+  "label": "preliminary_step",
+  "reason": "Inspecting the branch's commit informs PR title/description; does not open the PR."
+ },
+ {
+  "id": "tool|github.create_pull_request|5|mcp:github.get_file_contents",
+  "label": "preliminary_step",
+  "reason": "Reading branch contents can inform the description; does not open the PR."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|0|skill:dataviz",
+  "label": "equivalent",
+  "reason": "Description missing, but name clearly denotes a chart-making skill; can produce the bar chart."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|0|skill:run",
+  "label": "unassessable",
+  "reason": "Description missing and the name 'run' does not indicate charting."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|2|skill:artifact-design",
+  "label": "unassessable",
+  "reason": "Description missing; name suggests page design, unclear whether it yields a chart."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:painter.drawing_generateCanvas",
+  "label": "preliminary_step",
+  "reason": "Creates a blank canvas on which bars could then be drawn manually."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:painter.drawing_getCanvasPng",
+  "label": "related_partial",
+  "reason": "Exports a canvas image; only the final part of a manual drawing workaround."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:playwright-mcp.browser_navigate",
+  "label": "related_partial",
+  "reason": "Part of a render-HTML-then-screenshot workaround; no chart exists to navigate to."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:playwright-mcp.browser_take_screenshot",
+  "label": "related_partial",
+  "reason": "Screenshot could capture a rendered chart, but does not create one."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:puppeteer.puppeteer_navigate",
+  "label": "related_partial",
+  "reason": "Part of a render-HTML-then-screenshot workaround; no chart exists to navigate to."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|4|mcp:puppeteer.puppeteer_screenshot",
+  "label": "related_partial",
+  "reason": "Screenshot could capture a rendered chart, but does not create one."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|5|skill:artifact-design",
+  "label": "unassessable",
+  "reason": "Description missing; name suggests page design, unclear whether it yields a chart."
+ },
+ {
+  "id": "tool|mcp-server-chart.generate_bar_chart|5|skill:dataviz",
+  "label": "equivalent",
+  "reason": "Description missing, but name clearly denotes a chart-making skill; can produce the bar chart."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks or opens browser tabs before navigating; does not fill anything."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:npx-fetch.fetch_html",
+  "label": "related_partial",
+  "reason": "Plain HTTP fetch reveals form markup but is outside the browser and cannot fill."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-ea.playwright_get_visible_html",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-ea.playwright_get_visible_text",
+  "label": "preliminary_step",
+  "reason": "Reads the loaded page to understand the form; weak for locating inputs."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-ea.playwright_navigate",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:playwright-mcp.browser_find",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|0|mcp:puppeteer.puppeteer_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks or opens browser tabs before navigating; does not fill anything."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.navigate_page",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:chrome-devtools.take_snapshot",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:fetch.fetch",
+  "label": "related_partial",
+  "reason": "Plain HTTP fetch reveals form markup but is outside the browser and cannot fill."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-ea.playwright_get_visible_html",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-ea.playwright_get_visible_text",
+  "label": "preliminary_step",
+  "reason": "Reads the loaded page to understand the form; weak for locating inputs."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-ea.playwright_navigate",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_find",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_get_config",
+  "label": "inappropriate",
+  "reason": "Server configuration dump is unrelated to filling a form."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:playwright-mcp.browser_tabs",
+  "label": "preliminary_step",
+  "reason": "Checks or opens browser tabs before navigating; does not fill anything."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|1|mcp:puppeteer.puppeteer_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|2|mcp:playwright-mcp.browser_find",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:npx-fetch.fetch_html",
+  "label": "related_partial",
+  "reason": "Plain HTTP fetch reveals form markup but is outside the browser and cannot fill."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_get",
+  "label": "related_partial",
+  "reason": "Plain HTTP fetch reveals form markup but is outside the browser and cannot fill."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_get_visible_html",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_get_visible_text",
+  "label": "preliminary_step",
+  "reason": "Reads the loaded page to understand the form; weak for locating inputs."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-ea.playwright_navigate",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_tabs",
+  "label": "preliminary_step",
+  "reason": "Checks or opens browser tabs before navigating; does not fill anything."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:playwright-mcp.browser_wait_for",
+  "label": "preliminary_step",
+  "reason": "Waits for the page/form to load before filling; does not fill."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:puppeteer.puppeteer_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|3|mcp:puppeteer.puppeteer_screenshot",
+  "label": "preliminary_step",
+  "reason": "Screenshot lets the agent see the form before filling; does not fill."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:chrome-devtools.list_3p_developer_tools",
+  "label": "inappropriate",
+  "reason": "Listing page-exposed developer tools is unrelated to filling an address form."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:chrome-devtools.list_pages",
+  "label": "preliminary_step",
+  "reason": "Checks or opens browser tabs before navigating; does not fill anything."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_get_visible_text",
+  "label": "preliminary_step",
+  "reason": "Reads the loaded page to understand the form; weak for locating inputs."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-ea.playwright_navigate",
+  "label": "preliminary_step",
+  "reason": "Loads the target URL in the browser; needed before any field can be filled."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_find",
+  "label": "preliminary_step",
+  "reason": "Inspects the loaded page to locate form fields before filling them."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_get_config",
+  "label": "inappropriate",
+  "reason": "Server configuration dump is unrelated to filling a form."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_get_visible_text",
+  "label": "preliminary_step",
+  "reason": "Description missing, but name indicates reading page text before filling."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:playwright-mcp.browser_sessionstorage_list",
+  "label": "inappropriate",
+  "reason": "Session storage contents are unrelated to filling an address form."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_fill_form|5|mcp:puppeteer.puppeteer_evaluate",
+  "label": "related_partial",
+  "reason": "JavaScript can set field values or inspect the form, but less reliably than real input."
+ },
+ {
+  "id": "tool|playwright-mcp.browser_take_screenshot|4|mcp:chrome-devtools.new_page",
+  "label": "preliminary_step",
+  "reason": "Opens the URL in a tab; screenshot still has to be taken."
+ },
+ {
+  "id": "tool|time.convert_time|3|mcp:npx-fetch.fetch_json",
+  "label": "equivalent",
+  "reason": "A public time API returns Singapore's current time as JSON; answers the question."
+ }
+]
