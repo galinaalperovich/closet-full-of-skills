@@ -16,7 +16,7 @@ S = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CODEX = os.environ.get("CODEX_BIN", "/Applications/Codex.app/Contents/Resources/codex-cli/bin/codex")
 OUT = sys.argv[1]; os.makedirs(OUT, exist_ok=True)
 WHICH = set(sys.argv[2:]) or {"claude", "codex"}
-prompts = json.load(open(os.path.join(S, "prompts.json")))
+prompts = json.load(open(os.path.join(S, "skills", "prompts.json")))
 FIRST = {k.split(":")[1]: v[0] for k, v in prompts.items()}
 TARGETS = [t for t in FIRST if os.path.isdir(os.path.join(S, "envs", "alone", t))]
 CUR = {"label": None, "n": 0}

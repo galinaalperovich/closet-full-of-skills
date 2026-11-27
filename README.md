@@ -22,7 +22,7 @@ I asked Claude Code and Codex natural requests that were written for one particu
 
 **Skills + tools together** (E3, Haiku and Sonnet only), from the single component to the smaller and the larger mix: skill requests 79% → 33% → 21% (Haiku) and 94% → 45% → 34% (Sonnet); single-step tool requests 83% → 79% → 78% and 87% → 80% → 79%.
 
-- 6,594 retained runs: 4,980 Claude Code runs and 1,614 Codex runs. On top of those there is one excluded, rate-limited GPT batch (`gpt_subscription_failed.jsonl`).
+- 6,594 retained runs: 4,980 Claude Code runs and 1,614 Codex runs. On top of those there is one excluded, rate-limited GPT batch (`skills/gpt_subscription_failed.jsonl`).
 - **Two rounds of data collection.** Round 1 (20 November 2026): E1 for all three configurations, E3b, every Codex run, and a first pass of the Claude Code E2/E3 runs. Round 2 (22 November 2026): all 2,040 Claude Code E2/E3 runs again, because headless Claude Code had refused every MCP call and its per-folder auto-memory had carried notes from one run to the next. The 18 E1 runs of the one skill folder with a carried-over memory note (Sonnet, `caveman`, alone) were rerun the same way. Details are in `METHODOLOGY.md` §1.1.
 - **Two more configurations** were added on 25 November 2026, with the same harness versions, requests and setups: Claude Fable 5.2 in Claude Code and GPT-6 Sol in Codex, each with E1 (one run per request) and E2. They were not run in E3. See `METHODOLOGY.md` §14.
 - **Round 3 of the tool runs** (25–27 November 2026): every E2 run, and the tool requests of E3, were repeated for Haiku, Sonnet, Fable 5.2 and GPT-6 Sol. The stub server's reply had told the agent to "reply with one short sentence", which ended a run after its first call, and the first GPT-6 Sol run also had its MCP calls blocked, built-in web search on, and test folders inside a git repository. Round 3 uses a plain "Done." reply, an 8-turn limit in Claude Code, pre-approved stub servers in both harnesses, no web search in Codex, and folders outside a repository. **The tool numbers above are from round 3.** See `METHODOLOGY.md` §15.
@@ -42,7 +42,7 @@ python3 analysis/budget.py           # the cost model behind the follow-up plan:
 git status --short analysis/         # expect no changes: you get the same tables
 ```
 
-`analysis/derived/manifest.json` records the SHA-256 of every input. The result files (`*.jsonl`) are byte-identical to the ones the analysis was first run on. Only two kinds of file differ from my working copy: scripts whose machine-specific paths became environment variables, and `scan.json`, where other people's home-folder names found by the survey scanner were replaced with `<user>`.
+`analysis/derived/manifest.json` records the SHA-256 of every input. The result files (`*.jsonl`) are byte-identical to the ones the analysis was first run on. Only two kinds of file differ from my working copy: scripts whose machine-specific paths became environment variables, and `survey/scan.json`, where other people's home-folder names found by the survey scanner were replaced with `<user>`.
 
 To rebuild the post and its figures:
 
@@ -64,23 +64,23 @@ python3 build_page.py   # -> ../docs/index.html, the standalone page served by G
 
 **1. Fetch the sources at the exact commits used.** Third-party repositories are not redistributed here.
 ```bash
-scripts/fetch_sources.sh          # 43 skill repositories -> third_party/repos/
-scripts/fetch_sources.sh --mcp    # optional: MCP tool sources -> third_party/mcp/ (not needed to run; the inventory is frozen)
+sources/fetch_sources.sh          # 43 skill repositories -> third_party/repos/
+sources/fetch_sources.sh --mcp    # optional: MCP tool sources -> third_party/mcp/ (not needed to run; the inventory is frozen)
 ```
 
 **2. Build the test folders.** I checked that both builds reproduce the original folders byte for byte from the pinned commits.
 ```bash
-python3 build.py          # E1 -> envs/  (alone, pack20, crowd200, crowd1000)
+python3 skills/build.py          # E1 -> envs/  (alone, pack20, crowd200, crowd1000)
 python3 mcp/build.py      # E2/E3 -> envs2/  (MCP-only setups, trending skills alone, two mixed setups)
 ```
 
 **3. Run.** Always write to a **new** output file. The runners resume from the file you name, so never point them at the shipped results.
 ```bash
 # E1, skills only. Arguments: setups, repeats per request, model, output file
-ISOLATE=1 python3 run.py alone,pack20,crowd200,crowd1000 1 haiku  results/haiku_rerun.jsonl
-ISOLATE=1 python3 run.py alone,pack20,crowd200,crowd1000 3 sonnet results/sonnet_rerun.jsonl
-python3 run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_rerun.jsonl
-CODEX_MODEL=gpt-6-sol python3 run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_sol_rerun.jsonl
+ISOLATE=1 python3 skills/run.py alone,pack20,crowd200,crowd1000 1 haiku  results/haiku_rerun.jsonl
+ISOLATE=1 python3 skills/run.py alone,pack20,crowd200,crowd1000 3 sonnet results/sonnet_rerun.jsonl
+python3 skills/run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_rerun.jsonl
+CODEX_MODEL=gpt-6-sol python3 skills/run_codex.py alone,pack20,crowd200,crowd1000 1 medium results/gpt_sol_rerun.jsonl
 
 # E2 (MCP only), E3b (trending skills alone), E3 (mixed). Arguments: harness, model, job set, output file
 STOP_ON_HIT=1 MAX_TURNS=8 ALLOW_MCP=1 ISOLATE=1 PAR=2 python3 mcp/run.py claude haiku mcp   results/haiku_mcp.jsonl
@@ -90,7 +90,7 @@ CODEX_MODEL=gpt-6-sol CODEX_APPROVE_MCP=1 CODEX_WEB_SEARCH=disabled python3 mcp/
 - Run `mkdir results` first.
 - Useful environment variables:
   - `PAR`: parallel runs (default 6 for E1, 4 for E2/E3).
-  - `ONLY_ENV`, `ONLY_I` and `ONLY_TARGET`: run a subset (`run.py` takes `ONLY_TARGET`).
+  - `ONLY_ENV`, `ONLY_I` and `ONLY_TARGET`: run a subset (`skills/run.py` takes `ONLY_TARGET`).
   - `STOP_ON_429=1`: stop at the first rate limit.
   - `STOP_ON_HIT=1` (Claude Code, `mcp/run.py`): end a run as soon as it calls an accepted tool. Such a run has no cost or token totals.
   - `MAX_TURNS` (Claude Code, `mcp/run.py`): the turn limit, 4 when unset; round 3 used 8.
@@ -99,11 +99,11 @@ CODEX_MODEL=gpt-6-sol CODEX_APPROVE_MCP=1 CODEX_WEB_SEARCH=disabled python3 mcp/
   - `CODEX_WEB_SEARCH=disabled`: turn off Codex's built-in web search.
   - `RAW_DIR`: where raw event logs go (`mcp/raw` when unset).
   - `ALLOW_MCP=1` (Claude Code): pre-approve the stub MCP servers. Without it, headless Claude Code refuses every MCP call, which is what happened in round 1.
-  - `ISOLATE=1` (Claude Code, `run.py` and `mcp/run.py`): run each job in a fresh copy of its test folder, so Claude Code's per-folder auto-memory starts empty every time, and keep the raw output. It does not reset Claude Code's global skill-usage record (`skillUsage` in `~/.claude.json`), which decides which descriptions survive in large listings (`METHODOLOGY.md` §10).
+  - `ISOLATE=1` (Claude Code, `skills/run.py` and `mcp/run.py`): run each job in a fresh copy of its test folder, so Claude Code's per-folder auto-memory starts empty every time, and keep the raw output. It does not reset Claude Code's global skill-usage record (`skillUsage` in `~/.claude.json`), which decides which descriptions survive in large listings (`METHODOLOGY.md` §10).
   - `LOAD_MAX=<n>`: wait before starting a job while the 1-minute load average is above n. The mixed setups start up to 73 stub servers per run; 8 parallel runs once made a 10-core laptop unresponsive.
   - `SKILL_REPOS`, `ENVS_DIR` and `ENVS2_DIR`: move the inputs and test folders.
-  - `CODEX_MODEL`: the Codex model (`run_codex.py`: the Codex default when unset; `mcp/run.py`: `gpt-6-astra` when unset).
-  - `CODEX_EXTRA`: extra Codex config for `run_codex.py` and `listing/capture.py`, separated by `;`, for example `skills.max_context_tokens=10000`.
+  - `CODEX_MODEL`: the Codex model (`skills/run_codex.py`: the Codex default when unset; `mcp/run.py`: `gpt-6-astra` when unset).
+  - `CODEX_EXTRA`: extra Codex config for `skills/run_codex.py` and `listing/capture.py`, separated by `;`, for example `skills.max_context_tokens=10000`.
   - `SLASH_COMMAND_TOOL_CHAR_BUDGET` (read by Claude Code itself): the skill listing budget in characters.
   - `CODEX_BIN`: the path to Codex.
 - For Codex, build the test folders outside any git repository (`ENVS2_DIR`), or the model can answer git requests from the shell.
@@ -136,36 +136,55 @@ Most of a GPT run's cost is writing the prompt prefix (system prompt, skill list
 
 ## Repository layout
 
-| Path | What it is |
+```
+├── METHODOLOGY.md          design, measurement, statistics, all results, limitations
+├── FOLLOWUP_PROTOCOL.md    a costed plan to finish the study (a proposal, not results)
+├── THIRD_PARTY.md          licenses of the third-party material
+├── skills/                 Experiment 1: skills only
+├── mcp/                    Experiments 2, 3 and 3b: MCP tools only, trending skills, skills and tools mixed
+├── listing/                the skill listings each harness actually sent to the model
+├── survey/                 Experiment 0: static survey of 42 skill repositories
+├── sources/                the source repositories, their pinned commits, and the script that fetches them
+├── analysis/               turns the result records into every published number
+├── post/                   the blog post: builder, figures, PNG exports, Markdown copy
+└── docs/                   the published page (GitHub Pages)
+```
+
+**`skills/`** (E1)
+
+| File | What it is |
 |---|---|
-| `METHODOLOGY.md` | The methodology: design, measurement, statistics, all results, boundaries |
-| `FOLLOWUP_PROTOCOL.md` | A costed plan to finish the study (proposal, not results) |
-| `prompts.json`, `mcp/trending_skill_prompts.json`, `mcp/mcp_targets.json` | The 20 skill targets, the 5 trending skills and the 20 MCP tool targets, each with 6 requests |
-| `build.py`, `run.py`, `run_codex.py` | E1: build the skill setups; run Claude Code; run Codex |
-| `mcp/build.py`, `mcp/run.py`, `mcp/stub_server.py` | E2, E3, E3b: build the MCP and mixed setups; run both harnesses; the stub MCP server |
-| `mcp/tools_inventory.json` | The frozen inventory of 791 MCP tool definitions from 73 servers (see `THIRD_PARTY.md`) |
-| `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl`, `fable.jsonl`, `gpt_sol.jsonl` | E1 results: one record per run (`gpt.jsonl` is GPT-6 Astra) |
-| `sonnet_e1_caveman_rerun.jsonl`, `raw_e1/` | E1 rerun of Sonnet / `caveman` / alone (18 runs, one fresh folder each) and its raw logs, plus the raw logs of the Fable E1 runs; used in place of those 18 records of `sonnet.jsonl` |
-| `gpt_subscription_failed.jsonl` | The excluded E1 GPT batch (rate-limited subscription runs), kept for transparency |
-| `mcp/haiku_round1.jsonl`, `mcp/sonnet_round1.jsonl`, `mcp/gpt.jsonl` | E2, E3 and E3b results from round 1 (the analysis uses the GPT and E3b records) |
-| `mcp/haiku_round2.jsonl`, `mcp/sonnet_round2.jsonl` | Claude Code E2 and E3 results from round 2 (MCP allowed, a fresh folder per run) |
-| `mcp/fable.jsonl`, `mcp/gpt_sol.jsonl` | E2 results for Fable 5.2 (run like round 2) and GPT-6 Sol (run like GPT-6 Astra) |
-| `mcp/haiku_round3.jsonl`, `mcp/sonnet_round3.jsonl`, `mcp/fable_round3.jsonl`, `mcp/gpt_sol_round3.jsonl` | Round 3: E2, and the tool requests of E3 for Haiku and Sonnet. **The analysis uses these for the tool results** |
-| `e1_fullbudget_haiku.jsonl`, `e1_fullbudget_sonnet.jsonl`, `e1_fullbudget_fable.jsonl`, `e1_fullbudget_gpt_sol.jsonl` | E1 at 1,020 skills with the listing budget raised to its limit, 120 runs each (read by `post/build_post.py`, not by `analyze.py`) |
-| `mcp/raw/`, `mcp/raw_r3/` | Raw event logs of round 2 and the first Fable E2 runs, and of the Claude Code round 3 runs, with local paths removed |
-| `analysis/alt_judge_input_2.json`, `analysis/alt_judgments_2.json`, `analysis/alt_judge_make_batch2.py` | Second batch of blind ratings of alternative picks (104 pairs from the later runs) |
-| `analysis/analyze.py` | The single entry point that produces every published number |
-| `analysis/REPORT.md`, `analysis/derived/` | Its outputs: rates, paired differences, intervals, costs, audits, input hashes |
-| `analysis/raw_checks.py` | Raw-log checks for the round 2 runs (`derived/raw_checks.csv`, `derived/raw_browser.csv`) |
-| `analysis/alt_judge_*` | Blind rating of the 210 alternatives agents chose: input, the rater's prompt, its rules, its labels |
-| `analysis/budget.py` | The cost model for the follow-up plan (`derived/followup_budget.csv`) |
-| `listing/` | Captured skill listings: what each harness sent to the model in each skills setup (no model called) |
-| `scan.py`, `report.py`, `weight.py`, `stdlib.json` | Experiment 0: the static survey of skill repositories (read-only, runs no repo code) |
-| `scan.json`, `weight.json`, `report.txt`, `weight.txt` | Survey outputs for the 42 repositories that contain skills |
-| `repos.txt`, `source_commits.tsv` | Source repositories and the exact commits used |
-| `scripts/fetch_sources.sh` | Clones every source at its pinned commit |
-| `post/` | The blog post's builder, figure code, PNG exports and a Markdown copy (`post.md`) |
-| `docs/` | The published post (GitHub Pages) |
+| `prompts.json` | The 20 target skills, 6 requests each |
+| `build.py`, `run.py`, `run_codex.py` | Build the four skill setups; run them in Claude Code; run them in Codex |
+| `haiku.jsonl`, `sonnet.jsonl`, `fable.jsonl`, `gpt.jsonl`, `gpt_sol.jsonl` | Results, one record per run (`gpt.jsonl` is GPT-6 Astra) |
+| `sonnet_e1_caveman_rerun.jsonl` | The 18-run rerun of Sonnet / `caveman` / alone, used in place of those records of `sonnet.jsonl` |
+| `e1_fullbudget_*.jsonl` | 1,020 skills with the listing budget raised to its limit, 120 runs per model (read by `post/build_post.py`) |
+| `gpt_subscription_failed.jsonl` | The excluded, rate-limited GPT batch, kept for transparency |
+| `raw_e1/` | Raw event logs of the rerun and of the Fable runs, local paths removed |
+
+**`mcp/`** (E2, E3, E3b)
+
+| File | What it is |
+|---|---|
+| `mcp_targets.json`, `trending_skill_prompts.json` | The 20 MCP tool targets and the 5 trending skills, 6 requests each |
+| `tools_inventory.json` | The frozen inventory of 791 tool definitions from 73 servers (see `THIRD_PARTY.md`) |
+| `build.py`, `run.py`, `stub_server.py` | Build the MCP and mixed setups; run both harnesses; the stub MCP server |
+| `*_round3.jsonl` | Round 3: every E2 run, and the tool requests of E3. **The tool results come from these** |
+| `haiku_round2.jsonl`, `sonnet_round2.jsonl`, `fable.jsonl`, `gpt_sol.jsonl` | Round 2 (Claude Code, MCP allowed, fresh folder per run) and the first Fable and GPT-6 Sol runs |
+| `haiku_round1.jsonl`, `sonnet_round1.jsonl`, `gpt.jsonl` | Round 1 (the analysis uses the GPT and E3b records) |
+| `raw/`, `raw_r3/` | Raw event logs of round 2 and of the Claude Code round 3 runs, local paths removed |
+
+**`analysis/`**
+
+| File | What it is |
+|---|---|
+| `analyze.py` | The single entry point that produces every published number |
+| `REPORT.md`, `derived/` | Its outputs: rates, paired differences, intervals, costs, audits, input hashes |
+| `raw_checks.py` | Checks that need the raw logs (`derived/raw_checks.csv`, `derived/raw_browser.csv`) |
+| `alt_judge_*` | Blind ratings of the alternatives agents chose instead: inputs, the rater's prompt and rules, its labels |
+| `budget.py` | The cost model for the follow-up plan (`derived/followup_budget.csv`) |
+
+**`survey/`** has the read-only scanner (`scan.py`, `report.py`, `weight.py`, `stdlib.json`; it runs no repository code) and its outputs (`scan.json`, `weight.json`, `report.txt`, `weight.txt`). **`sources/`** has `repos.txt`, `source_commits.tsv` and `fetch_sources.sh`.
 
 Run records use the setup names from the time the runs were made: `mixed_typical` and `mixed_heavy` are called “mixed, smaller” and “mixed, larger” in the methodology and the post.
 

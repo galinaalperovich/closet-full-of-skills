@@ -13,7 +13,7 @@ if os.path.exists(out):
 jobs=[(c,k.split(":")[1],i,p,r) for c in conds for k,ps in prompts.items() for i,p in enumerate(ps) for r in range(reps)]
 jobs=[j for j in jobs if (j[0],j[1],j[2],j[4]) not in done]
 lock=threading.Lock(); f=open(out,"a")
-E=os.environ.get("ENVS_DIR", os.path.join(S,"envs"))   # where build.py put the test folders
+E=os.environ.get("ENVS_DIR", os.path.join(os.path.dirname(S),"envs"))   # where build.py put the test folders
 MODEL=os.environ.get("CODEX_MODEL")   # unset: the model in CODEX_HOME/config.toml (gpt-6-astra in the first runs)
 EXTRA=[a for x in filter(None,os.environ.get("CODEX_EXTRA","").split(";")) for a in ("-c",x)]   # extra config, e.g. skills.max_context_tokens=10000
 SK=re.compile(r"skills/([a-z0-9][a-z0-9\-]*)/SKILL\.md")

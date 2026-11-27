@@ -58,7 +58,7 @@ L = {
  "vaswani": "https://arxiv.org/abs/1706.03762", "lost": "https://arxiv.org/abs/2307.03172", "ruler": "https://arxiv.org/abs/2404.06654",
  "nolima": "https://arxiv.org/abs/2502.05167", "rot": "https://research.trychroma.com/context-rot", "ssmax": "https://arxiv.org/abs/2501.19399",
  "ctxeng": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents", "repo": "https://github.com/galinaalperovich/closet-full-of-skills", "r_meth": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md", "r_listing": "https://github.com/galinaalperovich/closet-full-of-skills/tree/main/listing",
- "r_follow": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/FOLLOWUP_PROTOCOL.md", "r_prompts": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/prompts.json", "r_judge": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md",
+ "r_follow": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/FOLLOWUP_PROTOCOL.md", "r_prompts": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/skills/prompts.json", "r_judge": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md",
  "r_cost": "https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/cost_by_batch.csv", "contextbolt": "https://contextbolt.com/blog/too-many-mcp-servers/", "uber": "https://www.uber.com/us/en/blog/optimizing-ubers-agent-skills/", "skills_mcp": "https://claude.com/resources/articles/skills-over-mcp-tasks-and-more", "davila7": "https://github.com/davila7/claude-code-templates",
  "i81081": "https://github.com/anthropics/claude-code/issues/81081", "i56710": "https://github.com/anthropics/claude-code/issues/56710", "i64606": "https://github.com/anthropics/claude-code/issues/64606",
  "i10768": "https://github.com/anthropics/claude-code/issues/10768", "c19679": "https://github.com/openai/codex/issues/19679", "r_cc": "https://www.reddit.com/r/ClaudeCode/comments/1qo0s2b/",
@@ -104,7 +104,7 @@ def tab_(cap, table):
     NUM["tab"] += 1
     return f'<p class="tcap"><span class="capn">Table {NUM["tab"]}.</span> {cap}</p>\n{table}'
 
-SK20 = [  # (skill, repo owner/name, what it does, one of its six requests) - from skill-trigger-spike/prompts.json
+SK20 = [  # (skill, repo owner/name, what it does, one of its six requests) - from skills/prompts.json
  ("pdf", "anthropics/skills", "Read, merge, split and edit PDF files", "Merge invoice-jan.pdf and invoice-feb.pdf in this folder into a single file."),
  ("xlsx", "anthropics/skills", "Create and edit spreadsheets", "Open sales.xlsx and add a column with the month-over-month growth."),
  ("pptx", "anthropics/skills", "Create and edit PowerPoint decks", "Make a 10-slide pitch deck for my coffee subscription startup as a PowerPoint file."),
@@ -214,7 +214,7 @@ _n = lambda x: f"{int(x):,}"
 SEO_CHARS = next(r["desc_chars_installed"] for r in LT if r["target"] == "seo-audit")
 _pt = {(r["model"], r["target"]): r for r in rdv("e1_per_target.csv")}
 SEO = lambda m, st: _pt[(m, "seo-audit")][st].replace("/", " of ")
-_fb = [json.loads(l) for l in open(os.path.join(B, "..", "fable.jsonl"))]
+_fb = [json.loads(l) for l in open(os.path.join(B, "..", "skills", "fable.jsonl"))]
 SEO_FABLE_ALT = sorted({x.split(":")[-1] for r in _fb if r["target"] == "seo-audit" and r["cond"] == "crowd1000" and not r["hit"] for x in r.get("fired", [])})
 T_SEEN = f"""<div class="wrap"><table>
 <thead><tr><th>Setup</th><th>What the model saw</th><th>Picked</th></tr></thead><tbody>
@@ -224,7 +224,7 @@ T_SEEN = f"""<div class="wrap"><table>
 </tbody></table></div>"""
 # The listing budget raised to its limit (e1_fullbudget_*.jsonl: 120 requests at 1,020 skills per model; captures in listing/)
 def _fb(m):
-    rs = [json.loads(l) for l in open(os.path.join(B, "..", f"e1_fullbudget_{m}.jsonl"))]; rs = [r for r in rs if not r.get("error")]
+    rs = [json.loads(l) for l in open(os.path.join(B, "..", "skills", f"e1_fullbudget_{m}.jsonl"))]; rs = [r for r in rs if not r.get("error")]
     return rs
 FB = {m: _fb(m) for m in ("haiku", "sonnet", "fable", "gpt_sol")}
 FBR = lambda m: f'{round(100 * sum(r["hit"] for r in FB[m]) / len(FB[m]))}%'
@@ -233,7 +233,7 @@ _fbl = [r for r in FB["gpt_sol"] if r["target"] in FB_CX_LISTED]; _fbn = [r for 
 FB_SOL_LISTED = f'{sum(r["hit"] for r in _fbl)} of {len(_fbl)}'; FB_SOL_UNLISTED = f'{sum(r["hit"] for r in _fbn)} of {len(_fbn)}'
 _cost1 = lambda rs: sum(r["cost"] for r in rs) / len(rs)
 def _basecost(m):
-    rs = [json.loads(l) for l in open(os.path.join(B, "..", f"{m}.jsonl"))]; rs = [r for r in rs if r["cond"] == "crowd1000" and r.get("cost")]
+    rs = [json.loads(l) for l in open(os.path.join(B, "..", "skills", f"{m}.jsonl"))]; rs = [r for r in rs if r["cond"] == "crowd1000" and r.get("cost")]
     return _cost1(rs)
 FB_CX_LAST = "maxia"   # last installed skill in the captured listing at the maximum budget
 FB_COST = {m: (_basecost(m), _cost1(FB[m])) for m in ("sonnet", "fable")}

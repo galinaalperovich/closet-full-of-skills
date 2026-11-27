@@ -6,7 +6,7 @@ What Claude Code and Codex put in the skill listing they send to the model, in e
 
 - `capture.py` runs each harness exactly as in the study (same commands, flags and test folders), but points it at a local stand-in server instead of the model API. The server records the first model request and returns a canned reply, which ends the run.
 - No model is called, and nothing reaches Anthropic or OpenAI. Request headers, which carry credentials, are never stored.
-- It sends one request per target folder in `alone` (the target's first request in `prompts.json`) and one request (the first `pdf` request) in each of `pack20`, `crowd200` and `crowd1000`.
+- It sends one request per target folder in `alone` (the target's first request in `skills/prompts.json`) and one request (the first `pdf` request) in each of `pack20`, `crowd200` and `crowd1000`.
 - `analyze_listing.py` reads the recorded requests, extracts the skill listing and writes the two CSV files. No request text is copied into them.
 - The raw request bodies are not published, because they contain the harness system prompts and local paths.
 - Skills only. The MCP setups were not captured.
@@ -53,7 +53,7 @@ The `harness` column:
 
 ## Reproduce
 
-You need Claude Code and/or Codex CLI, and the E1 test folders in `envs/` (`python3 build.py`, see the main `README.md`). Keep the capture folder outside the repository: the request bodies contain system prompts and local paths.
+You need Claude Code and/or Codex CLI, and the E1 test folders in `envs/` (`python3 skills/build.py`, see the main `README.md`). Keep the capture folder outside the repository: the request bodies contain system prompts and local paths.
 
 ```bash
 python3 listing/capture.py /path/to/captures              # both harnesses; add "claude" or "codex" to run one

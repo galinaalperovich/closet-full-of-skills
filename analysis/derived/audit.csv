@@ -38,10 +38,10 @@ E2,claude,sonnet,mcp_pack20,subscription,main,120,120,120,0,0,0,"skills=23,tools
 E2,codex,gpt,mcp_alone,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E2,codex,gpt,mcp_pack20,api_key,main,50,50,50,0,0,0,not recorded,0,0
 E2,codex,gpt,mcp_pack20,subscription,main,5,5,4,1,0,0,not recorded,0,0
-E2,codex,gpt_sol,mcp_alone,api_key,main,120,120,120,0,0,0,not recorded,0,120
-E2,codex,gpt_sol,mcp_crowd200,api_key,main,120,120,120,0,0,0,not recorded,0,120
-E2,codex,gpt_sol,mcp_crowdall,api_key,main,120,120,120,0,0,0,not recorded,0,120
-E2,codex,gpt_sol,mcp_pack20,api_key,main,120,120,120,0,0,0,not recorded,0,120
+E2,codex,gpt_sol,mcp_alone,api_key,main,120,120,120,0,0,0,not recorded,0,0
+E2,codex,gpt_sol,mcp_crowd200,api_key,main,120,120,120,0,0,0,not recorded,0,0
+E2,codex,gpt_sol,mcp_crowdall,api_key,main,120,120,120,0,0,0,not recorded,0,0
+E2,codex,gpt_sol,mcp_pack20,api_key,main,120,120,120,0,0,0,not recorded,0,0
 E3,claude,haiku,mixed_larger,subscription,main,270,270,270,0,55,54,"skills=423,tools=818",0,270
 E3,claude,haiku,mixed_smaller,subscription,main,270,270,270,0,42,39,"skills=123,tools=464",0,270
 E3,claude,sonnet,mixed_larger,subscription,main,270,270,270,0,17,17,"skills=423,tools=818",0,270

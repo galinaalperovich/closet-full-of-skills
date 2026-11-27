@@ -48,11 +48,11 @@ Round 2 differs from round 1 in two settings and nothing else:
 
 Models, folders, requests, tool definitions, stub text and turn limits are the same in both rounds. Before round 2, a pass that allowed MCP calls but still used shared folders was started and stopped after E2 and part of E3 (1,175 runs). Its records and logs are not part of the repo.
 
-**E1 rerun.** The 18 E1 runs of Sonnet, `caveman`, `alone` (6 requests × 3 repetitions) were also run again on 22 November, because runs in that folder had started with a carried-over note (§9.1). Each run had its own fresh folder (`ISOLATE=1` in `run.py`), with the original command and 3-turn limit. Results are in `sonnet_e1_caveman_rerun.jsonl`.
+**E1 rerun.** The 18 E1 runs of Sonnet, `caveman`, `alone` (6 requests × 3 repetitions) were also run again on 22 November, because runs in that folder had started with a carried-over note (§9.1). Each run had its own fresh folder (`ISOLATE=1` in `skills/run.py`), with the original command and 3-turn limit. Results are in `skills/sonnet_e1_caveman_rerun.jsonl`.
 
 **What the analysis uses.** Round 2 for the Claude Code E2/E3 runs; round 1's Claude Code E2/E3 records are skipped. The E1 rerun in place of the original 18 records of that folder. Round 1 for the rest of E1, for E3b and for every Codex run. All result files are kept on disk unchanged.
 
-**Raw logs.** Every round 2 run and every run of the E1 rerun kept its full event stream (`mcp/raw/` and `raw_e1/`, with local paths removed). `analysis/raw_checks.py` uses them to check what the records alone could not (§7.5).
+**Raw logs.** Every round 2 run and every run of the E1 rerun kept its full event stream (`mcp/raw/` and `skills/raw_e1/`, with local paths removed). `analysis/raw_checks.py` uses them to check what the records alone could not (§7.5).
 
 ---
 
@@ -88,14 +88,14 @@ The study runs did not record the rendered listing each model received. It was c
 **Corpus (frozen).** A selected sample of popular repositories found through the stated searches. It is not a verified ranking of the most popular repositories globally.
 - Searches: `gh search repos` over `topic:claude-skills`, `topic:agent-skills`, `topic:claude-code-plugin`, `topic:claude-code-skills`, `topic:claude-code`, `topic:agents-md`, `topic:claude-code-subagents`, `skills in:name claude`, `topic:mcp-server` and `topic:ai-agents`, sorted by stars.
 - From these, 36 repositories with `SKILL.md` files were hand-picked. Seven skill repositories from [GitHub trending (monthly)](https://github.com/trending?since=monthly) on 20 November 2026 were added.
-- In total, 43 repositories were cloned and 42 contain skills. Commits are in `source_commits.tsv`.
+- In total, 43 repositories were cloned and 42 contain skills. Commits are in `sources/source_commits.tsv`.
 
 **Units.**
 - 14,418 `SKILL.md` files.
 - 7,848 distinct *files*, meaning distinct SHA-1 contents. Distinct files are not distinct capabilities.
 - 6,908 skills after collapsing duplicate names within each repository. This is the unit for listing size and test detection.
 
-**Checks.** `scan.py` runs static text parsing only, and no repository code was executed. It checks:
+**Checks.** `survey/scan.py` runs static text parsing only, and no repository code was executed. It checks:
 - frontmatter and name rules;
 - description length and trigger wording;
 - body length;
@@ -112,7 +112,7 @@ The study runs did not record the rendered listing each model received. It was c
 - 16 of 42 repositories exceed 8,000 characters of listing if installed whole.
 - 831 skill names occur in two or more repositories.
 
-Full tables: `report.txt`, `weight.txt`, `analysis/derived/survey.json`.
+Full tables: `survey/report.txt`, `survey/weight.txt`, `analysis/derived/survey.json`.
 
 ---
 
@@ -130,7 +130,7 @@ Full tables: `report.txt`, `weight.txt`, `analysis/derived/survey.json`.
 - `JuliusBrussee/caveman`
 - `coreyhaines31/marketingskills`: `seo-audit`, `copywriting`
 
-**Requests.** There are 120 requests, 6 per skill (`prompts.json`), written with an LLM. They were written before any model run and not edited afterwards. The prompt audit (`analysis/derived/prompt_audit.csv`) found none with explicit invocation syntax, meaning a slash command, the word “skill”, `$name` or “use the <name>”.
+**Requests.** There are 120 requests, 6 per skill (`skills/prompts.json`), written with an LLM. They were written before any model run and not edited afterwards. The prompt audit (`analysis/derived/prompt_audit.csv`) found none with explicit invocation syntax, meaning a slash command, the word “skill”, `$name` or “use the <name>”.
 
 63 of the 150 skill requests (E1 plus E3b) contain a word from the target's name, for example “Grill me…” or “report.pdf”. Lexical overlap is not a flaw in itself, but it affects any interpretation about distinctiveness.
 
@@ -144,7 +144,7 @@ Full tables: `report.txt`, `weight.txt`, `analysis/derived/survey.json`.
 
 The additional skills are **one** uniform random sample (seed 7) from **one** collection, `sickn33/agentic-awesome-skills`. Target names and the names of Claude Code's built-in skills are excluded. `crowd200` is a subset of `crowd1000`.
 
-Some additional skills overlap with targets, for example 16 others containing “seo” and 14 containing “bug” or “debug”. Results describe this sampled collection, not installations in general (`build.py`).
+Some additional skills overlap with targets, for example 16 others containing “seo” and 14 containing “bug” or “debug”. Results describe this sampled collection, not installations in general (`skills/build.py`).
 
 ### 4.3 Stubs
 Each installed skill keeps its original `name`, `description` and `when_to_use`, re-serialised as YAML. The body is replaced with: “The instructions for this skill are omitted in this test. Reply with one short sentence.”
@@ -154,7 +154,7 @@ This preserves the metadata that initial routing depends on. It changes later be
 ### 4.4 Isolation and invocation
 Each run is a fresh process in the setup's folder. The folder contains only the skills: **no files, no repository, no browser state.** This is a minimal-context routing test, not ordinary task execution. Requests that mention files (31 of 120) refer to files that do not exist.
 
-Claude Code (`run.py`):
+Claude Code (`skills/run.py`):
 ```
 claude -p "<request>" --model <haiku|sonnet> --output-format stream-json --verbose \
   --setting-sources project --strict-mcp-config --no-session-persistence \
@@ -162,7 +162,7 @@ claude -p "<request>" --model <haiku|sonnet> --output-format stream-json --verbo
 ```
 The 18 runs of the E1 rerun (§1.1) used the same command, each in a fresh copy of the folder.
 
-Codex (`run_codex.py`):
+Codex (`skills/run_codex.py`):
 ```
 codex exec --json --ephemeral --skip-git-repo-check -s read-only \
   -c model_reasoning_effort="medium" "<request>"
@@ -481,13 +481,13 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 
 | File | Content |
 |---|---|
-| `haiku.jsonl`, `sonnet.jsonl`, `gpt.jsonl` | E1 results (round 1) |
-| `sonnet_e1_caveman_rerun.jsonl` | E1 rerun of Sonnet / `caveman` / `alone` (18 runs, one fresh folder per run); used in place of those 18 records of `sonnet.jsonl` |
-| `gpt_subscription_failed.jsonl` | Excluded E1 batch |
+| `skills/haiku.jsonl`, `skills/sonnet.jsonl`, `skills/gpt.jsonl` | E1 results (round 1) |
+| `skills/sonnet_e1_caveman_rerun.jsonl` | E1 rerun of Sonnet / `caveman` / `alone` (18 runs, one fresh folder per run); used in place of those 18 records of `skills/sonnet.jsonl` |
+| `skills/gpt_subscription_failed.jsonl` | Excluded E1 batch |
 | `mcp/haiku_round1.jsonl`, `mcp/sonnet_round1.jsonl`, `mcp/gpt.jsonl` | Round 1 E2/E3/E3b results. The analysis uses their GPT and E3b records and skips their Claude Code E2/E3 records |
 | `mcp/haiku_round2.jsonl`, `mcp/sonnet_round2.jsonl` | Round 2 Claude Code E2/E3 results: MCP allowed, one fresh folder per run |
 | `mcp/raw/claude_haiku/`, `mcp/raw/claude_sonnet/` | Raw event logs of round 2, local paths removed |
-| `raw_e1/claude_sonnet/` | Raw event logs of the E1 rerun, local paths removed |
+| `skills/raw_e1/claude_sonnet/` | Raw event logs of the E1 rerun, local paths removed |
 | `analysis/analyze.py` | The single analysis entry point (this document's numbers) |
 | `analysis/REPORT.md`, `analysis/derived/*.csv`, `analysis/derived/manifest.json` | Derived tables; SHA-256 of every input |
 | `analysis/derived/paired_vs_alone.csv`, `analysis/derived/e3_chart_rates.csv` | Tables behind the post's forest plot and mixed-scenario chart (paired change from alone; request-weighted rates with intervals) |
@@ -496,16 +496,16 @@ Claude's summed input rose from 64.5K to 102.2K tokens per Sonnet run. That rise
 | `analysis/alt_judge_input.json`, `analysis/alt_judgments.json` | Blind alternative ratings |
 | `listing/capture.py`, `listing/analyze_listing.py`, `listing/summary.csv`, `listing/targets.csv` | Captured skill listings (§10, `listing/README.md`); raw request bodies are not published |
 | `FOLLOWUP_PROTOCOL.md` | Proposed follow-up (not results) |
-| Experiment scripts | `prompts.json`, `build.py`, `run.py`, `run_codex.py`, `mcp/build.py`, `mcp/run.py`, `mcp/stub_server.py` and the other files in `mcp/` |
-| Survey files | `scan.py`, `scan.json`, `report.py`, `report.txt`, `weight.py`, `weight.json`, `weight.txt`, `stdlib.json`, `source_commits.tsv` |
+| Experiment scripts | `skills/prompts.json`, `skills/build.py`, `skills/run.py`, `skills/run_codex.py`, `mcp/build.py`, `mcp/run.py`, `mcp/stub_server.py` and the other files in `mcp/` |
+| Survey files | `survey/scan.py`, `survey/scan.json`, `survey/report.py`, `survey/report.txt`, `survey/weight.py`, `survey/weight.json`, `survey/weight.txt`, `survey/stdlib.json`, `sources/source_commits.tsv` |
 
-**Raw logs.** Raw logging was added to the runner during round 1, too late for any round 1 run in the results (every Claude Code batch had started under the earlier runner, and the GPT runs after the change ended in a rate limit). `mcp/raw/` holds 2,040 logs, one for each round 2 run. `raw_e1/` holds 18, one for each run of the E1 rerun. Local paths, the user ID in temporary paths and the working folder's name (also where an agent mentioned it in its text) were replaced with placeholders, and the `init` event's machine-specific fields (memory and scratch paths, socket, timings) were dropped. `analysis/raw_checks.py` gives identical results on the scrubbed and the original logs.
+**Raw logs.** Raw logging was added to the runner during round 1, too late for any round 1 run in the results (every Claude Code batch had started under the earlier runner, and the GPT runs after the change ended in a rate limit). `mcp/raw/` holds 2,040 logs, one for each round 2 run. `skills/raw_e1/` holds 18, one for each run of the E1 rerun. Local paths, the user ID in temporary paths and the working folder's name (also where an agent mentioned it in its text) were replaced with placeholders, and the `init` event's machine-specific fields (memory and scratch paths, socket, timings) were dropped. `analysis/raw_checks.py` gives identical results on the scrubbed and the original logs.
 
 **Reproducing.**
 1. `python3 analysis/analyze.py` regenerates every number in this document (`analysis/REPORT.md` and `analysis/derived/`). `python3 analysis/raw_checks.py` regenerates the raw-log checks.
-2. Re-running the experiments requires the cloned repositories at the commits in `source_commits.tsv`.
-3. Then run `build.py` / `mcp/build.py` and the runners. Paths come from environment variables at the top of each script, with defaults inside this repository (see `README.md`).
-4. The listing capture (§10) needs both harnesses and the E1 test folders from `build.py`. It calls no model (see `listing/README.md`).
+2. Re-running the experiments requires the cloned repositories at the commits in `sources/source_commits.tsv`.
+3. Then run `skills/build.py` / `mcp/build.py` and the runners. Paths come from environment variables at the top of each script, with defaults inside this repository (see `README.md`).
+4. The listing capture (§10) needs both harnesses and the E1 test folders from `skills/build.py`. It calls no model (see `listing/README.md`).
 
 ---
 
@@ -549,12 +549,12 @@ Collected on 25 November 2026 with the same harness versions (Claude Code 2.1.32
 | E1 | 480 runs: 4 setups × 120 requests, one run per request, each in a fresh copy of its folder (`ISOLATE=1`), 3-turn limit | 480 runs: 4 setups × 120 requests, one run per request, the GPT-6 Astra command |
 | E2 | 480 runs, run like round 2: stub servers allowed (`ALLOW_MCP=1`), a fresh folder per run, 4-turn limit | 480 runs with the GPT-6 Astra command: `approval_policy="never"`, stub servers not pre-approved |
 | E3, E3b | Not run | Not run |
-| Result files | `fable.jsonl`, `mcp/fable.jsonl` | `gpt_sol.jsonl`, `mcp/gpt_sol.jsonl` |
-| Raw logs | `raw_e1/claude_fable/`, `mcp/raw/claude_fable/` (local paths removed) | Kept but not published (below) |
+| Result files | `skills/fable.jsonl`, `mcp/fable.jsonl` | `skills/gpt_sol.jsonl`, `mcp/gpt_sol.jsonl` |
+| Raw logs | `skills/raw_e1/claude_fable/`, `mcp/raw/claude_fable/` (local paths removed) | Kept but not published (below) |
 
 No run had an infrastructure error, so every run is retained.
 
-**Test folders.** The original folders had been in a temporary location and were gone, so they were rebuilt with `build.py` and `mcp/build.py` from the pinned sources, this time inside the repository folder. As a check, the skill listings were captured again from the rebuilt folders (§10 method, no model called): the Claude Code listings, and every per-target row of `listing/targets.csv`, came out identical to the published ones. For Codex the listing at 1,020 skills had 329 entries where the original capture had 321, with the same 3 of the 20 targets listed; the number of entries that fit appears to depend on the length of the folder path.
+**Test folders.** The original folders had been in a temporary location and were gone, so they were rebuilt with `skills/build.py` and `mcp/build.py` from the pinned sources, this time inside the repository folder. As a check, the skill listings were captured again from the rebuilt folders (§10 method, no model called): the Claude Code listings, and every per-target row of `listing/targets.csv`, came out identical to the published ones. For Codex the listing at 1,020 skills had 329 entries where the original capture had 321, with the same 3 of the 20 targets listed; the number of entries that fit appears to depend on the length of the folder path.
 
 **Differences from the earlier runs, other than the model.**
 - Fable's E1 runs each had a fresh folder; Haiku's and Sonnet's E1 runs shared one folder per setup (apart from the 18 rerun records).

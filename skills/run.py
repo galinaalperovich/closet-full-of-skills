@@ -18,7 +18,7 @@ lock=threading.Lock(); f=open(out,"a")
 ISO=os.environ.get("ISOLATE")
 PROJ=os.path.join(os.path.expanduser("~"),".claude","projects")
 RAW=os.environ.get("RAW_DIR") or os.path.join(S,"raw_e1")
-E=os.environ.get("ENVS_DIR", os.path.join(S,"envs"))   # where build.py put the test folders
+E=os.environ.get("ENVS_DIR", os.path.join(os.path.dirname(S),"envs"))   # where build.py put the test folders
 def proj_dir(path): return os.path.join(PROJ, re.sub(r"[^A-Za-z0-9]","-",path))
 def read_memory(path):
     m=os.path.join(proj_dir(path),"memory"); res={}

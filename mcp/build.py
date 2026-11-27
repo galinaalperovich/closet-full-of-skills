@@ -2,7 +2,7 @@
 Skills are inert stubs (real name + description). MCP tools are served by stub_server.py with real definitions."""
 import json, os, random, re, shutil, yaml
 H=os.path.dirname(os.path.abspath(__file__)); SP=os.path.dirname(H)
-REPOS=os.environ.get("SKILL_REPOS", os.path.join(SP,"third_party","repos"))  # cloned by scripts/fetch_sources.sh
+REPOS=os.environ.get("SKILL_REPOS", os.path.join(SP,"third_party","repos"))  # cloned by sources/fetch_sources.sh
 ENV=os.environ.get("ENVS2_DIR", os.path.join(SP,"envs2"))
 BUILTIN={"deep-research","design","slides","design-sync","dataviz","artifact-diagramming","whiteboard","artifact-capabilities","update-config","verify","debug","code-review","simplify","batch","fewer-permission-prompts","doctor","loop","schedule","claude-api","workflow-authoring","run","run-skill-generator","plugin-authoring","init","security-review"}
 rnd=random.Random(11)

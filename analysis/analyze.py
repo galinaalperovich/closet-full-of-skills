@@ -35,22 +35,22 @@ P = lambda *a: os.path.join(ROOT, *a)
 
 # ---------------------------------------------------------------- inputs + manifest
 INPUTS = {
-    "E1": [("haiku.jsonl", "claude", "haiku", "subscription"), ("sonnet.jsonl", "claude", "sonnet", "subscription"),
-           ("gpt.jsonl", "codex", "gpt", "api_key"),
-           ("fable.jsonl", "claude", "fable", "subscription"), ("gpt_sol.jsonl", "codex", "gpt_sol", "api_key")],
-    "E1_excluded": [("gpt_subscription_failed.jsonl", "codex", "gpt", "subscription")],
+    "E1": [("skills/haiku.jsonl", "claude", "haiku", "subscription"), ("skills/sonnet.jsonl", "claude", "sonnet", "subscription"),
+           ("skills/gpt.jsonl", "codex", "gpt", "api_key"),
+           ("skills/fable.jsonl", "claude", "fable", "subscription"), ("skills/gpt_sol.jsonl", "codex", "gpt_sol", "api_key")],
+    "E1_excluded": [("skills/gpt_subscription_failed.jsonl", "codex", "gpt", "subscription")],
     "R1": [("mcp/haiku_round1.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round1.jsonl", "claude", "sonnet", "subscription"),
            ("mcp/gpt.jsonl", "codex", "gpt", "by_line")],
     "R2": [("mcp/haiku_round2.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round2.jsonl", "claude", "sonnet", "subscription"),
            ("mcp/fable.jsonl", "claude", "fable", "subscription"), ("mcp/gpt_sol.jsonl", "codex", "gpt_sol", "api_key")],
     "R3": [("mcp/haiku_round3.jsonl", "claude", "haiku", "subscription"), ("mcp/sonnet_round3.jsonl", "claude", "sonnet", "subscription"),
            ("mcp/fable_round3.jsonl", "claude", "fable", "subscription"), ("mcp/gpt_sol_round3.jsonl", "codex", "gpt_sol", "api_key")],
-    "E1_rerun": [("sonnet_e1_caveman_rerun.jsonl", "claude", "sonnet", "subscription")],
+    "E1_rerun": [("skills/sonnet_e1_caveman_rerun.jsonl", "claude", "sonnet", "subscription")],
 }
 E1_RERUN = lambda r: r["model"] == "sonnet" and r["setup"] == "alone" and r["target"] == "caveman"
-OTHER = ["prompts.json", "mcp/mcp_targets.json", "mcp/trending_skill_prompts.json", "mcp/tools_inventory.json",
-         "build.py", "run.py", "run_codex.py", "mcp/build.py", "mcp/run.py", "mcp/stub_server.py",
-         "scan.py", "weight.py", "report.py", "scan.json", "weight.json", "source_commits.tsv",
+OTHER = ["skills/prompts.json", "mcp/mcp_targets.json", "mcp/trending_skill_prompts.json", "mcp/tools_inventory.json",
+         "skills/build.py", "skills/run.py", "skills/run_codex.py", "mcp/build.py", "mcp/run.py", "mcp/stub_server.py",
+         "survey/scan.py", "survey/weight.py", "survey/report.py", "survey/scan.json", "survey/weight.json", "sources/source_commits.tsv",
          "analysis/alt_judge_input.json", "analysis/alt_judgments.json", "analysis/alt_judge_input_2.json", "analysis/alt_judgments_2.json", "analysis/analyze.py"]
 def sha(p):
     h = hashlib.sha256(); h.update(open(p, "rb").read()); return h.hexdigest()
@@ -370,7 +370,7 @@ for r in retained:
 write_csv("e3_builtin_actions_in_skill_misses.csv", [dict(action=k, runs=v) for k, v in bi.most_common()])
 
 # ---------------------------------------------------------------- 7. survey (expanded corpus, frozen)
-S = json.load(open(P("scan.json"))); W = json.load(open(P("weight.json")))
+S = json.load(open(P("survey", "scan.json"))); W = json.load(open(P("survey", "weight.json")))
 uniq = {}
 for r in S: uniq.setdefault(r["sha"], r)
 repos_with = {r["repo"] for r in S}
@@ -389,7 +389,7 @@ survey["names_in_2plus_repos"] = len(sn) if sn is not None else None
 json.dump(survey, open(os.path.join(OUT, "survey.json"), "w"), indent=1)
 
 # ---------------------------------------------------------------- 8. prompt audit
-PR = json.load(open(P("prompts.json"))); PR2 = json.load(open(P("mcp/trending_skill_prompts.json")))
+PR = json.load(open(P("skills", "prompts.json"))); PR2 = json.load(open(P("mcp/trending_skill_prompts.json")))
 pa = []
 for k, ps in list(PR.items()) + list(PR2.items()):
     name = k.split(":")[1]; toks = [t for t in name.split("-") if len(t) >= 3]

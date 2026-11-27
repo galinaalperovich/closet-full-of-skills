@@ -14,7 +14,7 @@ When this is done, every cell of the final matrix will have a defensible value o
 | GPT (Codex) | done + cliff replication | 4 points (20 requests each at the large points) | not run: ~$1.5–2.2 per run (see §4) | not run | **new** | raw-logged subset |
 
 ## 2. Pipeline changes before any run
-A new runner, `run_followup.py`, leaves the study's runners (`run.py`, `run_codex.py`, `mcp/run.py`) unchanged.
+A new runner, `run_followup.py`, leaves the study's runners (`skills/run.py`, `skills/run_codex.py`, `mcp/run.py`) unchanged.
 1. **Raw logs:** save the full ordered event stream from process start, including partial output on timeout, plus the exact command. Configuration manifests contain no credentials.
 2. **Run metadata:** record the resolved model ID if the CLI reports one, the access route, the commit of the runner and the scoring code, and a catalogue manifest (installed names and hashes) per setup.
 3. **First selection batch:** score the first selection batch before any stub result, denial or synthetic instruction is delivered. Parallel calls in that batch all count as “first”.

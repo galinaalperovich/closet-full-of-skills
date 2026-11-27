@@ -4,32 +4,32 @@
  "bootstrap_resamples": 2000,
  "files": [
   {
-   "file": "haiku.jsonl",
+   "file": "skills/haiku.jsonl",
    "sha256": "b8d123ceff8071b61c2e2062c049297250297693e514a56d62ef1bdb35293193",
    "lines": 480
   },
   {
-   "file": "sonnet.jsonl",
+   "file": "skills/sonnet.jsonl",
    "sha256": "d6c9202bde406362e60296bff3abb2eacd4b9260434b623384a562998d5f21b3",
    "lines": 1440
   },
   {
-   "file": "gpt.jsonl",
+   "file": "skills/gpt.jsonl",
    "sha256": "21619a31994c90e3f4c728dc24ed688e0628530c40309b0b837b1c6fa860cbf4",
    "lines": 480
   },
   {
-   "file": "fable.jsonl",
+   "file": "skills/fable.jsonl",
    "sha256": "75c13e1afa27eaa7360b74c2f4280a2abf05dd77f9dffa93012c827f55bdd99f",
    "lines": 480
   },
   {
-   "file": "gpt_sol.jsonl",
+   "file": "skills/gpt_sol.jsonl",
    "sha256": "d6320e38401078781fba6bc3eeeca3ea06dc2d9ad6ace101be44a404168f4c2f",
    "lines": 480
   },
   {
-   "file": "gpt_subscription_failed.jsonl",
+   "file": "skills/gpt_subscription_failed.jsonl",
    "sha256": "997b96102b7e19203846c85ba1db9b7cc2fbe7ee23121214b31876f0e19d3e0c",
    "lines": 480
   },
@@ -89,12 +89,12 @@
    "lines": 480
   },
   {
-   "file": "sonnet_e1_caveman_rerun.jsonl",
+   "file": "skills/sonnet_e1_caveman_rerun.jsonl",
    "sha256": "56c0e143fb209e2a2494e9c0d9570c0ca1da23485171a3e61baa665454d48962",
    "lines": 18
   },
   {
-   "file": "prompts.json",
+   "file": "skills/prompts.json",
    "sha256": "1c96bf4fd4d6f54b3c25dc34bee20c3a39b95c6bcbe8669f38ba446c58c06e75",
    "lines": 22
   },
@@ -114,28 +114,28 @@
    "lines": 1
   },
   {
-   "file": "build.py",
-   "sha256": "288f6ccc62c29f8e99c35eeb493af6597c645a1efab4fe53df01936264fef87c",
-   "lines": 41
+   "file": "skills/build.py",
+   "sha256": "82167622e29daf18d782015f5189a335b39050255b28d72b181128e3b117d532",
+   "lines": 42
   },
   {
-   "file": "run.py",
-   "sha256": "3825e624e490c70c2ca1738aaaed04f1623850e78f3e6de35fbfdae74930f910",
+   "file": "skills/run.py",
+   "sha256": "1dfe12811a85661a11b263d7e32b7e67a27a3cc08115edc07dab3e1db1cfcaec",
    "lines": 71
   },
   {
-   "file": "run_codex.py",
-   "sha256": "b63374597646479f3119b1abdc248495cd657d17776da70dade5dafb478068c1",
-   "lines": 40
+   "file": "skills/run_codex.py",
+   "sha256": "b36ab086dd1936ebba01e67bb068b5c2e6ca2b0ce66ff61ecc2fb937a750e079",
+   "lines": 41
   },
   {
    "file": "mcp/build.py",
-   "sha256": "7602367e2efcb1577f24bbfaa69eaa1b0dbbb5513e4b97c7fb9e57978d21746c",
+   "sha256": "874e0e281980adf7fabc0dc7a2396afe0791dbcbe46179431a6f807a8a7e1032",
    "lines": 87
   },
   {
    "file": "mcp/run.py",
-   "sha256": "27eb284052546dd01ff4c43cfbce2644a42ce4b4a437be9eb8c4d0beb9b0d3ca",
+   "sha256": "8d123984f05de726de2629419606c60e975c7eb24c67ae7046b4848bb606d8e3",
    "lines": 192
   },
   {
@@ -144,32 +144,32 @@
    "lines": 25
   },
   {
-   "file": "scan.py",
+   "file": "survey/scan.py",
    "sha256": "af862399c0eee16a8907861f6a8fedf44604b73d8845e917dd834ab4eb94482e",
    "lines": 153
   },
   {
-   "file": "weight.py",
+   "file": "survey/weight.py",
    "sha256": "834dcf5e484a1f7c97e863465c14a4ad97194db4dddc72cbbe17d0bf8d514426",
    "lines": 56
   },
   {
-   "file": "report.py",
+   "file": "survey/report.py",
    "sha256": "6c453e0a5d9f883eee5405a618bc3bdeaff69627b9c9975782b24a6d3a8d2cfc",
    "lines": 25
   },
   {
-   "file": "scan.json",
+   "file": "survey/scan.json",
    "sha256": "0355a9c9e2bea37813da2dbea30f248496dd1f15654e6ad8a9494f546a0023cc",
    "lines": 1
   },
   {
-   "file": "weight.json",
+   "file": "survey/weight.json",
    "sha256": "d390660fbab74ae93a9d5ed05917e3555c235308de1f49193414cceaa12f8314",
    "lines": 1
   },
   {
-   "file": "source_commits.tsv",
+   "file": "sources/source_commits.tsv",
    "sha256": "01011a5ac92bec194c0270248c1a0e7f74d79acf69f88dddb5c7ea4a54c511f2",
    "lines": 49
   },
@@ -195,7 +195,7 @@
   },
   {
    "file": "analysis/analyze.py",
-   "sha256": "4e6714c558ab3e85632a4745244fbba46e67c8ec76a7031656979a879516aa8a",
+   "sha256": "0468782e6cf0826950246c25c982de84a02ad65316874b5fe6d726f15d5bc7df",
    "lines": 538
   }
  ]

@@ -13,7 +13,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 P = lambda *a: os.path.join(ROOT, *a)
 done = {j["id"] for j in json.load(open(P("analysis", "alt_judgments.json")))}
 T = json.load(open(P("mcp", "mcp_targets.json")))
-P1 = json.load(open(P("prompts.json"))); P2 = json.load(open(P("mcp", "trending_skill_prompts.json")))
+P1 = json.load(open(P("skills", "prompts.json"))); P2 = json.load(open(P("mcp", "trending_skill_prompts.json")))
 REQ = {("skill", k.split(":")[1]): v for k, v in list(P1.items()) + list(P2.items())}
 REQ.update({("tool", k): v["prompts"] for k, v in T.items()})
 INV = {f"{s}.{t['name']}": t.get("description", "") for s, ts in json.load(open(P("mcp", "tools_inventory.json"))).items() for t in ts}
@@ -37,7 +37,7 @@ def add(kind, target, i, comp):
     items[cid] = dict(id=cid, request=REQ[(kind, target)][i], designated_target=target,
                       target_description=desc(("skill:" if kind == "skill" else "mcp:") + target),
                       alternative=comp, alternative_description=desc(comp))
-for f in ("fable.jsonl", "gpt_sol.jsonl"):                      # skills experiment
+for f in ("skills/fable.jsonl", "skills/gpt_sol.jsonl"):                      # skills experiment
     for l in open(P(f)):
         r = json.loads(l)
         if r.get("error") or r["hit"]: continue

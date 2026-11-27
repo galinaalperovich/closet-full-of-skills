@@ -60,7 +60,7 @@ E1 uses the isolated rerun for Sonnet / caveman / alone (18 runs) in place of th
 | E3b | haiku | sk_alone | subscription | 30 | 30 | 0 | 0 | 0 | skills=24,tools=27 |
 | E3b | sonnet | sk_alone | subscription | 30 | 30 | 0 | 0 | 0 | skills=24,tools=27 |
 
-Raw event logs (retained runs, main batches): 3,498 of 6,594 have one. The `raw_log_coverage` column in `audit.csv` gives the count per setup.
+Raw event logs (retained runs, main batches): 3,018 of 6,594 have one. The `raw_log_coverage` column in `audit.csv` gives the count per setup.
 
 | Experiment | Model | Retained | With raw log |
 |---|---|---|---|
@@ -71,7 +71,7 @@ Raw event logs (retained runs, main batches): 3,498 of 6,594 have one. The `raw_
 | E1 | sonnet | 1440 | 18 |
 | E2 | fable | 480 | 480 |
 | E2 | gpt | 174 | 0 |
-| E2 | gpt_sol | 480 | 480 |
+| E2 | gpt_sol | 480 | 0 |
 | E2 | haiku | 480 | 480 |
 | E2 | sonnet | 480 | 480 |
 | E3 | haiku | 540 | 540 |

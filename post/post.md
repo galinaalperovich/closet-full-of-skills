@@ -85,7 +85,7 @@ I needed two things: targets, and a crowd to hide them in.
 - **Targets:** 20 well-known skills ([Anthropic’s](https://github.com/anthropics/skills) pdf, xlsx, pptx and docx, [Matt Pocock’s](https://github.com/mattpocock/skills) tdd and grill-me, and others, full list in [Appendix A](#appendix-a)) and 20 everyday MCP tools, such as creating a GitHub issue or getting a stock price.
 - **The crowd:** 1,000 other real skills, drawn at random from [sickn33/agentic-awesome-skills](https://github.com/sickn33/agentic-awesome-skills), and 771 other real tool definitions, making 791 tools from 73 servers ([GitHub](https://github.com/github/github-mcp-server), [Chrome DevTools](https://github.com/ChromeDevTools/chrome-devtools-mcp), [Playwright](https://github.com/microsoft/playwright-mcp), and 70 from [LiveMCPBench](https://github.com/icip-cas/LiveMCPBench)).
 
-For each target an LLM wrote six realistic requests with no explicit invocation: no `/pdf`, no “use the pdf skill” ([all requests](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/prompts.json)).
+For each target an LLM wrote six realistic requests with no explicit invocation: no `/pdf`, no “use the pdf skill” ([all requests](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/skills/prompts.json)).
 
 *Table 1. Example requests. Every target had six like these.*
 

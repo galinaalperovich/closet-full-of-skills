@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Clone every source repository at the exact commit used in the study (source_commits.tsv).
-#   scripts/fetch_sources.sh            skill repositories -> third_party/repos/<owner>_<repo>
-#   scripts/fetch_sources.sh --mcp      also the MCP tool sources -> third_party/mcp/<owner>_<repo>
-#   ONLY="owner/repo other/repo" scripts/fetch_sources.sh   fetch a subset
+# Clone every source repository at the exact commit used in the study (sources/source_commits.tsv).
+#   sources/fetch_sources.sh            skill repositories -> third_party/repos/<owner>_<repo>
+#   sources/fetch_sources.sh --mcp      also the MCP tool sources -> third_party/mcp/<owner>_<repo>
+#   ONLY="owner/repo other/repo" sources/fetch_sources.sh   fetch a subset
 # Nothing is executed from the cloned repositories; the build scripts only read SKILL.md frontmatter.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -23,5 +23,5 @@ while IFS=$'\t' read -r repo commit date; do
   fi
   if git -C "$dest" -c advice.detachedHead=false checkout --quiet "$commit" 2>/dev/null; then echo "ok      $repo @ ${commit:0:10} ($date)"
   else echo "FAILED  $repo: commit $commit not found (force-pushed or deleted upstream)"; fail=1; fi
-done < source_commits.tsv
+done < sources/source_commits.tsv
 exit $fail

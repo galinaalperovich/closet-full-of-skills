@@ -1,6 +1,7 @@
 """Build isolated project dirs. Skills are reduced to name+description with a stub body, so nothing from the repos can execute."""
 import json, os, random, re, shutil, sys, yaml
-S=os.path.dirname(os.path.abspath(__file__)); REPOS=os.environ.get("SKILL_REPOS", os.path.join(S,"third_party","repos"))  # cloned by scripts/fetch_sources.sh
+S=os.path.dirname(os.path.abspath(__file__)); ROOT=os.path.dirname(S)
+REPOS=os.environ.get("SKILL_REPOS", os.path.join(ROOT,"third_party","repos"))  # cloned by sources/fetch_sources.sh
 BUILTIN={"deep-research","design","slides","design-sync","dataviz","artifact-diagramming","whiteboard","artifact-capabilities","update-config","verify","debug","code-review","simplify","batch","fewer-permission-prompts","doctor","loop","schedule","claude-api","workflow-authoring","run","run-skill-generator","plugin-authoring","init","security-review"}
 def load(repo):
     out={}
@@ -30,10 +31,10 @@ for key in prompts:
 pool=load("sickn33_agentic-awesome-skills")
 names=sorted(n for n in pool if n not in targets and n not in BUILTIN)
 random.Random(7).shuffle(names)
-shutil.rmtree(os.path.join(S,"envs"),ignore_errors=True)
-for name,(d,w) in targets.items(): write(os.path.join(S,"envs","alone",name),name,d,w)
+shutil.rmtree(os.path.join(ROOT,"envs"),ignore_errors=True)
+for name,(d,w) in targets.items(): write(os.path.join(ROOT,"envs","alone",name),name,d,w)
 for cond,k in (("pack20",0),("crowd200",200),("crowd1000",1000)):
-    b=os.path.join(S,"envs",cond)
+    b=os.path.join(ROOT,"envs",cond)
     for name,(d,w) in targets.items(): write(b,name,d,w)
     for n in names[:k]: write(b,n,*pool[n])
     tot=sum(len(n)+min(1536,len(" ".join(x)))for n,x in list(targets.items())+[(n,pool[n]) for n in names[:k]])

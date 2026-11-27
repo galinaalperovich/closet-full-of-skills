@@ -6,7 +6,7 @@ ENV=os.environ.get("ENVS2_DIR", os.path.join(SP,"envs2"))
 CODEX=os.environ.get("CODEX_BIN") or shutil.which("codex") or "/Applications/Codex.app/Contents/Resources/codex-cli/bin/codex"
 harness, model, jobset, out = sys.argv[1:5]
 T=json.load(open(os.path.join(H,"mcp_targets.json")))
-P1=json.load(open(os.path.join(SP,"prompts.json"))); P2=json.load(open(os.path.join(H,"trending_skill_prompts.json")))
+P1=json.load(open(os.path.join(SP,"skills","prompts.json"))); P2=json.load(open(os.path.join(H,"trending_skill_prompts.json")))
 SKP={k.split(":")[1]:v for k,v in list(P1.items())+list(P2.items())}
 OVERLAP={"pdf":{"pdf-reader-mcp.read_pdf","searxng.pdf_merger","searxng.pdf_splitter"},"xlsx":{"excel."},"pptx":{"ppt.","okppt."},"docx":{"word-document-server."},"webapp-testing":{"playwright-mcp.","chrome-devtools.","playwright-ea.","puppeteer."}}
 jobs=[]
