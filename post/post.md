@@ -174,18 +174,18 @@ This is the example that made it click for me. Take `seo-audit` and its six requ
 | 1,020 skills, Claude Code | `seo-audit` | Sonnet: 0 of 18 |
 | 1,020 skills, Codex | nothing | GPT-6 Astra: 0 of 6 |
 
-In Claude Code the skill became a bare name among 16 other names with “seo” in them; in Codex it was never offered.
+In Claude Code the skill became a bare name among 16 other names with “seo” in them, and in Codex it was never offered.
 
 ### Codex: first shorter, then gone
 
-- **At ~220 skills** Codex keeps every skill but cuts each description to about 30 characters. GPT-6 Astra still picked the right skill in 83% of requests: a name and five words were nearly enough.
-- **At 1,020 skills** it listed only 321 entries, alphabetically up to “developer-listening”, with no descriptions. Of the 20 targets, only `animate`, `caveman` and `copywriting` made it in.
+- **At ~220 skills,** Codex keeps every skill but cuts each description to about 30 characters. GPT-6 Astra still picked the right skill in 83% of requests: a name and five words were nearly enough.
+- **At 1,020 skills,** it listed only 321 entries, alphabetically up to “developer-listening”, with no descriptions. Of the 20 targets, only `animate`, `caveman` and `copywriting` made it in.
 
-Those three account for 11 of GPT-6 Astra’s 12 hits at 1,020 skills and 11 of GPT-6 Sol’s 14. So **the Codex cliff is the alphabet**, not a model choosing badly. I did not believe it until I read the list myself. If your skill is called `zebra-something`, I have bad news.
+Those three account for 11 of GPT-6 Astra’s 12 hits at 1,020 skills and 11 of GPT-6 Sol’s 14. So **the Codex cliff is the alphabet**, not a model choosing badly. I did not believe it until I read the list myself. If your skill is called `zebra-something`, I have bad news for you!
 
 ### Claude Code: every name, few descriptions
 
-Claude Code never drops a skill; it drops descriptions. The listing stops growing at about 30,000 characters, already at ~220 skills. At 1,020, only 19 of 1,037 entries had a description, so the model mostly chooses from **bare names**. How much a model makes of a bare name is where the three differ: 16% for Haiku, 34% for Sonnet, 72% for Fable.
+Claude Code never drops a skill, but it drops descriptions. The listing stops growing at about 30,000 characters, already at ~220 skills. At 1,020, only 19 of 1,037 entries had a description, so the model mostly chooses from **bare names**. How much a model makes of a bare name is where the three differ: 16% for Haiku, 34% for Sonnet, 72% for Fable.
 
 **Which descriptions survive? The ones you have used.** I noticed that the few surviving descriptions were skills I had already used, and it was not a coincidence. Claude Code records how often and how recently you used each skill, across all your projects:
 
@@ -196,7 +196,7 @@ A twist, and this one is on me: my own runs fed that record, so I cannot say whi
 
 ### Can you just raise the cap?
 
-Yes, both harnesses have a setting, and I nearly missed it. I was sure this would fix everything, so I ran the 1,020-skill setup again with the budget at its limit:
+Yes, both harnesses have a setting, and I nearly missed it. I thought it might fix everything, so I ran the 1,020-skill setup again with the budget at its limit:
 
 *Table 5. The listing budget, the setting that raises it, and what raising it did at 1,020 skills (120 requests per model; listings captured with no model called).*
 
