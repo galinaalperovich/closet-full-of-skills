@@ -22,7 +22,7 @@ Installing a skill doesn’t mean your agent will use it. I sent 120 natural req
 
 1. **Skills fade.** With only that skill installed, the agent picked it in 78–100% of runs. With 1,000 other skills next to it, in 10–34%, and in 72% for the strongest model I tried. [→ Result 1](#result-1)
 2. **For smaller models, twenty is enough.** With just 20 unrelated skills, and nothing cut from the listing, Haiku already fell from 78% to 48% and Sonnet from 94% to 76%. [→ Result 1](#result-1)
-3. **Past a few hundred skills, the harness quietly cuts the listing.** With 1,020 skills installed, Codex listed only 321 of them, in alphabetical order, and dropped the rest. Claude Code kept every name but gave only 19 of them a description, and your usage history decides which. [→ Result 2](#result-2)
+3. **Past a few hundred skills, the harness quietly cuts the listing.** With 1,020 skills installed, Codex listed only 321 of them, in alphabetical order, and dropped the rest. Claude Code kept every name but gave only 19 of them a description, and your usage history decides which. Both have a setting that raises the cap; at its limit it won back about ten points in Claude Code, at four times the cost per request. [→ Result 2](#result-2)
 4. **A stronger model buys room, not immunity.** Fable 5.2 held at 98% up to ~220 skills and fell to 72% at 1,020, only after the listing was cut. So for a strong model, the harness explains more of the loss than the model’s own confusion does. In Codex the model made no difference at all: GPT-6 Sol, at a fifth of the price, matched GPT-6 Astra in every setup. [→ Result 2](#result-2)
 5. **Most misses are no skill at all, not a wrong one.** The agent carries on with its built-in tools, or simply writes the answer itself, and nothing tells you. [→ What the agent did instead](#misses)
 6. **MCP tools held up better.** Single-step tool selection went from 83–96% with the tool alone to 78–84% with all 791 tools installed, in Claude Code and in Codex, and barely moved from ~200 tools on. [→ Result 3](#result-3)
@@ -201,11 +201,32 @@ How much a model makes of a bare name is where the three differ. On this same li
 
 A twist, and this one is on me: my own runs fed that record, so I cannot say exactly which targets had a description in each run, only that at 1,020 skills almost none did. **A new skill in a big collection starts life as a bare name.**
 
+### Can you just raise the cap?
+
+Yes, both harnesses have a setting for it, and I nearly missed that. So I went back and ran the 1,020-skill setup once more with the budget raised as far as each harness allows, 120 requests per model:
+
+*Table 5. The listing budget, the setting that raises it, and what raising it did at 1,020 skills. The listings were captured with no model called.*
+
+|  | Claude Code | Codex |
+|---|---|---|
+| Default budget for the skill listing | 1% of the context window | 2% of the context window |
+| Setting that raises it | `skillListingBudgetFraction` in settings, or the `SLASH_COMMAND_TOOL_CHAR_BUDGET` environment variable | `skills.max_context_tokens` in `config.toml` |
+| How far it goes | up to the whole context window | 10,000 tokens at most |
+| Listing at 1,020 skills, default | 1,037 names, 19 with a description | 321 names, no descriptions; 3 of the 20 targets |
+| Listing at 1,020 skills, setting raised | all 1,037 with a description, about 184,000 characters in every request | 618 names, still no descriptions; 9 of the 20 targets |
+| Designated skill picked at 1,020 skills, default → raised | Haiku 16% → **8%**<br>Sonnet 34% → **44%**<br>Fable 72% → **82%** | GPT-6 Sol 12% → **41%** |
+
+- **In Claude Code, the full listing gave back about ten points, not the original rate.** With every description restored, Sonnet went from 34% to 44% and Fable from 72% to 82%, still far from the 94% and 99% they reach with the skill alone. Haiku got worse, 16% to 8%. So the cut explains part of the loss, and **a thousand full descriptions are their own kind of haystack**.
+- **It is not free.** Those descriptions travel with every request: at list prices a Sonnet run went from $0.09 to $0.31 and a Fable run from $0.30 to $1.20.
+- **In Codex, the maximum only moves the cliff.** The list now runs about twice as far into the alphabet, to “maxia”, so 9 of the 20 targets are offered instead of 3. GPT-6 Sol picked the designated skill in 36 of 54 requests for those nine, and in 13 of 66 for the other eleven.
+
+This is one run per request, so read the changes as directions, not as precise sizes.
+
 ### What this means for your skills
 
 - **The name does most of the work.** In a big collection the name is often all the model gets, so name a skill with the words people will actually type.
 - **A new skill starts at the back of the queue.** In Claude Code, the skills you use keep their descriptions, so a new one in a big collection may wait a long time for its first pick. Calling it by name is the obvious way in (I seeded the record by hand and did not test how many uses it takes).
-- **In Codex, past about 320 skills, the end of the alphabet does not exist.** The only fix I know is fewer skills.
+- **In Codex, past about 320 skills, the end of the alphabet does not exist.** The maximum budget pushes that to about 620; beyond it, the only fix I know is fewer skills.
 - **A stronger model buys room, not immunity.** Fable was fine at ~220 skills and missed more than a quarter of its requests at 1,020. In Codex a different model changed nothing, because the listing was cut before any model saw it.
 
 ### Which skills kept being selected
@@ -232,7 +253,7 @@ Then I repeated the design with 20 everyday MCP tools, such as creating a GitHub
 
 What loss there was came at the first step, from one tool to twenty, where near neighbours appear: four GitHub tools, two browser servers. After that the curve is flat. Adding 571 more tools, from ~220 to 791, changed **nothing measurable** (77% → 78% for Haiku, 76% → 79% for Sonnet, 81% → 84% for Fable, 86% → 81% for GPT-6 Sol). Not proof of no effect, but a very different picture from the skills.
 
-*Table 5. Share of single-step tool requests where the agent called the designated tool (or an equivalent one), with 95% CIs. Highlighted: tools still lost some ground, only much less than skills.*
+*Table 6. Share of single-step tool requests where the agent called the designated tool (or an equivalent one), with 95% CIs. Highlighted: tools still lost some ground, only much less than skills.*
 
 | Tools installed | Haiku | Sonnet | Fable | GPT-6 Sol |
 |---|---|---|---|---|
@@ -273,7 +294,7 @@ The first is measured; treat the other two as hypotheses. The cited studies use 
 
 ## What you can do about it
 
-*Table 6. What I observed, how sure I am, and what to do about it.*
+*Table 7. What I observed, how sure I am, and what to do about it.*
 
 | What I observed | How sure | What to do |
 |---|---|---|
@@ -285,11 +306,20 @@ The first is measured; treat the other two as hypotheses. The cited studies use 
 
 In Claude Code, `/context` shows the size of your skill listing and [`/doctor` tells you whether descriptions are being dropped](https://code.claude.com/docs/en/skills.md). Codex prints a warning when it goes over its budget ([codex#19679](https://github.com/openai/codex/issues/19679)). And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. Since November 2026, [MCP servers can ship skills too](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more), with nothing for you to install, so your listing can grow without you noticing (I have not tested how those are listed). This is the first thing I would check.
 
-### [Trick #2] Enable less, per project
+### [Trick #2] Raise the listing budget, if you can afford it
 
-This is the one thing I tested: with fewer skills installed, the designated one was picked more often (answer quality not measured). Enable plugins per project, turn off unused skills with `/skills`, and if you only need `pdf` from a 3,000-skill collection, install `pdf`.
+If `/doctor` says descriptions are being dropped, you can give the listing more room:
 
-### [Trick #3] Try other ways to discover and invoke (untested here)
+- **Claude Code:** set `skillListingBudgetFraction` in your settings (the default is `0.01`, so `0.02` doubles it), or the environment variable `SLASH_COMMAND_TOOL_CHAR_BUDGET` to a number of characters.
+- **Codex:** set `skills.max_context_tokens` in `config.toml`, up to 10,000.
+
+In my runs this helped less than I hoped (see [Result 2](#raise-the-cap)): about ten points for Sonnet and Fable at 1,020 skills, nothing for Haiku, and every request carries the longer listing. It makes sense when you are a little over the budget, not when you are ten times over.
+
+### [Trick #3] Enable less, per project
+
+This is what worked best in my runs: with fewer skills installed, the designated one was picked more often (answer quality not measured). Enable plugins per project, turn off unused skills with `/skills`, and if you only need `pdf` from a 3,000-skill collection, install `pdf`.
+
+### [Trick #4] Try other ways to discover and invoke (untested here)
 
 - **Invoke required skills by name** (`/skill-name`) instead of hoping for a match.
 - **Give a skill a trigger nobody else has.** In my sample, skills with concrete nouns and file types held up.
@@ -354,7 +384,7 @@ Thanks for reading! If you run the check on your own setup, tell me what you got
 
 ## Appendix A: The 20 target skills
 
-*Table 7. The 20 target skills, where they come from, and one of their six requests.*
+*Table 8. The 20 target skills, where they come from, and one of their six requests.*
 
 | # | Skill | From | What it does | One of its six requests |
 |---|---|---|---|---|
@@ -412,7 +442,7 @@ Nakanishi’s [Scalable-Softmax](https://arxiv.org/abs/2501.19399) paper describ
 
 ## Appendix D: What this cost
 
-*Table 8. What the runs cost.*
+*Table 9. What the runs cost.*
 
 | Item | Runs | Cost |
 |---|---|---|
@@ -421,9 +451,11 @@ Nakanishi’s [Scalable-Softmax](https://arxiv.org/abs/2501.19399) paper describ
 | GPT-6 Sol, skills experiment (OpenAI API) | 480 | $30.81 |
 | GPT-6 Sol, MCP experiment (OpenAI API) | 480 | $35.79 |
 | GPT-6 Sol, first MCP run, discarded (OpenAI API) | 480 | $39.00 |
-| **Calculated API fees** | 2,090 | **$277.33** |
+| GPT-6 Sol, 1,020 skills with the maximum listing budget (OpenAI API) | 120 | $12.60 |
+| **Calculated API fees** | 2,210 | **$289.93** |
 | Claude Haiku and Sonnet in Claude Code, the runs in these results (my Claude subscription; API list price for reference) | 4,020 | $0 extra ($144.56 list) |
 | Claude Fable 5.2 in Claude Code (same subscription) | 960 | $0 extra ($113.95 list) |
+| Haiku, Sonnet and Fable at 1,020 skills with the full listing budget (same subscription) | 360 | $0 extra ($184.53 list) |
 | Claude Code runs I discarded: two earlier rounds of MCP and mixed runs, a rerun I stopped, and 18 skill runs I repeated (same subscription) | 5,153 | $0 extra ($327.54 list) |
 
 The GPT-6 figures are calculated from the token usage Codex reported, at OpenAI’s list prices ([Astra](https://developers.openai.com/api/docs/models/gpt-6-astra.md), [Sol](https://developers.openai.com/api/docs/models/gpt-6-sol.md); Sol’s cache-write price is not listed, and I assumed the same ratio as Astra’s), and not reconciled against the invoice ([per-batch breakdown](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/derived/cost_by_batch.csv)). The Claude Code list prices leave out the tool runs that I stopped as soon as the designated tool was called, because a stopped run reports no cost.

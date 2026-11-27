@@ -700,3 +700,30 @@ The pairs of request and alternative from target misses that the first batch (§
 ### 15.6 Cost
 
 GPT-6 Sol, round 3: $35.79 for 480 runs at list prices (cache-write price assumed, §14.5). The Claude Code runs were on the experimenter's subscription; list prices are recorded only for the runs that were not stopped at the accepted call.
+
+---
+
+## 16. The listing budget raised to its limit
+
+Collected on 27 November 2026. The earlier sections describe both harnesses with their default skill listing budget. Both have a setting that raises it:
+
+| | Claude Code | Codex |
+|---|---|---|
+| Default | 1% of the context window | 2% of the context window |
+| Setting | `skillListingBudgetFraction` (a fraction up to 1), or the environment variable `SLASH_COMMAND_TOOL_CHAR_BUDGET` (characters) | `skills.max_context_tokens`; explicit values are capped at 10,000 |
+| Value used here | `SLASH_COMMAND_TOOL_CHAR_BUDGET=1000000` | `-c skills.max_context_tokens=10000` (`CODEX_EXTRA`) |
+
+**Listings, captured with no model called** (§10 method, `crowd1000`): Claude Code went from 19 of 1,037 entries with a description to all 1,037 (about 184,000 characters; all 20 targets with a description). Codex went from 323 entries to 618, names only, with 9 of the 20 targets listed (`animate`, `caveman`, `copywriting`, `diagnosing-bugs`, `docx`, `frontend-design`, `grill-me`, `humanizer`, `json-canvas`). At `crowd200`, Codex's median description went from 32 to 116 characters. (In this capture the default Codex listing had 323 entries; the published capture had 321.)
+
+**Runs.** E1, `crowd1000` only, 120 requests, one run per request, otherwise the E1 commands: Haiku, Sonnet and Fable 5.2 with `ISOLATE=1`, and GPT-6 Sol. No run had an error. Files: `e1_fullbudget_*.jsonl`. These records are not read by `analyze.py`; the post computes the rates below directly, without intervals.
+
+| Model | `crowd1000`, default budget | `crowd1000`, budget raised | Turn-limited (raised) | List price per run, default → raised |
+|---|---|---|---|---|
+| Haiku | 15.8% | 9/120 (7.5%) | 73 | $0.005 → $0.026 |
+| Sonnet | 33.6% (360 runs) | 53/120 (44.2%) | 24 | $0.088 → $0.314 |
+| Fable 5.2 | 72.5% | 99/120 (82.5%) | 2 | $0.305 → $1.198 |
+| GPT-6 Sol | 11.7% | 49/120 (40.8%) | n/a | $12.60 for the 120 runs |
+
+GPT-6 Sol selected the designated skill in 36 of 54 requests for the nine listed targets and in 13 of 66 for the eleven that were not listed.
+
+**Limits.** One run per request and one budget value per harness. Haiku's 73 turn-limited runs (of 120) mean its lower rate may partly reflect the 3-turn window. Claude Code's usage record (§10) was in whatever state the earlier runs left it, which matters less here because every description fits. The Claude Code raw logs of these runs are kept but not published.

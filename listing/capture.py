@@ -75,7 +75,9 @@ def run_codex(setup, t, cwd):
     cmd = [CODEX, "exec", "--json", "--ephemeral", "--skip-git-repo-check", "-s", "read-only", "-c", 'model_reasoning_effort="medium"',
            "-c", 'model_provider="capture"', "-c", 'model_providers.capture.name="capture"',
            "-c", f'model_providers.capture.base_url="http://127.0.0.1:{PORT}/v1"', "-c", 'model_providers.capture.wire_api="responses"',
-           "-c", "model_providers.capture.request_max_retries=0", "-c", "model_providers.capture.stream_max_retries=0", FIRST[t]]
+           "-c", "model_providers.capture.request_max_retries=0", "-c", "model_providers.capture.stream_max_retries=0"]
+    for x in filter(None, os.environ.get("CODEX_EXTRA", "").split(";")): cmd += ["-c", x]   # extra config, e.g. skills.max_context_tokens=10000
+    cmd.append(FIRST[t])
     pr = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
     return pr.returncode
 

@@ -15,13 +15,14 @@ jobs=[j for j in jobs if (j[0],j[1],j[2],j[4]) not in done]
 lock=threading.Lock(); f=open(out,"a")
 E=os.environ.get("ENVS_DIR", os.path.join(S,"envs"))   # where build.py put the test folders
 MODEL=os.environ.get("CODEX_MODEL")   # unset: the model in CODEX_HOME/config.toml (gpt-6-astra in the first runs)
+EXTRA=[a for x in filter(None,os.environ.get("CODEX_EXTRA","").split(";")) for a in ("-c",x)]   # extra config, e.g. skills.max_context_tokens=10000
 SK=re.compile(r"skills/([a-z0-9][a-z0-9\-]*)/SKILL\.md")
 def one(j):
     c,t,i,p,rep=j
     cwd=os.path.join(E,"alone",t) if c=="alone" else os.path.join(E,c)
     rec={"cond":c,"target":t,"i":i,"rep":rep,"model":MODEL or "codex-default","effort":effort,"fired":[]}
     try:
-        pr=subprocess.run([CODEX,"exec","--json","--ephemeral","--skip-git-repo-check","-s","read-only","-c",f'model_reasoning_effort="{effort}"']+(["-c",f'model="{MODEL}"'] if MODEL else [])+[p],cwd=cwd,capture_output=True,text=True,timeout=300,stdin=subprocess.DEVNULL)
+        pr=subprocess.run([CODEX,"exec","--json","--ephemeral","--skip-git-repo-check","-s","read-only","-c",f'model_reasoning_effort="{effort}"']+(["-c",f'model="{MODEL}"'] if MODEL else [])+EXTRA+[p],cwd=cwd,capture_output=True,text=True,timeout=300,stdin=subprocess.DEVNULL)
         for l in pr.stdout.splitlines():
             try: e=json.loads(l)
             except Exception: continue

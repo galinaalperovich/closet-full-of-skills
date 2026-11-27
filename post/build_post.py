@@ -172,6 +172,7 @@ CB = rdv("cost_by_batch.csv")
 _cost = lambda m, exp: sum(float(r["list_price_usd"]) for r in CB if r["model"] == m and r["exp"] == exp and r["batch"] == "main")
 _runs = lambda m, exp: sum(int(r["attempts"]) for r in CB if r["model"] == m and r["exp"] == exp and r["batch"] == "main")
 SOL_E1, SOL_E2 = _cost("gpt_sol", "E1"), _cost("gpt_sol", "E2")
+SOL_FB = 12.60   # e1_fullbudget_gpt_sol.jsonl, from reported token usage at list prices
 SOL_E2_FIRST = 39.00   # the first GPT-6 Sol MCP run (mcp/gpt_sol.jsonl), replaced by the third round
 HS_COST = sum(_cost(m, e) for m in CM for e in ("E1", "E2", "E3", "E3b")); HS_RUNS = sum(_runs(m, e) for m in CM for e in ("E1", "E2", "E3", "E3b"))
 FABLE_COST, FABLE_RUNS = _cost("fable", "E1") + _cost("fable", "E2"), _runs("fable", "E1") + _runs("fable", "E2")
@@ -220,6 +221,31 @@ T_SEEN = f"""<div class="wrap"><table>
 <tr class="row-bad"><td>1,020 skills, Claude Code</td><td><code>seo-audit</code>: a bare name, next to 16 other bare names with “seo” in them</td><td>Sonnet {SEO("sonnet", "crowd1000")}, Fable {SEO("fable", "crowd1000")} (it loaded {LIST(f"<code>{x}</code>" for x in SEO_FABLE_ALT)} instead)</td></tr>
 <tr class="row-bad"><td>1,020 skills, Codex</td><td>nothing: the list ends at “developer-listening”</td><td>GPT-6 Astra {SEO("gpt", "crowd1000")}, GPT-6 Sol {SEO("gpt_sol", "crowd1000")}</td></tr>
 </tbody></table></div>"""
+# The listing budget raised to its limit (e1_fullbudget_*.jsonl: 120 requests at 1,020 skills per model; captures in listing/)
+def _fb(m):
+    rs = [json.loads(l) for l in open(os.path.join(B, "..", f"e1_fullbudget_{m}.jsonl"))]; rs = [r for r in rs if not r.get("error")]
+    return rs
+FB = {m: _fb(m) for m in ("haiku", "sonnet", "fable", "gpt_sol")}
+FBR = lambda m: f'{round(100 * sum(r["hit"] for r in FB[m]) / len(FB[m]))}%'
+FB_CX_LISTED = ["animate", "caveman", "copywriting", "diagnosing-bugs", "docx", "frontend-design", "grill-me", "humanizer", "json-canvas"]   # targets Codex lists at 10,000 tokens (capture)
+_fbl = [r for r in FB["gpt_sol"] if r["target"] in FB_CX_LISTED]; _fbn = [r for r in FB["gpt_sol"] if r["target"] not in FB_CX_LISTED]
+FB_SOL_LISTED = f'{sum(r["hit"] for r in _fbl)} of {len(_fbl)}'; FB_SOL_UNLISTED = f'{sum(r["hit"] for r in _fbn)} of {len(_fbn)}'
+_cost1 = lambda rs: sum(r["cost"] for r in rs) / len(rs)
+def _basecost(m):
+    rs = [json.loads(l) for l in open(os.path.join(B, "..", f"{m}.jsonl"))]; rs = [r for r in rs if r["cond"] == "crowd1000" and r.get("cost")]
+    return _cost1(rs)
+FB_CX_LAST = "maxia"   # last installed skill in the captured listing at the maximum budget
+FB_COST = {m: (_basecost(m), _cost1(FB[m])) for m in ("sonnet", "fable")}
+_fbrow = lambda m: f'<td class="n">{E1R(m, "crowd1000")}% → <b>{FBR(m)}</b></td>'
+T_BUDGET = f"""<div class="wrap"><table>
+<thead><tr><th></th><th>Claude Code</th><th>Codex</th></tr></thead><tbody>
+<tr><td>Default budget for the skill listing</td><td>1% of the context window</td><td>2% of the context window</td></tr>
+<tr><td>Setting that raises it</td><td><code>skillListingBudgetFraction</code> in settings, or the <code>SLASH_COMMAND_TOOL_CHAR_BUDGET</code> environment variable</td><td><code>skills.max_context_tokens</code> in <code>config.toml</code></td></tr>
+<tr><td>How far it goes</td><td>up to the whole context window</td><td>10,000 tokens at most</td></tr>
+<tr><td>Listing at 1,020 skills, default</td><td>{_n(LS[("claude", "crowd1000")]["entries"])} names, {LS[("claude", "crowd1000")]["entries_with_description"]} with a description</td><td>{CX1K["entries"]} names, no descriptions; {CX1K["targets_listed"]} of the 20 targets</td></tr>
+<tr class="row-good"><td>Listing at 1,020 skills, setting raised</td><td>all {_n(LS[("claude", "crowd1000")]["entries"])} with a description, about 184,000 characters in every request</td><td>618 names, still no descriptions; 9 of the 20 targets</td></tr>
+<tr class="row-warn"><td>Designated skill picked at 1,020 skills, default → raised</td><td>Haiku {E1R("haiku", "crowd1000")}% → <b>{FBR("haiku")}</b><br>Sonnet {E1R("sonnet", "crowd1000")}% → <b>{FBR("sonnet")}</b><br>Fable {E1R("fable", "crowd1000")}% → <b>{FBR("fable")}</b></td><td>GPT-6 Sol {E1R("gpt_sol", "crowd1000")}% → <b>{FBR("gpt_sol")}</b></td></tr>
+</tbody></table></div>"""
 T_LISTING = f"""<div class="wrap"><table>
 <tr><th>Setup</th><th>Claude Code</th><th>Codex</th></tr>
 <tr><td>Alone</td><td>the target, with its full description</td><td>the target, with its full description</td></tr>
@@ -240,9 +266,11 @@ T_COST = f"""<div class="wrap"><table>
 <tr><td>GPT-6 Sol, skills experiment (OpenAI API)</td><td class="n">480</td><td class="n">${SOL_E1:.2f}</td></tr>
 <tr><td>GPT-6 Sol, MCP experiment (OpenAI API)</td><td class="n">480</td><td class="n">${SOL_E2:.2f}</td></tr>
 <tr><td>GPT-6 Sol, first MCP run, discarded (OpenAI API)</td><td class="n">480</td><td class="n">${SOL_E2_FIRST:.2f}</td></tr>
-<tr><td><b>Calculated API fees</b></td><td class="n">2,090</td><td class="n"><b>${171.73 + SOL_E1 + SOL_E2 + SOL_E2_FIRST:.2f}</b></td></tr>
+<tr><td>GPT-6 Sol, 1,020 skills with the maximum listing budget (OpenAI API)</td><td class="n">120</td><td class="n">${SOL_FB:.2f}</td></tr>
+<tr><td><b>Calculated API fees</b></td><td class="n">2,210</td><td class="n"><b>${171.73 + SOL_E1 + SOL_E2 + SOL_E2_FIRST + SOL_FB:.2f}</b></td></tr>
 <tr><td>Claude Haiku and Sonnet in Claude Code, the runs in these results (my Claude subscription; API list price for reference)</td><td class="n">{HS_RUNS:,}</td><td class="n">$0 extra (${HS_COST:.2f} list)</td></tr>
 <tr><td>Claude Fable 5.2 in Claude Code (same subscription)</td><td class="n">{FABLE_RUNS:,}</td><td class="n">$0 extra (${FABLE_COST:.2f} list)</td></tr>
+<tr><td>Haiku, Sonnet and Fable at 1,020 skills with the full listing budget (same subscription)</td><td class="n">360</td><td class="n">$0 extra (${sum(r["cost"] for m in ("haiku", "sonnet", "fable") for r in FB[m]):.2f} list)</td></tr>
 <tr><td>Claude Code runs I discarded: two earlier rounds of MCP and mixed runs, a rerun I stopped, and 18 skill runs I repeated (same subscription)</td><td class="n">{3233 + 1920:,}</td><td class="n">$0 extra (${149.64 + 177.90:.2f} list)</td></tr>
 </table></div>"""
 _sk = [E3P[(m, f"skill: single-skill baseline -> {st}")]["diff"] for m in CM for st in ("mixed_smaller", "mixed_larger")]
@@ -275,7 +303,7 @@ body = f"""
 <ol>
 <li><b>Skills fade.</b> With only that skill installed, the agent picked it in {RNG(E1[(m, "alone")]["rate"] for m in ALLM)}% of runs. With 1,000 other skills next to it, in {RNG(E1[(m, "crowd1000")]["rate"] for m in ALLM if m != "fable")}%, and in {E1R("fable", "crowd1000")}% for the strongest model I tried. {SEE("result-1", "Result 1")}</li>
 <li><b>For smaller models, twenty is enough.</b> With just 20 unrelated skills, and nothing cut from the listing, Haiku already fell from {E1R("haiku", "alone")}% to {E1R("haiku", "pack20")}% and Sonnet from {E1R("sonnet", "alone")}% to {E1R("sonnet", "pack20")}%. {SEE("result-1", "Result 1")}</li>
-<li><b>Past a few hundred skills, the harness quietly cuts the listing.</b> With 1,020 skills installed, Codex listed only {CX1K["entries"]} of them, in alphabetical order, and dropped the rest. Claude Code kept every name but gave only {LS[("claude", "crowd1000")]["entries_with_description"]} of them a description, and your usage history decides which. {SEE("result-2", "Result 2")}</li>
+<li><b>Past a few hundred skills, the harness quietly cuts the listing.</b> With 1,020 skills installed, Codex listed only {CX1K["entries"]} of them, in alphabetical order, and dropped the rest. Claude Code kept every name but gave only {LS[("claude", "crowd1000")]["entries_with_description"]} of them a description, and your usage history decides which. Both have a setting that raises the cap; at its limit it won back about ten points in Claude Code, at four times the cost per request. {SEE("result-2", "Result 2")}</li>
 <li><b>A stronger model buys room, not immunity.</b> Fable 5.2 held at {E1R("fable", "crowd200")}% up to ~220 skills and fell to {E1R("fable", "crowd1000")}% at 1,020, only after the listing was cut. So for a strong model, the harness explains more of the loss than the model’s own confusion does. In Codex the model made no difference at all: GPT-6 Sol, at a fifth of the price, matched GPT-6 Astra in every setup. {SEE("result-2", "Result 2")}</li>
 <li><b>Most misses are no skill at all, not a wrong one.</b> The agent carries on with its built-in tools, or simply writes the answer itself, and nothing tells you. {SEE("misses", "What the agent did instead")}</li>
 <li><b>MCP tools held up better.</b> {SUM_MCP} {SEE("result-3", "Result 3")}</li>
@@ -395,11 +423,21 @@ body = f"""
 </ul>
 <p>A twist, and this one is on me: my own runs fed that record, so I cannot say exactly which targets had a description in each run, only that at 1,020 skills almost none did. <b>A new skill in a big collection starts life as a bare name.</b></p>
 
+<h3 id="raise-the-cap">Can you just raise the cap?</h3>
+<p>Yes, both harnesses have a setting for it, and I nearly missed that. So I went back and ran the 1,020-skill setup once more with the budget raised as far as each harness allows, 120 requests per model:</p>
+{tab_("The listing budget, the setting that raises it, and what raising it did at 1,020 skills. The listings were captured with no model called.", T_BUDGET)}
+<ul>
+<li><b>In Claude Code, the full listing gave back about ten points, not the original rate.</b> With every description restored, Sonnet went from {E1R("sonnet", "crowd1000")}% to {FBR("sonnet")} and Fable from {E1R("fable", "crowd1000")}% to {FBR("fable")}, still far from the {E1R("sonnet", "alone")}% and {E1R("fable", "alone")}% they reach with the skill alone. Haiku got worse, {E1R("haiku", "crowd1000")}% to {FBR("haiku")}. So the cut explains part of the loss, and <b>a thousand full descriptions are their own kind of haystack</b>.</li>
+<li><b>It is not free.</b> Those descriptions travel with every request: at list prices a Sonnet run went from ${FB_COST["sonnet"][0]:.2f} to ${FB_COST["sonnet"][1]:.2f} and a Fable run from ${FB_COST["fable"][0]:.2f} to ${FB_COST["fable"][1]:.2f}.</li>
+<li><b>In Codex, the maximum only moves the cliff.</b> The list now runs about twice as far into the alphabet, to “{FB_CX_LAST}”, so 9 of the 20 targets are offered instead of {CX1K["targets_listed"]}. GPT-6 Sol picked the designated skill in {FB_SOL_LISTED} requests for those nine, and in {FB_SOL_UNLISTED} for the other eleven.</li>
+</ul>
+<p>This is one run per request, so read the changes as directions, not as precise sizes.</p>
+
 <h3>What this means for your skills</h3>
 <ul>
 <li><b>The name does most of the work.</b> In a big collection the name is often all the model gets, so name a skill with the words people will actually type.</li>
 <li><b>A new skill starts at the back of the queue.</b> In Claude Code, the skills you use keep their descriptions, so a new one in a big collection may wait a long time for its first pick. Calling it by name is the obvious way in (I seeded the record by hand and did not test how many uses it takes).</li>
-<li><b>In Codex, past about {round(int(CX1K["entries"]), -1)} skills, the end of the alphabet does not exist.</b> The only fix I know is fewer skills.</li>
+<li><b>In Codex, past about {round(int(CX1K["entries"]), -1)} skills, the end of the alphabet does not exist.</b> The maximum budget pushes that to about 620; beyond it, the only fix I know is fewer skills.</li>
 <li><b>A stronger model buys room, not immunity.</b> Fable was fine at ~220 skills and missed more than a quarter of its requests at 1,020. In Codex a different model changed nothing, because the listing was cut before any model saw it.</li>
 </ul>
 
@@ -441,9 +479,16 @@ body = f"""
 {tab_("What I observed, how sure I am, and what to do about it.", T_TODO)}
 <h3>[Trick #1] Check what is actually exposed</h3>
 <p>In Claude Code, <code>/context</code> shows the size of your skill listing and {A(L["cc_skills"], "<code>/doctor</code> tells you whether descriptions are being dropped")}. Codex prints a warning when it goes over its budget ({A(L["c19679"], "codex#19679")}). And remember that Claude Code favours the skills you have used before, so a new skill in a big collection may reach the model as a bare name. Since November 2026, {A(L["skills_mcp"], "MCP servers can ship skills too")}, with nothing for you to install, so your listing can grow without you noticing (I have not tested how those are listed). This is the first thing I would check.</p>
-<h3>[Trick #2] Enable less, per project</h3>
-<p>This is the one thing I tested: with fewer skills installed, the designated one was picked more often (answer quality not measured). Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>.</p>
-<h3 id="trick-search">[Trick #3] Try other ways to discover and invoke (untested here)</h3>
+<h3>[Trick #2] Raise the listing budget, if you can afford it</h3>
+<p>If <code>/doctor</code> says descriptions are being dropped, you can give the listing more room:</p>
+<ul>
+<li><b>Claude Code:</b> set <code>skillListingBudgetFraction</code> in your settings (the default is <code>0.01</code>, so <code>0.02</code> doubles it), or the environment variable <code>SLASH_COMMAND_TOOL_CHAR_BUDGET</code> to a number of characters.</li>
+<li><b>Codex:</b> set <code>skills.max_context_tokens</code> in <code>config.toml</code>, up to 10,000.</li>
+</ul>
+<p>In my runs this helped less than I hoped (see <a href="#raise-the-cap">Result 2</a>): about ten points for Sonnet and Fable at 1,020 skills, nothing for Haiku, and every request carries the longer listing. It makes sense when you are a little over the budget, not when you are ten times over.</p>
+<h3>[Trick #3] Enable less, per project</h3>
+<p>This is what worked best in my runs: with fewer skills installed, the designated one was picked more often (answer quality not measured). Enable plugins per project, turn off unused skills with <code>/skills</code>, and if you only need <code>pdf</code> from a 3,000-skill collection, install <code>pdf</code>.</p>
+<h3 id="trick-search">[Trick #4] Try other ways to discover and invoke (untested here)</h3>
 <ul>
 <li><b>Invoke required skills by name</b> (<code>/skill-name</code>) instead of hoping for a match.</li>
 <li><b>Give a skill a trigger nobody else has.</b> In my sample, skills with concrete nouns and file types held up.</li>

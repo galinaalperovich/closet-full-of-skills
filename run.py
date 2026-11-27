@@ -17,7 +17,7 @@ lock=threading.Lock(); f=open(out,"a")
 # folder (Sonnet, caveman, alone) picked up a note saved by an earlier run, and its 18 runs were rerun with ISOLATE=1.
 ISO=os.environ.get("ISOLATE")
 PROJ=os.path.join(os.path.expanduser("~"),".claude","projects")
-RAW=os.path.join(S,"raw_e1")
+RAW=os.environ.get("RAW_DIR") or os.path.join(S,"raw_e1")
 E=os.environ.get("ENVS_DIR", os.path.join(S,"envs"))   # where build.py put the test folders
 def proj_dir(path): return os.path.join(PROJ, re.sub(r"[^A-Za-z0-9]","-",path))
 def read_memory(path):
