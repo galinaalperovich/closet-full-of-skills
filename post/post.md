@@ -304,7 +304,7 @@ I am packaging this check as a skill you can run on your own setup (coming soon 
 
 ## Limitations of the experiment
 
-This is one person’s experiment, not a benchmark, and I would rather list the weak spots myself than have you find them:
+This is one person’s experiment, not a benchmark. Here is what it cannot tell you:
 
 - **Selection, not quality.** A run without the skill can still produce a fine answer.
 - **Listing captured afterwards**, so the exact listing of each run is unknown.
