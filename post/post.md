@@ -21,11 +21,11 @@ A skill to check your own agent: *coming soon*
 Apparently, installing a skill doesn’t mean your agent will use it. I wanted to see how bad it gets, so I sent 120 natural requests to Claude Code and Codex, each written for one skill, and kept installing more and more skills. That is what I found out:
 
 1. **Skills fade.** Alone, the skill was picked in 78–100% of runs. Among 1,000 others, in 10–34%, and in 72% for the strongest model. [→ Result 1](#result-1)
-2. **For smaller models, just 20 is enough.** This one surprised me: among just 20 unrelated skills, Haiku fell from 78% to 48% and Sonnet from 94% to 76%! [→ Result 1](#result-1)
+2. **For smaller models, just 20 is enough.** This one surprised me: among just 20 unrelated skills, Haiku fell from 78% to 48% and Sonnet from 94% to 76%! [→ Result 1](#result-1)
 3. **Past a few hundred skills, the harness quietly cuts the listing.** Of 1,020 skills, Codex listed 321, alphabetically. Claude Code kept every name but only 19 descriptions. Both harnesses have a setting that raises the cap, but it didn't help much and won back only about ten points. [→ Result 2](#result-2)
 4. **A stronger model buys room, not immunity.** Fable 5.2 held at 98% up to ~220 skills and fell only after the listing was cut. For a strong model, the harness explains more of the loss than the model’s own confusion. [→ Result 2](#result-2)
 5. **Most misses are no skill at all, not a wrong one.** The agent uses built-in tools or just writes the answer on its own, and nothing tells you about it, response looks realistic (opening the door to the old, known hallucinations). [→ What the agent did instead](#misses)
-6. **MCP tools held up better.** Single-step tool selection went from 83–96% alone to 78–84% among 791, in both harnesses. Not bad! [→ Result 3](#result-3)
+6. **MCP tools held up better.** Single-step tool selection went from 83–96% alone to 78–84% among 791, in both harnesses. Not bad! [→ Result 3](#result-3)
 
 The experiment has [its limits](#limitations-of-the-experiment). At the end, I share [a few tricks for dealing with this problem](#what-you-can-do-about-it).
 
@@ -52,7 +52,7 @@ I used to think the worst case was the agent picking a wrong skill. It appeared 
 - **A skipped skill fails silently.** The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get **a confident number from the model’s memory**.
 - **One skipped skill can skip a whole recipe:** run the linter, then the tests, then open the pull request.
 - **If you have specific business rules to follow, it gets worse.** “We installed the skill and hoped for the best” is not convincing for an audit trail.
-- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and a recent [Uber](https://x.com/UberEng/status/2125008806249930999) post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.
+- **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and a recent [Uber](https://x.com/UberEng/status/2125008806249930999) post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.
 
 ## Quick background: How an agent picks a skill or a tool
 

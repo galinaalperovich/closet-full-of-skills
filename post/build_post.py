@@ -295,21 +295,21 @@ body = f"""
 <p class="dek" data-desc="I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex. The skill each request was written for went from being picked {RNG(E1[(m, "alone")]["rate"] for m in ALLM)}% of the time to {RNG(E1[(m, "crowd1000")]["rate"] for m in ALLM)}%, depending on the model. In Claude Code, single-step MCP tool selection fell much less, from {RNG(E2[(m, "mcp_alone")]["nonbrowser_rate"] for m in C3)}% to {RNG(E2[(m, "mcp_crowdall")]["nonbrowser_rate"] for m in C3)}%, and held steady from ~200 to ~800 tools.">I installed up to 1,000 skills and ~800 MCP tools in Claude Code and Codex, and measured how often the agent still picked the one each request was written for.</p>
 
 <div class="repobox">
-<div><span class="lbl">The experiment, data and analysis:</span> {A(L["repo"], "github.com/galinaalperovich/closet-full-of-skills")}. Every request, every result record and every script, so you can reproduce all the numbers for free.</div>
-<div><span class="lbl">A skill to check your own agent:</span> <span class="soon">coming soon</span></div>
+<div><span class="lbl">The experiment, data, and analysis:</span> {A(L["repo"], "github.com/galinaalperovich/closet-full-of-skills")}. Every request, every result record, and every script, so you can reproduce all the numbers (for free).</div>
+<div><span class="lbl">A skill to check your own agent:</span> <span class="soon"><em>coming soon</em></span></div>
 </div>
 
 <h2>Summary</h2>
-<p class="tldr">Installing a skill doesn’t mean your agent will use it. I wanted to see how bad it gets, so I sent 120 natural requests to Claude Code and Codex, each written for one skill, and kept installing more skills around it:</p>
+<p class="tldr">Apparently, installing a skill doesn’t mean your agent will use it. I wanted to see how bad it gets, so I sent 120 natural requests to Claude Code and Codex, each written for one skill, and kept installing more and more skills. That is what I found out:</p>
 <ol>
 <li><b>Skills fade.</b> Alone, the skill was picked in {RNG(E1[(m, "alone")]["rate"] for m in ALLM)}% of runs. Among 1,000 others, in {RNG(E1[(m, "crowd1000")]["rate"] for m in ALLM if m != "fable")}%, and in {E1R("fable", "crowd1000")}% for the strongest model. {SEE("result-1", "Result 1")}</li>
-<li><b>For smaller models, twenty is enough.</b> This one surprised me: among just 20 unrelated skills, Haiku fell from {E1R("haiku", "alone")}% to {E1R("haiku", "pack20")}% and Sonnet from {E1R("sonnet", "alone")}% to {E1R("sonnet", "pack20")}%. {SEE("result-1", "Result 1")}</li>
-<li><b>Past a few hundred skills, the harness quietly cuts the listing.</b> Of 1,020 skills, Codex listed {CX1K["entries"]}, alphabetically. Claude Code kept every name but only {LS[("claude", "crowd1000")]["entries_with_description"]} descriptions. I found a setting that raises the cap, but it won back only about ten points. {SEE("result-2", "Result 2")}</li>
+<li><b>For smaller models, just 20 is enough.</b> This one surprised me: among just 20 unrelated skills, Haiku fell from {E1R("haiku", "alone")}% to {E1R("haiku", "pack20")}% and Sonnet from {E1R("sonnet", "alone")}% to {E1R("sonnet", "pack20")}%! {SEE("result-1", "Result 1")}</li>
+<li><b>Past a few hundred skills, the harness quietly cuts the listing.</b> Of 1,020 skills, Codex listed {CX1K["entries"]}, alphabetically. Claude Code kept every name but only {LS[("claude", "crowd1000")]["entries_with_description"]} descriptions. Both harnesses have a setting that raises the cap, but it didn't help much and won back only about ten points. {SEE("result-2", "Result 2")}</li>
 <li><b>A stronger model buys room, not immunity.</b> Fable 5.2 held at {E1R("fable", "crowd200")}% up to ~220 skills and fell only after the listing was cut. For a strong model, the harness explains more of the loss than the model’s own confusion. {SEE("result-2", "Result 2")}</li>
-<li><b>Most misses are no skill at all, not a wrong one.</b> The agent uses built-in tools or just writes the answer itself, and nothing tells you. {SEE("misses", "What the agent did instead")}</li>
-<li><b>MCP tools held up better.</b> {SUM_MCP} {SEE("result-3", "Result 3")}</li>
+<li><b>Most misses are no skill at all, not a wrong one.</b> The agent uses built-in tools or just writes the answer on its own, and nothing tells you about it, response looks realistic (opening the door to the old, known hallucinations). {SEE("misses", "What the agent did instead")}</li>
+<li><b>MCP tools held up better.</b> {SUM_MCP} Not bad! {SEE("result-3", "Result 3")}</li>
 </ol>
-<p>The experiment has <a href="#limitations-of-the-experiment">its limits</a>. At the end I share <a href="#what-you-can-do-about-it">a few tricks for dealing with this problem</a>.</p>
+<p>The experiment has <a href="#limitations-of-the-experiment">its limits</a>. At the end, I share <a href="#what-you-can-do-about-it">a few tricks for dealing with this problem</a>.</p>
 <!--toc-->
 <h2>Problem statement</h2>
 
@@ -317,7 +317,7 @@ body = f"""
 
 <p>Here is what made me curious. The agent chooses a skill from its description, and the descriptions in that one collection add up to about 129K tokens. <em>The Great Gatsby</em> is about 72K. No harness sends <b>two Gatsbys</b> with every request: Claude Code and Codex both cap the listing. So what happens to the skills that do not fit, and to the ones that do?</p>
 
-<p>It is a harder version of the <b>needle-in-a-haystack test</b>. The {A(L["niah"], "original")} hides one fact in a long document and asks for it. Here the needle is one skill among hundreds, and nobody asks for it: the model has to notice that the request needs it. A few benchmarks study parts of this ({A(L["metatool"], "MetaTool")}, {A(L["longfunc"], "LongFuncEval")}, {A(L["wild"], "Liu et al.")}), but none shows the full picture of a real harness. What is new in my study:</p>
+<p>It is a harder version of the <b>needle-in-a-haystack test</b>. The {A(L["niah"], "original")} hides one fact in a long document and asks for it. Here the needle is one skill among hundreds, and nobody asks for it: the model has to notice that the request <b>implicitly</b> asks for it. A few benchmarks study parts of this problem ({A(L["metatool"], "MetaTool")}, {A(L["longfunc"], "LongFuncEval")}, {A(L["wild"], "Liu et al.")}), but none shows the full picture of a real harness. What's new in this study:</p>
 <ul>
 <li><b>Real harnesses, not a bare model.</b> What the harness does before the model sees anything turned out to matter most.</li>
 <li><b>Real skills and tools:</b> 20 popular skills and 20 published MCP tools, among up to 1,000 real skills and 791 real tool definitions.</li>
@@ -327,18 +327,18 @@ body = f"""
 </ul>
 
 <h2>Why it matters</h2>
-<p>I used to think the worst case was the agent picking a wrong skill. The worst case is quieter than that:</p>
+<p>I used to think the worst case was the agent picking a wrong skill. It appeared that the worst case is <b>quieter</b> than that:</p>
 <ul>
-<li><b>A skipped skill fails silently.</b> The agent answers anyway. Ask for Apple’s stock price without the finance tool being called, and you may get <b>a confident number from the model’s memory</b>.</li>
+<li><b>A skipped skill fails silently.</b> The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get <b>a confident number from the model’s memory</b>.</li>
 <li><b>One skipped skill can skip a whole recipe:</b> run the linter, then the tests, then open the pull request.</li>
-<li><b>If you have rules to follow, it gets worse.</b> “We installed the skill and hoped for the best” is not an audit trail.</li>
-<li><b>It takes an everyday setup, not an extreme one.</b> {A(L["i81081"], "One Claude Code issue")} reports 27 of 36 project skills reaching the model with only a name, and {A(L["uber"], "Uber")} has more than 5,000 skills in its internal marketplace.</li>
+<li><b>If you have specific business rules to follow, it gets worse.</b> “We installed the skill and hoped for the best” is not convincing for an audit trail.</li>
+<li><b>It takes an everyday setup, not an extreme one.</b> {A(L["i81081"], "One Claude Code issue")} reports 27 of 36 project skills reaching the model with only a name, and a recent {A(L["uber"], "Uber")} post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.</li>
 </ul>
 
-<h2>How an agent picks a skill or a tool</h2>
+<h2>Quick background: How an agent picks a skill or a tool</h2>
 <p>A <b>skill</b> is a folder of instructions that teaches the agent <em>how</em> to do something. An <b>MCP tool</b> is a function on a server that <em>does</em> one thing, such as creating an issue.</p>
-<p><b>Loading a skill is itself a tool call.</b> Claude Code calls its <code>Skill</code> tool; Codex reads the file with a shell command such as <code>cat .agents/skills/pdf/SKILL.md</code>. That first call is what I count as “selected” (for Codex, a command naming the skill’s <code>SKILL.md</code>; I did not check that the read succeeded).</p>
-<p>The two reach the model differently. Skills sit in one listing of names and descriptions, sent with every request. MCP tools are listed by name only, and the model fetches a full definition on demand.</p>
+<p><b>Loading a skill is itself a tool call.</b> Claude Code calls its <code>Skill</code> tool; Codex reads the file with a shell command such as <code>cat .agents/skills/pdf/SKILL.md</code>. That first call is what I count as “selected” (for Codex, a command naming the skill’s <code>SKILL.md</code>).</p>
+<p>A skill and a tool reach the model differently. Skills sit in one listing of names and descriptions, sent with every request. MCP tools are listed by name only, and the model fetches a full definition on demand.</p>
 {fig_("fig_how", "How a request reaches a skill or a tool, with MCP tools handled the way Claude Code does it.")}
 <p>Between installing a skill and the skill doing its job there are four stages:</p>
 <ol>
