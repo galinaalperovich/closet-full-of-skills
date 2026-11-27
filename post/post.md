@@ -102,20 +102,20 @@ Each request ran in four setups:
 3. **~220:** the 20 plus 200 from the crowd.
 4. **All:** the 20 plus the whole crowd: 1,000 skills, or 771 tools.
 
-Five configurations ran them: Claude Haiku, Sonnet and Fable 5.2 in Claude Code (v2.1.328), and GPT-6 Astra and GPT-6 Sol (medium reasoning) in Codex CLI (v0.160.0). Fable and Astra are the top models of the two families; Sol is Astra’s sibling at a fifth of the price. Each configuration is a model plus a harness, so a difference between Codex and Claude Code may be either, but a difference between two models inside one harness is the model.
+Five configurations ran them: Haiku, Sonnet, and Fable 5.2 in Claude Code (v2.1.328), and GPT-6 Astra and GPT-6 Sol (medium reasoning) in Codex CLI (v0.160.0). Fable and Astra are the top models of the two families, and Sol is Astra’s sibling at a fifth of the price. Each configuration is a model plus a harness, so a difference between Codex and Claude Code may be either, but a difference between two models inside one harness is the model.
 
 Four details matter for reading the numbers:
 
-1. **Fake skill bodies.** Each skill keeps its real name and description, but its instructions are one line: “reply with one short sentence”. MCP tools keep their real definitions and answer every call with “Done.”
+1. **Fake skill bodies.** Each skill keeps its real name and description, but its instructions are one line: “reply with one short sentence” (because we only need the fact of a skill being called, not the skill itself). MCP tools keep their real definitions and answer every call with “Done.”
 2. **Fresh, empty folders.** Every setup sees the same thing, and Claude Code’s per-folder memory cannot carry notes from one run to the next. I learned about that memory the hard way, and reran every affected run with a little less enthusiasm than the first time.
 3. **Short observation window.** Claude Code was capped at 3 turns for skills and 8 for MCP tools. Codex has no turn cap.
 4. **Scoring.** A hit is exactly the designated skill, or the designated tool or an equivalent one on another server. Other picks were rated later by a separate Claude session ([prompt and rules](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md)).
 
-**How to read the numbers.** Each configuration got 120 skill requests and 120 tool requests, 90 of them for tools that need a single call. Brackets are 95% confidence intervals from resampling requests. They do not cover the random draw of extra skills or the request wording; details are in the [methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md).
+**How to read the numbers.** Each configuration got 120 skill requests and 120 tool requests. Brackets are 95% confidence intervals from resampling requests. See full details in the [methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md).
 
 ## Result 1: Skills fade
 
-*Table 2. Share of requests where the agent picked the designated skill, with 95% CIs. Haiku, Sonnet and Fable ran in Claude Code; GPT-6 Astra and GPT-6 Sol in Codex.*
+*Table 2. Share of requests where the agent picked the designated skill, with 95% CIs. Haiku, Sonnet, and Fable ran in Claude Code. GPT-6 Astra and GPT-6 Sol in Codex.*
 
 | Setup | Skills | Haiku | Sonnet | Fable | GPT-6 Astra | GPT-6 Sol |
 |---|---|---|---|---|---|---|
