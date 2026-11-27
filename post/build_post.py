@@ -367,7 +367,7 @@ body = f"""
 <p>Five configurations ran them: Haiku, Sonnet, and Fable 5.2 in Claude Code (v2.1.328), and GPT-6 Astra and GPT-6 Sol (medium reasoning) in Codex CLI (v0.160.0). Fable and Astra are the top models of the two families, and Sol is Astra’s sibling at a fifth of the price. Each configuration is a model plus a harness, so a difference between Codex and Claude Code may be either, but a difference between two models inside one harness is the model.</p>
 <p>Four details matter for reading the numbers:</p>
 <ol>
-<li><b>Fake skill bodies.</b> Each skill keeps its real name and description, but its instructions are one line: “reply with one short sentence” (because we only need the fact of a skill being called, not the skill itself). MCP tools keep their real definitions and answer every call with “Done.”</li>
+<li><b>Fake skill bodies.</b> Each skill keeps its real name and description, but its instructions are one line: “reply with one short sentence” (I only needed to know whether the skill was called). MCP tools keep their real definitions and answer every call with “Done.”</li>
 <li><b>Fresh, empty folders.</b> Every setup sees the same thing, and Claude Code’s per-folder memory cannot carry notes from one run to the next. I learned about that memory the hard way, and reran every affected run with a little less enthusiasm than the first time.</li>
 <li><b>Short observation window.</b> Claude Code was capped at 3 turns for skills and 8 for MCP tools. Codex has no turn cap.</li>
 <li><b>Scoring.</b> A hit is exactly the designated skill, or the designated tool or an equivalent one on another server. Other picks were rated later by a separate Claude session ({A(L["r_judge"], "prompt and rules")}).</li>
@@ -375,7 +375,7 @@ body = f"""
 <p><b>How to read the numbers.</b> Each configuration got 120 skill requests and 120 tool requests. Brackets are 95% confidence intervals from resampling requests. See full details in the {A(L["r_meth"], "methodology")}.</p>
 
 <h2 id="result-1">Result 1: Skills fade</h2>
-{tab_("Share of requests where the agent picked the designated skill, with 95% CIs. Haiku, Sonnet, and Fable ran in Claude Code. GPT-6 Astra and GPT-6 Sol in Codex.", T_SKILLS)}
+{tab_("Share of requests where the agent picked the designated skill, with 95% CIs. Haiku, Sonnet, and Fable ran in Claude Code. GPT-6 Astra and GPT-6 Sol ran in Codex.", T_SKILLS)}
 {fig_("fig_skills", "The same numbers as a chart. GPT-6 Sol is the dashed line, almost on top of GPT-6 Astra. Sonnet: 360 runs per point; the others: 120. The x axis is not to scale.")}
 <p><b>For Haiku and Sonnet, the decline is already there at 20.</b> These are 20 skills about different things: PDFs, SEO, TDD, animation. Still, Haiku fell from {P(E1[("haiku", "alone")]["rate"])}% to {P(E1[("haiku", "pack20")]["rate"])}% and Sonnet from {P(E1[("sonnet", "alone")]["rate"])}% to {P(E1[("sonnet", "pack20")]["rate"])}%. I expected trouble at a bit higher number than <b>20</b>.</p>
 <p><b>A stronger model holds longer.</b> I hoped a stronger model would simply fix it, and for a while it did. Fable stayed at {E1R("fable", "alone")}%, {E1R("fable", "pack20")}%, and {E1R("fable", "crowd200")}% up to ~220 skills, and only then gave way: {E1R("fable", "crowd1000")}% at 1,020. Still more than one request in four missed.</p>
@@ -457,7 +457,7 @@ body = f"""
 <ol>
 <li><b>Skills lose their descriptions, but tools can be searched.</b> A skill listing is like <b>a restaurant menu printed on one page</b>: the more dishes, the smaller the print. Tools are more like asking the waiter: the model searches and gets the full definition back. Retrieving a few tools instead of listing them all raised selection from 13.6% to 43.1% in {A(L["ragmcp"], "RAG-MCP")}.</li>
 <li><b>Tools match the words of a request, and skills match its meaning.</b> A tool name is a verb the request nearly repeats (<code>create_issue</code>). A skill describes a workflow in broad words its neighbours share ({A(L["nolima"], "NoLiMa")}, {A(L["rot"], "Context Rot")}).</li>
-<li><b>An action needs a tool, a goal does not.</b> “Open an issue” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can ({A(L["metatool"], "MetaTool")}).</li>
+<li><b>An action needs a tool, but a goal does not.</b> “Open an issue” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can ({A(L["metatool"], "MetaTool")}).</li>
 </ol>
 <p>A toy calculation of the dilution idea is in <a href="#appendix-c">Appendix C</a>.</p>
 
@@ -492,12 +492,12 @@ body = f"""
 <p>Until then, the {A(L["repo"] + "#check-your-own-agent", "README")} has a manual version in two commands.</p>
 
 <h2>Limitations of the experiment</h2>
-<p>This is one person’s experiment, not a benchmark. Here is what it cannot tell:</p>
+<p>This is one person’s experiment, not a benchmark. Here is what it cannot show:</p>
 <ul>
 <li><b>Selection, not quality.</b> A run without the skill can still produce a fine answer.</li>
 <li><b>Selected means the agent tried to load it.</b> I counted the first call that loads the skill: Claude Code’s <code>Skill</code> call, or a Codex command naming the skill’s <code>SKILL.md</code>. I did not check that the skill actually loaded.</li>
 <li><b>Listing captured afterwards</b>, so the exact listing of each run is unknown.</li>
-<li><b>Few samples.</b> One random draw of extra skills and six LLM-written requests per target.</li>
+<li><b>Few samples.</b> One random draw of extra skills and six LLM-written requests per target. The confidence intervals cover the choice of requests, not the draw of extra skills or the request wording.</li>
 <li><b>Configurations, not models.</b> Models can be compared inside one harness, not across the two.</li>
 <li><b>The tool runs are a second attempt.</b> My first test server ended a run after its first call, and my first Codex setup blocked the calls. I repeated all tool runs with both fixed.</li>
 <li><b>Thinner data for Fable and Codex.</b> One run per request, no mixed setups, and GPT-6 Astra ran the skills experiment only.</li>

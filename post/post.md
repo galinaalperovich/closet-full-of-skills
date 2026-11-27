@@ -106,7 +106,7 @@ Five configurations ran them: Haiku, Sonnet, and Fable 5.2 in Claude Code (v2.1.
 
 Four details matter for reading the numbers:
 
-1. **Fake skill bodies.** Each skill keeps its real name and description, but its instructions are one line: “reply with one short sentence” (because we only need the fact of a skill being called, not the skill itself). MCP tools keep their real definitions and answer every call with “Done.”
+1. **Fake skill bodies.** Each skill keeps its real name and description, but its instructions are one line: “reply with one short sentence” (I only needed to know whether the skill was called). MCP tools keep their real definitions and answer every call with “Done.”
 2. **Fresh, empty folders.** Every setup sees the same thing, and Claude Code’s per-folder memory cannot carry notes from one run to the next. I learned about that memory the hard way, and reran every affected run with a little less enthusiasm than the first time.
 3. **Short observation window.** Claude Code was capped at 3 turns for skills and 8 for MCP tools. Codex has no turn cap.
 4. **Scoring.** A hit is exactly the designated skill, or the designated tool or an equivalent one on another server. Other picks were rated later by a separate Claude session ([prompt and rules](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md)).
@@ -115,7 +115,7 @@ Four details matter for reading the numbers:
 
 ## Result 1: Skills fade
 
-*Table 2. Share of requests where the agent picked the designated skill, with 95% CIs. Haiku, Sonnet, and Fable ran in Claude Code. GPT-6 Astra and GPT-6 Sol in Codex.*
+*Table 2. Share of requests where the agent picked the designated skill, with 95% CIs. Haiku, Sonnet, and Fable ran in Claude Code. GPT-6 Astra and GPT-6 Sol ran in Codex.*
 
 | Setup | Skills | Haiku | Sonnet | Fable | GPT-6 Astra | GPT-6 Sol |
 |---|---|---|---|---|---|---|
@@ -270,7 +270,7 @@ I can’t open the models and look inside, but three explanations fit what I saw
 
 1. **Skills lose their descriptions, but tools can be searched.** A skill listing is like **a restaurant menu printed on one page**: the more dishes, the smaller the print. Tools are more like asking the waiter: the model searches and gets the full definition back. Retrieving a few tools instead of listing them all raised selection from 13.6% to 43.1% in [RAG-MCP](https://arxiv.org/abs/2505.03275).
 2. **Tools match the words of a request, and skills match its meaning.** A tool name is a verb the request nearly repeats (`create_issue`). A skill describes a workflow in broad words its neighbours share ([NoLiMa](https://arxiv.org/abs/2502.05167), [Context Rot](https://research.trychroma.com/context-rot)).
-3. **An action needs a tool, a goal does not.** “Open an issue” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can ([MetaTool](https://arxiv.org/abs/2310.03128)).
+3. **An action needs a tool, but a goal does not.** “Open an issue” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can ([MetaTool](https://arxiv.org/abs/2310.03128)).
 
 A toy calculation of the dilution idea is in [Appendix C](#appendix-c).
 
@@ -314,12 +314,12 @@ Until then, the [README](https://github.com/galinaalperovich/closet-full-of-skil
 
 ## Limitations of the experiment
 
-This is one person’s experiment, not a benchmark. Here is what it cannot tell:
+This is one person’s experiment, not a benchmark. Here is what it cannot show:
 
 - **Selection, not quality.** A run without the skill can still produce a fine answer.
 - **Selected means the agent tried to load it.** I counted the first call that loads the skill: Claude Code’s `Skill` call, or a Codex command naming the skill’s `SKILL.md`. I did not check that the skill actually loaded.
 - **Listing captured afterwards**, so the exact listing of each run is unknown.
-- **Few samples.** One random draw of extra skills and six LLM-written requests per target.
+- **Few samples.** One random draw of extra skills and six LLM-written requests per target. The confidence intervals cover the choice of requests, not the draw of extra skills or the request wording.
 - **Configurations, not models.** Models can be compared inside one harness, not across the two.
 - **The tool runs are a second attempt.** My first test server ended a run after its first call, and my first Codex setup blocked the calls. I repeated all tool runs with both fixed.
 - **Thinner data for Fable and Codex.** One run per request, no mixed setups, and GPT-6 Astra ran the skills experiment only.
