@@ -42,14 +42,14 @@ It is a harder version of the **needle-in-a-haystack test**. The [original](http
 - **Real harnesses, not a bare model.** What the harness does before the model sees anything turned out to matter most.
 - **Real skills and tools:** 20 popular skills and 20 published MCP tools, among up to 1,000 real skills and 791 real tool definitions.
 - **Requests that never name the skill**, sent unchanged to every setup.
-- **Skills and MCP tools side by side, then mixed.**
+- **Skills and MCP tools side by side, then mixed**.
 - **What the model actually received:** I captured the listing each harness sent.
 
 ## Why it matters
 
 I used to think the worst case was the agent picking a wrong skill. It turns out the worst case is **quieter** than that:
 
-- **A skipped skill fails silently.** The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get **a confident number from the model’s memory**.
+- **A skipped skill fails silently.** The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get **a confident number from the model’s memory**. In my runs, most misses looked exactly like this ([what the agent did instead](#misses)).
 - **One skipped skill can skip a whole recipe:** run the linter, then the tests, then open the pull request.
 - **If you have specific business rules to follow, it gets worse.** “We installed the skill and hoped for the best” is not convincing for an audit trail.
 - **It takes an everyday setup, not an extreme one.** [One Claude Code issue](https://github.com/anthropics/claude-code/issues/81081) reports 27 of 36 project skills reaching the model with only a name, and a recent [Uber](https://x.com/UberEng/status/2125008806249930999) post says it has more than 5,000 skills in its internal marketplace, with 100 enabled for each employee by default.
@@ -111,7 +111,7 @@ Four details matter for reading the numbers:
 3. **Short observation window.** Claude Code was capped at 3 turns for skills and 8 for MCP tools. Codex has no turn cap.
 4. **Scoring.** A hit is exactly the designated skill, or the designated tool or an equivalent one on another server. Other picks were rated later by a separate Claude session ([prompt and rules](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/analysis/alt_judge_prompt.md)).
 
-**How to read the numbers.** Each configuration got 120 skill requests and 120 tool requests. Brackets are 95% confidence intervals from resampling requests. See full details in the [methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md).
+**How to read the numbers.** Each configuration got 120 skill requests and 120 tool requests. Brackets are 95% confidence intervals from resampling requests. What this setup cannot show is in [Limitations of the experiment](#limitations-of-the-experiment). See full details in the [methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md).
 
 ## Result 1: Skills fade
 
@@ -128,7 +128,7 @@ Four details matter for reading the numbers:
 
 *Figure 3. The same numbers as a chart. GPT-6 Sol is the dashed line, almost on top of GPT-6 Astra. Sonnet: 360 runs per point; the others: 120. The x axis is not to scale.*
 
-**For Haiku and Sonnet, the decline is already there at 20.** These are 20 skills about different things: PDFs, SEO, TDD, animation. Still, Haiku fell from 78% to 48% and Sonnet from 94% to 76%. I expected trouble at a bit higher number than **20**.
+**For Haiku and Sonnet, the decline is already there at 20.** These are 20 skills about different things: PDFs, SEO, TDD, animation. Still, Haiku fell from 78% to 48% and Sonnet from 94% to 76%. I expected trouble at a bit higher number than **20**. Skill by skill, it is in [Appendix E](#appendix-e).
 
 **A stronger model holds longer.** I hoped a stronger model would simply fix it, and for a while it did. Fable stayed at 99%, 99%, and 98% up to ~220 skills, and only then gave way: 72% at 1,020. Still more than one request in four missed.
 
@@ -181,7 +181,7 @@ In Claude Code the skill became a bare name among 16 other names with “seo” 
 - **At ~220 skills,** Codex keeps every skill but cuts each description to about 30 characters. GPT-6 Astra still picked the right skill in 83% of requests: a name and five words were nearly enough.
 - **At 1,020 skills,** it listed only 321 entries, alphabetically up to “developer-listening”, with no descriptions. Of the 20 targets, only `animate`, `caveman` and `copywriting` made it in.
 
-Those three account for 11 of GPT-6 Astra’s 12 hits at 1,020 skills and 11 of GPT-6 Sol’s 14. So **the Codex cliff is the alphabet**, not a model choosing badly. I did not believe it until I read the list myself. If your skill is called `zebra-something`, I have bad news for you!
+Those three account for 11 of GPT-6 Astra’s 12 hits at 1,020 skills and 11 of GPT-6 Sol’s 14. So **the Codex cliff is the alphabet**, not a model choosing badly. I did not believe it until I read the list myself. If your skill is called `zebra-something`, I have bad news for you! (Some naming advice is in [Trick #4](#trick-naming).)
 
 ### Claude Code: every name, few descriptions
 
@@ -210,16 +210,16 @@ Yes, both harnesses have a setting, and I nearly missed it. I thought it might f
 | Designated skill picked at 1,020 skills, default → raised | Haiku 16% → **8%**<br>Sonnet 34% → **44%**<br>Fable 72% → **82%** | GPT-6 Sol 12% → **41%** |
 
 - **In Claude Code, the full listing gave back about ten points.** Not what I hoped for. Sonnet went from 34% to 44% and Fable from 72% to 82%, still far from their 94% and 99% with the skill alone. Haiku got worse. So the cut explains part of the loss, and **a thousand full descriptions are their own kind of haystack**.
-- **It is not free.** The descriptions travel with every request: at list prices a Sonnet run went from $0.09 to $0.31 and a Fable run from $0.30 to $1.20.
+- **It is not free** ([Appendix D](#appendix-d)). The descriptions travel with every request: at list prices a Sonnet run went from $0.09 to $0.31 and a Fable run from $0.30 to $1.20.
 - **In Codex, the maximum only moves the cliff.** The list runs about twice as far into the alphabet, to “maxia”, so 9 targets are offered instead of 3. GPT-6 Sol picked the right skill in 36 of 54 requests for those nine, and in 13 of 66 for the other eleven.
 
 One run per request, so read these as directions, not precise sizes.
 
 ### What this means for your skills
 
-- **The name does most of the work.** In a big collection it is often all the model gets, so name a skill with the words people will actually type.
-- **A new skill starts at the back of the queue.** In Claude Code, used skills keep their descriptions. Calling a new one by name is the obvious way in.
-- **In Codex, past about 320 skills, the end of the alphabet does not exist** (about 620 at the maximum budget). Beyond that, the only fix I know is fewer skills.
+- **The name does most of the work.** In a big collection it is often all the model gets, so name a skill with the words people will actually type ([Trick #4](#trick-naming)).
+- **A new skill starts at the back of the queue.** In Claude Code, used skills keep their descriptions. Calling a new one by name is the obvious way in ([Trick #5](#trick-search)).
+- **In Codex, past about 320 skills, the end of the alphabet does not exist** (about 620 at the maximum budget). Beyond that, the only fix I know is fewer skills ([Trick #3](#trick-enable-less)).
 
 Which of the 20 skills survived, and why, is in [Appendix E](#appendix-e).
 
@@ -244,7 +244,7 @@ What loss there was came at the first step, from one tool to twenty. After that 
 | ~220 | 77% [68–84] | 76% [67–84] | 81% [73–89] | 86% [78–92] |
 | 791 | 78% [69–86] | 79% [70–87] | 84% [77–91] | 81% [73–89] |
 
-**Neither harness lists all the tools.** Both list MCP tools by name and have the model look a definition up (`ToolSearch` in Claude Code). That is the main difference from skills, where everything hangs on one listing.
+**Neither harness lists all the tools.** Both list MCP tools by name and have the model look a definition up (`ToolSearch` in Claude Code). That is the main difference from skills, where everything hangs on one listing ([why that matters](#why)).
 
 Five of the 20 tools need a first step, such as opening a page before a screenshot, and a tool for that exists only in the two larger setups. There the agent took both steps in 90% of requests (217 of 240). I keep these five out of the curve.
 
