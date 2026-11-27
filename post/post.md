@@ -268,9 +268,9 @@ When the agent skipped the skill, it mostly **used only built-in tools**: “Mer
 
 I can’t open the models and look inside, but three explanations fit what I saw. The first is measured; the other two are my guesses:
 
-1. **Skills lose their descriptions; tools can be searched.** A skill listing is like **a restaurant menu printed on one page**: the more dishes, the smaller the print. Tools are more like asking the waiter: the model searches and gets the full definition back. Retrieving a few tools instead of listing them all raised selection from 13.6% to 43.1% in [RAG-MCP](https://arxiv.org/abs/2505.03275).
-2. **Tools match the words of a request; skills match its meaning.** A tool name is a verb the request nearly repeats (`create_issue`). A skill describes a workflow in broad words its neighbours share ([NoLiMa](https://arxiv.org/abs/2502.05167), [Context Rot](https://research.trychroma.com/context-rot)).
-3. **An action needs a tool; a goal does not.** “Open an issue” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can ([MetaTool](https://arxiv.org/abs/2310.03128)).
+1. **Skills lose their descriptions, but tools can be searched.** A skill listing is like **a restaurant menu printed on one page**: the more dishes, the smaller the print. Tools are more like asking the waiter: the model searches and gets the full definition back. Retrieving a few tools instead of listing them all raised selection from 13.6% to 43.1% in [RAG-MCP](https://arxiv.org/abs/2505.03275).
+2. **Tools match the words of a request, and skills match its meaning.** A tool name is a verb the request nearly repeats (`create_issue`). A skill describes a workflow in broad words its neighbours share ([NoLiMa](https://arxiv.org/abs/2502.05167), [Context Rot](https://research.trychroma.com/context-rot)).
+3. **An action needs a tool, a goal does not.** “Open an issue” cannot be done without the GitHub tool. “Rewrite the copy on our homepage” can ([MetaTool](https://arxiv.org/abs/2310.03128)).
 
 A toy calculation of the dilution idea is in [Appendix C](#appendix-c).
 
@@ -298,13 +298,17 @@ If I had to pick one trick, this is it. Enable plugins per project, turn off unu
 - **Use a router skill or a hook.** [A hook that makes Claude evaluate skills before answering](https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably) reached 84% activation in Scott Spence’s test, against 20% for a keyword hook. [Uber](https://x.com/UberEng/status/2125008806249930999) keeps about 100 skills on by default and uses a `find-skills` skill to search the other 5,000.
 - **Search instead of listing.** In your own agent, use the Claude API’s [tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool), or embed the descriptions and retrieve the closest few.
 
+//[Trick #4] <add trick about naming skills better: more specific actions, and also at the beginning of the alphabet! and maybe even restructuring fat skills into smalelr more specific actionable skills that have clear actionable names>
+
 ## Check your own agent
 
-I am packaging this check as a skill you can run on your own setup (coming soon on [GitHub](https://github.com/galinaalperovich/closet-full-of-skills)). Yes, a skill that checks whether your skills get picked. I see the irony too. Let’s hope your harness picks it! Until then, the [README](https://github.com/galinaalperovich/closet-full-of-skills#check-your-own-agent) has a manual version in two commands.
+I am packaging this check as a skill you can run on your own setup (coming soon on [GitHub](https://github.com/galinaalperovich/closet-full-of-skills)). Yes, a skill that checks whether your skills get picked. Let’s hope your harness picks it!
+
+Until then, the [README](https://github.com/galinaalperovich/closet-full-of-skills#check-your-own-agent) has a manual version in two commands.
 
 ## Limitations of the experiment
 
-This is one person’s experiment, not a benchmark. Here is what it cannot tell you:
+This is one person’s experiment, not a benchmark. Here is what it cannot tell:
 
 - **Selection, not quality.** A run without the skill can still produce a fine answer.
 - **Selected means the agent tried to load it.** I counted the first call that loads the skill: Claude Code’s `Skill` call, or a Codex command naming the skill’s `SKILL.md`. I did not check that the skill actually loaded.
@@ -314,7 +318,7 @@ This is one person’s experiment, not a benchmark. Here is what it cannot tell 
 - **The tool runs are a second attempt.** My first test server ended a run after its first call, and my first Codex setup blocked the calls. I repeated all tool runs with both fixed.
 - **Thinner data for Fable and Codex.** One run per request, no mixed setups, and GPT-6 Astra ran the skills experiment only.
 
-The [full methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md), all data and all scripts are in [the GitHub repo](https://github.com/galinaalperovich/closet-full-of-skills).
+The [full methodology](https://github.com/galinaalperovich/closet-full-of-skills/blob/main/METHODOLOGY.md), all data, and all scripts are in [the GitHub repo](https://github.com/galinaalperovich/closet-full-of-skills).
 
 ## What’s next
 
@@ -326,9 +330,11 @@ The full plan is in [the follow-up protocol](https://github.com/galinaalperovich
 
 ## Conclusion
 
-I started with a simple question: if I install a thousand skills, does my agent get more capable? Mostly, it gets a bigger closet. What changed my view is the gap between installing a capability and having it reliably picked when a request needs it. Before adding another big collection, I would check what the agent can actually see. I still install skills. I just stopped assuming they are there.
+I started with a simple question: what happens if I install a thousand skills and tools, will it get more capable? And found the gap between installing a capability and having it reliably picked when a request needs it.
 
-Thanks for reading! If you run the check on your own setup, tell me what you got. And if you spot a mistake, tell me too: I have already redone half of this study once, I can take it.
+After this post, I still install skills. I just stopped assuming they are used...
+
+Thanks for reading! Congrats if you made it to the end. If you run the check on your own setup, tell me what you got. And if you spot a mistake, please share in comments!
 
 ## Appendix A: The 20 target skills
 
