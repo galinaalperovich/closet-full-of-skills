@@ -305,7 +305,7 @@ The ratings were made after the results and only for alternatives that actually 
 - Rendered catalogues: target visibility, surviving description length, position. These were captured after the runs for the skills setups (§10), not per run.
 - Agent text.
 - Tool arguments and results.
-- Codex command exit status.
+- Whether a skill actually loaded. A hit is an attempt to load it: a Claude `Skill` call, or a completed Codex command naming the skill's `SKILL.md` (§2). The `Skill` call's result and the Codex command's exit status and output were not checked.
 - Ordered events, beyond the deduplicated `used` list and Claude's `first_tool`.
 
 **Raw logs exist only for the round 2 Claude Code E2/E3 runs and the 18 runs of the E1 rerun** (§1.1, §12). For those runs the list above is answered by the event stream: agent text, tool arguments and results, and event order. The rest of E1, E3b and all Codex runs have no raw log, so their detection cannot be validated retroactively. A validation rerun for them is part of the follow-up.

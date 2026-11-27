@@ -300,13 +300,13 @@ body = f"""
 </div>
 
 <h2>Summary</h2>
-<p class="tldr">Apparently, installing a skill doesn’t mean your agent will use it. I wanted to see how bad it gets, so I sent 120 natural requests to Claude Code and Codex, each written for one skill, and kept installing more and more skills. That is what I found out:</p>
+<p class="tldr">Apparently, installing a skill doesn’t mean your agent will use it. I wanted to see how bad it gets, so I sent 120 natural requests to Claude Code and Codex, each written for one skill, and kept installing more and more skills. Here is what I found:</p>
 <ol>
 <li><b>Skills fade.</b> Alone, the skill was picked in {RNG(E1[(m, "alone")]["rate"] for m in ALLM)}% of runs. Among 1,000 others, in {RNG(E1[(m, "crowd1000")]["rate"] for m in ALLM if m != "fable")}%, and in {E1R("fable", "crowd1000")}% for the strongest model. {SEE("result-1", "Result 1")}</li>
-<li><b>For smaller models, just 20 is enough.</b> This one surprised me: among just 20 unrelated skills, Haiku fell from {E1R("haiku", "alone")}% to {E1R("haiku", "pack20")}% and Sonnet from {E1R("sonnet", "alone")}% to {E1R("sonnet", "pack20")}%! {SEE("result-1", "Result 1")}</li>
+<li><b>For smaller models, just 20 is enough.</b> This one surprised me: among 20 unrelated skills, Haiku fell from {E1R("haiku", "alone")}% to {E1R("haiku", "pack20")}% and Sonnet from {E1R("sonnet", "alone")}% to {E1R("sonnet", "pack20")}%! {SEE("result-1", "Result 1")}</li>
 <li><b>Past a few hundred skills, the harness quietly cuts the listing.</b> Of 1,020 skills, Codex listed {CX1K["entries"]}, alphabetically. Claude Code kept every name but only {LS[("claude", "crowd1000")]["entries_with_description"]} descriptions. Both harnesses have a setting that raises the cap, but it didn't help much and won back only about ten points. {SEE("result-2", "Result 2")}</li>
 <li><b>A stronger model buys room, not immunity.</b> Fable 5.2 held at {E1R("fable", "crowd200")}% up to ~220 skills and fell only after the listing was cut. For a strong model, the harness explains more of the loss than the model’s own confusion. {SEE("result-2", "Result 2")}</li>
-<li><b>Most misses are no skill at all, not a wrong one.</b> The agent uses built-in tools or just writes the answer on its own, and nothing tells you about it, response looks realistic (opening the door to the old, known hallucinations). {SEE("misses", "What the agent did instead")}</li>
+<li><b>Most misses are no skill at all, not a wrong one.</b> The agent uses built-in tools or just writes the answer on its own, and nothing tells you: the answer looks plausible, which opens the door to good old hallucinations. {SEE("misses", "What the agent did instead")}</li>
 <li><b>MCP tools held up better.</b> {SUM_MCP} Not bad! {SEE("result-3", "Result 3")}</li>
 </ol>
 <p>The experiment has <a href="#limitations-of-the-experiment">its limits</a>. At the end, I share <a href="#what-you-can-do-about-it">a few tricks for dealing with this problem</a>.</p>
@@ -327,7 +327,7 @@ body = f"""
 </ul>
 
 <h2>Why it matters</h2>
-<p>I used to think the worst case was the agent picking a wrong skill. It appeared that the worst case is <b>quieter</b> than that:</p>
+<p>I used to think the worst case was the agent picking a wrong skill. It turns out the worst case is <b>quieter</b> than that:</p>
 <ul>
 <li><b>A skipped skill fails silently.</b> The agent answers anyway. Ask for Apple’s stock price without calling the finance tool, and you may get <b>a confident number from the model’s memory</b>.</li>
 <li><b>One skipped skill can skip a whole recipe:</b> run the linter, then the tests, then open the pull request.</li>
@@ -487,6 +487,7 @@ body = f"""
 <p>This is one person’s experiment, not a benchmark. Here is what it cannot tell you:</p>
 <ul>
 <li><b>Selection, not quality.</b> A run without the skill can still produce a fine answer.</li>
+<li><b>Selected means the agent tried to load it.</b> I counted the first call that loads the skill: Claude Code’s <code>Skill</code> call, or a Codex command naming the skill’s <code>SKILL.md</code>. I did not check that the skill actually loaded.</li>
 <li><b>Listing captured afterwards</b>, so the exact listing of each run is unknown.</li>
 <li><b>Few samples.</b> One random draw of extra skills and six LLM-written requests per target.</li>
 <li><b>Configurations, not models.</b> Models can be compared inside one harness, not across the two.</li>
